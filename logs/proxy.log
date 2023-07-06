@@ -1,0 +1,24 @@
+2023-07-06 16:00:21,006  INFO - [Demo]PackageAnalysisController.getUserBasicInfo@ success run into getUserBasicInfo function
+2023-07-06 16:00:50,976  INFO - [Demo]PackageAnalysisController.createFlowchart@ success run into createFlowchart function
+2023-07-06 16:00:50,976  INFO - [com.zulong.web.service.serviceimpl]FlowchartServiceImpl.createFlowchart@create flowchart|id=2|version=0|name=myFlowchart|des=Flowchart description|current_time=2023-07-06 16:00:50|inner=false
+2023-07-06 16:02:02,907  INFO - [Demo]PackageAnalysisController.getUserBasicInfo@ success run into getUserBasicInfo function
+2023-07-06 16:02:09,629  INFO - [Demo]PackageAnalysisController.createFlowchart@ success run into createFlowchart function
+2023-07-06 16:02:09,629  INFO - [com.zulong.web.service.serviceimpl]FlowchartServiceImpl.createFlowchart@create flowchart|id=3|version=0|name=myFlowchart|des=Flowchart description|current_time=2023-07-06 16:02:09|inner=false
+2023-07-06 16:02:09,667  INFO - [Demo]PackageAnalysisController.getUserBasicInfo@ success run into getUserBasicInfo function
+2023-07-06 16:02:10,018  INFO - {"status":0,"desc":"SUCCESS","data":{"UserID":"Test","token":"zulong001","projects":null,"administrator":false,"userID":"Test"}}
+2023-07-06 16:02:38,844  INFO - [Demo]PackageAnalysisController.createFlowchart@ success run into createFlowchart function
+2023-07-06 16:02:38,844  INFO - [com.zulong.web.service.serviceimpl]FlowchartServiceImpl.createFlowchart@create flowchart|id=4|version=0|name=myFlowchart|des=Flowchart description|current_time=2023-07-06 16:02:38|inner=false
+2023-07-06 16:03:45,355  INFO - [Demo]PackageAnalysisController.getUserBasicInfo@ success run into getUserBasicInfo function
+2023-07-06 16:03:52,576  INFO - [Demo]PackageAnalysisController.createFlowchart@ success run into createFlowchart function
+2023-07-06 16:03:52,576  INFO - [com.zulong.web.service.serviceimpl]FlowchartServiceImpl.createFlowchart@create flowchart|id=5|version=0|name=myFlowchart|des=Flowchart description|current_time=2023-07-06 16:03:52|inner=false
+2023-07-06 16:04:20,156  INFO - [Demo]PackageAnalysisController.getUserBasicInfo@ success run into getUserBasicInfo function
+2023-07-06 16:04:34,772  INFO - [Demo]PackageAnalysisController.createFlowchart@ success run into createFlowchart function
+2023-07-06 16:04:34,773  INFO - [com.zulong.web.service.serviceimpl]FlowchartServiceImpl.createFlowchart@create flowchart|id=6|version=0|name=myFlowchart|des=Flowchart description|current_time=2023-07-06 16:04:34|inner=false
+2023-07-06 16:04:34,802  INFO - [Demo]PackageAnalysisController.getUserBasicInfo@ success run into getUserBasicInfo function
+2023-07-06 16:04:35,094  INFO - {"status":0,"desc":"SUCCESS","data":{"UserID":"Test","token":"zulong001","projects":null,"administrator":false,"userID":"Test"}}
+2023-07-06 16:05:46,691  INFO - [Demo]PackageAnalysisController.createFlowchart@ success run into createFlowchart function
+2023-07-06 16:05:46,691  INFO - [com.zulong.web.service.serviceimpl]FlowchartServiceImpl.createFlowchart@create flowchart|id=7|version=0|name=myFlowchart|des=Flowchart description|current_time=2023-07-06 16:05:46|inner=false
+2023-07-06 16:05:46,729  INFO - [Demo]PackageAnalysisController.getUserBasicInfo@ success run into getUserBasicInfo function
+2023-07-06 16:05:47,049  INFO - {"status":0,"desc":"SUCCESS","data":{"UserID":"Test","token":"zulong001","projects":null,"administrator":false,"userID":"Test"}}
+2023-07-06 16:50:21,553  INFO - [system]WebServer Application started
+2023-07-06 16:54:40,737  INFO - [system]WebServer Application started
