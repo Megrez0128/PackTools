@@ -33,7 +33,7 @@ public class TestRedis {
 
     @Test
     public void testObj() throws Exception {
-        User user=new User("aa@126.com", "aa");
+        User user=new User("aa@126.com", "aa",null,false);
         ValueOperations operations=redisTemplate.opsForValue();
 
         operations.set("com.neox", user);

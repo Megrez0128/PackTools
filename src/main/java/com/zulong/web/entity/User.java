@@ -12,32 +12,31 @@ import java.util.ArrayList;
 @AllArgsConstructor
 public class User implements Serializable
 {
-    public String UserID;
-    public String token;
-    public ArrayList<Group> projects;
-    public boolean administrator;
-
-    /**
-     * 测试用的构造函数
-     * @param id
-     * @param token
-     */
-    public User(String id, String token) {
-        this.UserID = id;
-        this.token = token;
-    }
-
-    final public String getUserID() {
-        return this.UserID;
-    }
-    final public String getToken() {
-        return this.token;
-    }
-    final public ArrayList<Group> getProjects() {
-        return this.projects;
-    }
-    final public boolean getAdministrator() {
-        return this.administrator;
-    }
+    private String user_id;
+    private String token;
+    private ArrayList<Integer> projects;
+    private boolean administrator;
+//    /**
+//     * 测试用的构造函数
+//     * @param id
+//     * @param token
+//     */
+//    public User(String id, String token) {
+//        this.UserID = id;
+//        this.token = token;
+//    }
+//
+//    final public String getUserID() {
+//        return this.UserID;
+//    }
+//    final public String getToken() {
+//        return this.token;
+//    }
+//    final public ArrayList<Integer> getProjects() {
+//        return this.projects;
+//    }
+//    final public boolean getAdministrator() {
+//        return this.administrator;
+//    }
 
 }
