@@ -33,7 +33,7 @@ public class FlowchartServiceImpl implements FlowchartService {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
         String current_time = df.format(new Date());// new Date()为获取当前系统时间
         LoggerManager.logger().info(String.format(
-                "[com.zulong.web.service.serviceimpl]FlowchartServiceImpl.createFlowchart@create flowchart|id=%s|version=%s|name=%s|des=%s|current_time=%s|inner=%s", tempId, 0, name, des, current_time, "false"));
+                "[com.zulong.web.daoimpl.serviceimpl]FlowchartServiceImpl.createFlowchart@create flowchart|id=%s|version=%s|name=%s|des=%s|current_time=%s|inner=%s", tempId, 0, name, des, current_time, "false"));
         return new Flowchart(tempId++, 0,"success", name, des, current_time, false);
     }
 

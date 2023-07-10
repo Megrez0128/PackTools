@@ -14,5 +14,6 @@ public class Flowchart {
     private String name;
     private String des;
     private String last_build;
+    //TODO: 目前还不知道inner的属性以及怎么使用
     private boolean inner;
 }

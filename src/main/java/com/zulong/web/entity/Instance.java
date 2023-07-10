@@ -11,16 +11,16 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Instance extends Flowchart{
-    String uuid;  // TODO：暂时指定为String类型，标记唯一id
-    String flow_id;  // 流程id
-    String node_id;  // 运行到的节点的id
-    ArrayList<String> option;  // 参数，不需要处理
+    private String uuid;  // TODO：暂时指定为String类型，标记唯一id
+    private String flow_id;  // 流程id
+    private String node_id;  // 运行到的节点的id
+    private ArrayList<String> option;  // 参数，不需要处理
     // 以上信息都不需要修改
-
-    String startTime;
-    String endTime;
-    Boolean complete;
-    Boolean hasError;
+    // 指定为private类型，需要添加接口
+    private String startTime;
+    private String endTime;
+    private Boolean complete;
+    private Boolean hasError;
 
 //    /**
 //     * 设置Instance初始化函数

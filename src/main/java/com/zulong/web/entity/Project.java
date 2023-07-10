@@ -9,8 +9,8 @@ import java.util.ArrayList;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Group {
+public class Project {
     private int id;
     private String projectName;
-    private ArrayList<String> members;
+    private ArrayList<String> members;  // 存储userID
 }
