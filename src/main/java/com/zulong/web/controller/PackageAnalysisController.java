@@ -33,7 +33,6 @@ public class PackageAnalysisController
         LoggerManager.logger().info(String.format("[com.zulong.web.controller]PackageAnalysisController.getUserBasicInfo@ success run into getUserBasicInfo function"));
         if (StringUtils.isBlank(username))
         {
-            // 这里是不是可以直接一个error日志？
             ClientArgIllegalException e = new ClientArgIllegalException(ResultCode.PARAM_IS_INVALID);
             LoggerManager.logger().error(String.format(
                     "[com.zulong.web.controller]PackageAnalysisController.getUserBasicInfo@param invalid|username=%s"), e);

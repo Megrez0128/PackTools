@@ -1,5 +1,6 @@
 package com.zulong.web.entity;
 
+import com.sun.xml.internal.ws.message.stream.StreamHeader11;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,10 +12,10 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Instance extends Flowchart{
-    private String uuid;  // TODO：暂时指定为String类型，标记唯一id
+    private int uuid;  // TODO：暂时指定为int类型，标记唯一id
     private String flow_id;  // 流程id
     private String node_id;  // 运行到的节点的id
-    private ArrayList<String> option;  // 参数，不需要处理
+    private String option;  // 参数，不需要处理
     // 以上信息都不需要修改
     // 指定为private类型，需要添加接口
     private String startTime;
@@ -24,15 +25,20 @@ public class Instance extends Flowchart{
 
 //    /**
 //     * 设置Instance初始化函数
-//     * 理论上只需要设置startTime, complete, hasError
+//     * 固定设置startTime, complete, hasError
 //     * 其余信息都在调用Instance上传时更新
 //     */
-//    public Instance(){
-//        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//        this.startTime = df.format(new Date());
-//        this.complete = false;
-//        this.hasError = false;
-//    }
+    final public void initInstance(int uuid, String flow_id, String node_id, String option){
+        this.uuid = uuid;
+        this.flow_id = flow_id;
+        this.node_id = node_id;
+        this.option = option;
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        this.startTime = df.format(new Date());
+        this.complete = false;
+        this.hasError = false;
+    }
+
 
 
 }

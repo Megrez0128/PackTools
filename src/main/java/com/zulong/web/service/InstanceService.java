@@ -1,8 +1,9 @@
 package com.zulong.web.service;
 
-import java.util.ArrayList;
+import com.zulong.web.entity.Instance;
+
 
 public interface InstanceService {
-    public void UploadInstance(String uuid, String flow_id, String node_id, ArrayList<String> option);
+    public Instance CreateInstance(String flow_id, String node_id, String option);
     public void PullAndBuild();
 }
