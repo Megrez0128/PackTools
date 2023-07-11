@@ -10,7 +10,7 @@ public class InstanceServiceImpl implements InstanceService {
     int tmpuuid = 0;
 
     @Override
-    final public Instance CreateInstance(String flow_id, String node_id, String option){
+    final public Instance CreateInstance(int flow_id, String node_id, String option){
         Instance instance = new Instance();
         instance.initInstance(tmpuuid++, flow_id, node_id, option);
         return instance;

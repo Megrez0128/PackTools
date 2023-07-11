@@ -49,7 +49,7 @@ public class PackageAnalysisController
     }
 
     @PostMapping(value = "/create")
-    public Map<String,Object> createFlowchart(@RequestBody Map<String, String> request) {
+    public Map<String, Object> createFlowchart(@RequestBody Map<String, String> request) {
         String name = request.get("name");
         String des = request.get("des");
         LoggerManager.logger().debug(String.format("[com.zulong.web.controller]PackageAnalysisController.createFlowchart@ success receive post|name=%s|des=%s",name,des));

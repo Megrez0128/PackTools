@@ -13,7 +13,7 @@ import java.util.Date;
 @AllArgsConstructor
 public class Instance extends Flowchart{
     private int uuid;  // TODO：暂时指定为int类型，标记唯一id
-    private String flow_id;  // 流程id
+    private int flow_id;  // 流程id
     private String node_id;  // 运行到的节点的id
     private String option;  // 参数，不需要处理
     // 以上信息都不需要修改
@@ -28,7 +28,7 @@ public class Instance extends Flowchart{
 //     * 固定设置startTime, complete, hasError
 //     * 其余信息都在调用Instance上传时更新
 //     */
-    final public void initInstance(int uuid, String flow_id, String node_id, String option){
+    final public void initInstance(int uuid, int flow_id, String node_id, String option){
         this.uuid = uuid;
         this.flow_id = flow_id;
         this.node_id = node_id;
