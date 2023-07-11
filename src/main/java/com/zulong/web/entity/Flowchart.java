@@ -16,4 +16,8 @@ public class Flowchart {
     private String last_build;
     //TODO: 目前还不知道inner的属性以及怎么使用
     private boolean inner;
+
+    public void setLast_build(String last_build) {
+        this.last_build = last_build;
+    }
 }

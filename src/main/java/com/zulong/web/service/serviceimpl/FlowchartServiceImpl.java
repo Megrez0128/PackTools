@@ -16,7 +16,7 @@ public class FlowchartServiceImpl implements FlowchartService {
 
     @Override
     public User getUserInfo(String username) {
-        return new User("Test", "zulong001",null,false);
+        return new User("Test", "zulong001",false);
     }
 
     /**

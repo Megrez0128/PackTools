@@ -12,17 +12,16 @@ import java.util.Map;
 import com.zulong.web.utils.ResultCode;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.integration.IntegrationProperties;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/myflow")
-public class PackageAnalysisController
+public class FlowController
 {
     private final FlowchartService flowchartService;
 
     @Autowired
-    public PackageAnalysisController(FlowchartService flowchartService)
+    public FlowController(FlowchartService flowchartService)
     {
         this.flowchartService = flowchartService;
     }
@@ -30,12 +29,12 @@ public class PackageAnalysisController
     @GetMapping(value = "/userinfo")
     public User getUserBasicInfo(@RequestParam String username)
     {
-        LoggerManager.logger().info(String.format("[com.zulong.web.controller]PackageAnalysisController.getUserBasicInfo@ success run into getUserBasicInfo function"));
+        LoggerManager.logger().info(String.format("[com.zulong.web.controller]FlowController.getUserBasicInfo@ success run into getUserBasicInfo function"));
         if (StringUtils.isBlank(username))
         {
             ClientArgIllegalException e = new ClientArgIllegalException(ResultCode.PARAM_IS_INVALID);
             LoggerManager.logger().error(String.format(
-                    "[com.zulong.web.controller]PackageAnalysisController.getUserBasicInfo@param invalid|username=%s"), e);
+                    "[com.zulong.web.controller]FlowController.getUserBasicInfo@param invalid|username=%s"), e);
         }
 
         User userInfo = flowchartService.getUserInfo(username);
@@ -43,7 +42,7 @@ public class PackageAnalysisController
         {
             ClientArgIllegalException e = new ClientArgIllegalException(ResultCode.USER_NOT_EXIST);
             LoggerManager.logger().error(String.format(
-                    "[com.zulong.web.controller]PackageAnalysisController.getUserBasicInfo@user info not exist|username=%s"), e);
+                    "[com.zulong.web.controller]FlowController.getUserBasicInfo@user info not exist|username=%s"), e);
         }
         return userInfo;
     }
@@ -52,7 +51,7 @@ public class PackageAnalysisController
     public Map<String, Object> createFlowchart(@RequestBody Map<String, String> request) {
         String name = request.get("name");
         String des = request.get("des");
-        LoggerManager.logger().debug(String.format("[com.zulong.web.controller]PackageAnalysisController.createFlowchart@ success receive post|name=%s|des=%s",name,des));
+        LoggerManager.logger().debug(String.format("[com.zulong.web.controller]FlowController.createFlowchart@ success receive post|name=%s|des=%s",name,des));
         Flowchart flowchart = flowchartService.createFlowchart(name, des);
 
         Map<String, Object> response = new HashMap<>();
@@ -76,7 +75,7 @@ public class PackageAnalysisController
             response.put("data", result);
             return response;
         } catch (Exception e) {
-            LoggerManager.logger().warn("[com.zulong.web.controller]PackageAnalysisController.saveFlowchart@saving operation failed|", e);
+            LoggerManager.logger().warn("[com.zulong.web.controller]FlowController.saveFlowchart@saving operation failed|", e);
             Map<String, Object> response = new HashMap<>();
             response.put("code", 40000);
             response.put("data", null);
@@ -94,7 +93,7 @@ public class PackageAnalysisController
             response.put("data", result);
             return response;
         } catch (Exception e) {
-            LoggerManager.logger().warn("[com.zulong.web.controller]PackageAnalysisController.saveFlowchart@deletion operation failed|", e);
+            LoggerManager.logger().warn("[com.zulong.web.controller]FlowController.saveFlowchart@deletion operation failed|", e);
             Map<String, Object> response = new HashMap<>();
             response.put("code", 40000);
             response.put("data", null);

@@ -1,7 +1,7 @@
 package com.zulong.web;//package com.zulong.web;
 //
 //import com.fasterxml.jackson.databind.ObjectMapper;
-//import com.zulong.web.controller.PackageAnalysisController;
+//import com.zulong.web.controller.FlowController;
 //import org.junit.jupiter.api.BeforeAll;
 //import org.junit.jupiter.api.Test;
 //import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ package com.zulong.web;//package com.zulong.web;
 //class WebServerApplicationTests {
 //
 //    @Autowired
-//    private PackageAnalysisController packageAnalysisController;
+//    private FlowController packageAnalysisController;
 //
 //    @Autowired
 //    private MockMvc mockMvc;
@@ -46,23 +46,15 @@ package com.zulong.web;//package com.zulong.web;
 //}
 
 
-import com.zulong.web.controller.PackageAnalysisController;
-import com.zulong.web.service.FlowchartService;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.web.servlet.MockMvc;
 
 import com.zulong.web.log.LoggerManager;
-import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.HashMap;
 import java.util.Map;

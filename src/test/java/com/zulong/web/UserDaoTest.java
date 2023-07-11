@@ -2,8 +2,6 @@ package com.zulong.web;
 
 import com.zulong.web.dao.UserDao;
 import com.zulong.web.entity.User;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,8 +30,8 @@ public class UserDaoTest {
 //        jdbcTemplate.execute("create database test_user");
 //        jdbcTemplate.execute("use test_user");
 //        jdbcTemplate.execute("drop table test_user");
-        jdbcTemplate.execute("create table test_user(user_id varchar(20) primary key, token varchar(50), projects varchar(50), administrator boolean)");
-        jdbcTemplate.execute("insert into test_user(user_id,token,projects,administrator)values('admin','123456','1',true)");
+        jdbcTemplate.execute("create table test_user(user_id varchar(20) primary key, token varchar(50), administrator boolean)");
+        jdbcTemplate.execute("insert into test_user(user_id,token,administrator)values('admin','123456',true)");
     }
 
     @AfterEach
@@ -44,38 +42,35 @@ public class UserDaoTest {
 
     @Test
     public void testFindAll() {
-//        jdbcTemplate.execute("create table test_user(user_id varchar(20) primary key, token varchar(50), projects varchar(50), administrator boolean)");
-//        jdbcTemplate.execute("insert into test_user(user_id,token,projects,administrator)values('admin','123456','1',true)");
+//        jdbcTemplate.execute("create table test_user(user_id varchar(20) primary key, token varchar(50), administrator boolean)");
+//        jdbcTemplate.execute("insert into test_user(user_id,token,administrator)values('admin','123456',true)");
         List<User> userList = userDao.findAll();
         assertEquals(1, userList.size());
         assertEquals("admin", userList.get(0).getUser_id());
         assertEquals("123456", userList.get(0).getToken());
-        assertEquals(1, userList.get(0).getProjects().get(0));
         assertTrue(userList.get(0).isAdministrator());
 //        jdbcTemplate.execute("drop table test_user");
     }
 
     @Test
     public void testFindByUserID() {
-//        jdbcTemplate.execute("create table test_user(user_id varchar(20) primary key, token varchar(50), projects varchar(50), administrator boolean)");
-//        jdbcTemplate.execute("insert into test_user(user_id,token,projects,administrator)values('admin','123456','1',true)");
+//        jdbcTemplate.execute("create table test_user(user_id varchar(20) primary key, token varchar(50), administrator boolean)");
+//        jdbcTemplate.execute("insert into test_user(user_id,token,administrator)values('admin','123456',true)");
         User user = userDao.findByUserID("admin");
         assertNotNull(user);
         assertEquals("admin", user.getUser_id());
         assertEquals("123456", user.getToken());
-        assertEquals(1, user.getProjects().get(0));
         assertTrue(user.isAdministrator());
 //        jdbcTemplate.execute("drop table test_user");
     }
 
     @Test
     public void testAddUser() {
-//        jdbcTemplate.execute("create table test_user(user_id varchar(20) primary key, token varchar(50), projects varchar(50), administrator boolean)");
-//        jdbcTemplate.execute("insert into test_user(user_id,token,projects,administrator)values('admin','123456','1',true)");
+//        jdbcTemplate.execute("create table test_user(user_id varchar(20) primary key, token varchar(50), administrator boolean)");
+//        jdbcTemplate.execute("insert into test_user(user_id,token,administrator)values('admin','123456',true)");
         User user = new User();
         user.setUser_id("test");
         user.setToken("123");
-        user.setProjects(null);
         user.setAdministrator(false);
         boolean result = userDao.insertUser(user);
         assertTrue(result);
@@ -84,15 +79,14 @@ public class UserDaoTest {
         assertNotNull(newUser);
         assertEquals("test", newUser.getUser_id());
         assertEquals("123", newUser.getToken());
-        assertEquals(null, newUser.getProjects());
         assertFalse(newUser.isAdministrator());
 //        jdbcTemplate.execute("drop table test_user");
     }
 
     @Test
     public void testDeleteByUserID() {
-//        jdbcTemplate.execute("create table test_user(user_id varchar(20) primary key, token varchar(50), projects varchar(50), administrator boolean)");
-//        jdbcTemplate.execute("insert into test_user(user_id,token,projects,administrator)values('admin','123456','1',true)");
+//        jdbcTemplate.execute("create table test_user(user_id varchar(20) primary key, token varchar(50), administrator boolean)");
+//        jdbcTemplate.execute("insert into test_user(user_id,token,administrator)values('admin','123456',true)");
         boolean result = userDao.deleteByUserID("admin");
         assertTrue(result);
 

@@ -14,13 +14,6 @@ public class User implements Serializable
 {
     private String user_id;
     private String token;
-    private ArrayList<Integer> projects;  // 存储id
     private boolean administrator;
-
-//    public User(String id, String token) {
-//        this.UserID = id;
-//        this.token = token;
-//    }
-
 
 }

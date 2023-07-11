@@ -19,7 +19,6 @@ public class UserDaoImpl implements UserDao {
     @Override
     public List<User> findAll() {
         String sql = "select * from test_user";
-        //todo: projects是arrayList<integer>，可能转化会有问题
         List<User> userList = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(User.class));
         return userList;
     }
@@ -43,7 +42,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public boolean insertUser(User user) {
         String sql = "insert into test_user(user_id, token, projects, administrator)values(?,?,?,?)";
-        Object[] params = {user.getUser_id(), user.getToken(), user.getProjects(), user.isAdministrator()};
+        Object[] params = {user.getUser_id(), user.getToken(), user.isAdministrator()};
         boolean flag = jdbcTemplate.update(sql, params) > 0;
         if(!flag){
             LoggerManager.logger().warn("[com.zulong.web.dao.daoimpl]UserDaoImpl.insertUser@insertion failed");

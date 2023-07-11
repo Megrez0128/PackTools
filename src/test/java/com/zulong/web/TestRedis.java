@@ -31,9 +31,13 @@ public class TestRedis {
         assertEquals("111", stringRedisTemplate.opsForValue().get("aaa"));
     }
 
+    /**
+     * 证明Redis连接成功并能顺利插入数据
+     * @throws Exception
+     */
     @Test
     public void testObj() throws Exception {
-        User user=new User("aa@126.com", "aa",null,false);
+        User user=new User("aa@126.com", "aa", false);
         ValueOperations operations=redisTemplate.opsForValue();
 
         operations.set("com.neox", user);
