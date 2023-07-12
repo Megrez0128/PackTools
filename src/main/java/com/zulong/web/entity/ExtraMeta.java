@@ -10,7 +10,8 @@ import java.util.HashMap;
 @Data
 public class ExtraMeta {
     private int id;
-    private int group_id;
+    private int meta_id;
+    private int group;
     private int version;
     private HashMap<String,Object> data;
 }

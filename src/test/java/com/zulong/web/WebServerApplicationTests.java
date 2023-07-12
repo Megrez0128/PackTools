@@ -74,7 +74,7 @@ class WebServerApplicationTests{
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		Map<String, String> requestBody = new HashMap<>();
 		requestBody.put("name", "myFlowchart");
-		requestBody.put("des", "Flowchart description");
+		requestBody.put("des", "Flow description");
 		HttpEntity<Map<String, String>> requestEntity = new HttpEntity<>(requestBody, headers);
 		ResponseEntity<Map> responseEntity = restTemplate.postForEntity(url, requestEntity, Map.class);
 		Map response = responseEntity.getBody();
@@ -83,7 +83,7 @@ class WebServerApplicationTests{
 		assertEquals(20000, data.get("code"));
 		Map data2 = (Map) data.get("data");
 		assertEquals("myFlowchart", data2.get("name"));
-		assertEquals("Flowchart description", data2.get("des"));
+		assertEquals("Flow description", data2.get("des"));
 		assertNotNull(data2.get("id"));
 	}
 

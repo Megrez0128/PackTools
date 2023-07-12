@@ -11,6 +11,7 @@ import java.util.HashMap;
 @Data
 public class CoreMeta {
     private int id;
+    private int meta_id;
     private int version;
     private HashMap<String,Object> data;
 }

@@ -1,19 +1,16 @@
 package com.zulong.web.entity;
 
-import com.sun.xml.internal.ws.message.stream.StreamHeader11;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 
 @NoArgsConstructor
 @AllArgsConstructor
-public class Instance extends Flowchart{
+public class Instance extends Flow {
     private int uuid;  // TODO：暂时指定为int类型，标记唯一id
-    private int flow_id;  // 流程id
+    private int flow_record_id;  // 流程id
     private String node_id;  // 运行到的节点的id
     private String option;  // 参数，不需要处理
     // 以上信息都不需要修改
@@ -30,7 +27,7 @@ public class Instance extends Flowchart{
 //     */
     final public void initInstance(int uuid, int flow_id, String node_id, String option){
         this.uuid = uuid;
-        this.flow_id = flow_id;
+        this.flow_record_id = flow_id;
         this.node_id = node_id;
         this.option = option;
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

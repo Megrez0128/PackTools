@@ -1,14 +1,18 @@
 package com.zulong.web.dao.daoimpl;
 
+import com.alibaba.fastjson.JSON;
 import com.zulong.web.dao.ExtraMetaDao;
 import com.zulong.web.entity.ExtraMeta;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
+
 @Service("extraMetaImpl")
 public class ExtraMetaDaoImpl implements ExtraMetaDao {
-    
+
     @Autowired
     private JdbcTemplate jdbcTemplate;
     

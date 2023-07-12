@@ -1,12 +1,15 @@
 package com.zulong.web.service.serviceimpl;
 
+import com.zulong.web.dao.FlowDao;
 import com.zulong.web.entity.Instance;
 import com.zulong.web.service.InstanceService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
 @Service
 public class InstanceServiceImpl implements InstanceService {
+
     int tmpuuid = 0;
 
     @Override

@@ -10,7 +10,6 @@ import java.util.ArrayList;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Group {
-    private int id;
-    private String projectName;
-    // private ArrayList<String> members;
+    private int group_id;
+    private String project_name;
 }
