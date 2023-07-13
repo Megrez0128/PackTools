@@ -4,4 +4,5 @@ import com.zulong.web.entity.Group;
 
 public interface GroupDao {
     public boolean insertGroup(Group group);
+    
 }

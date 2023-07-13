@@ -62,4 +62,16 @@ public class FlowDaoImpl implements FlowDao {
         }
         return 1;
     }
+
+    public Flow cloneFlow(int record_id, String name, String des){
+        String sql = "select * from flow where record_id=?";
+        Object[] params = {record_id};
+        Flow sample = jdbcTemplate.queryForObject(sql, params, new BeanPropertyRowMapper<>(Flow.class));
+        Flow flow = new Flow(sample);
+        flow.setName(name);
+        flow.setDes(des);
+        // TODO: 写insertFlow
+        // TODO: 并且修改record_id和版本，可以在写完FlowSummary后继续补充
+        return flow;
+    }
 }

@@ -1,6 +1,5 @@
 package com.zulong.web.entity;
 
-import com.alibaba.fastjson.JSONObject;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,8 +19,8 @@ public class Flow {
     private int core_meta_id;
     private int extra_meta_id;
 
-    private JSONObject graph_data;
-    private JSONObject blackboard;
+    private String graph_data;
+    private String blackboard;
 
     public Flow(int record_id, int version,  String name, String des, String currentTime) {
         this.record_id = record_id;
@@ -29,6 +28,16 @@ public class Flow {
         this.name = name;
         this.des = des;
         this.last_build = currentTime;
+    }
+
+    public Flow(Flow flow){
+        this.flow_id = flow.flow_id;
+        this.name = flow.name;
+        this.des = flow.des;
+        this.core_meta_id = flow.core_meta_id;
+        this.extra_meta_id = flow.extra_meta_id;
+        this.graph_data = flow.graph_data;
+        this.blackboard = flow.blackboard;
     }
 
     public void setLast_build(String last_build) {

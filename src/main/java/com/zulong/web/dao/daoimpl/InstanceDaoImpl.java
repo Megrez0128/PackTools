@@ -28,9 +28,10 @@ public class InstanceDaoImpl implements InstanceDao {
     }
 
     @Override
-    public Instance findInstanceByID(Integer instance_id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findInstanceByID'");
+    public Instance findInstanceByID(Integer uuid) {
+        String sql = "select count(*) from instance where uuid = ?";
+        Instance instance = jdbcTemplate.queryForObject(sql, new Object[]{uuid}, Instance.class);
+        return instance;
     }
 
 }

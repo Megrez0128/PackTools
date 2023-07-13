@@ -47,15 +47,28 @@ public class InstanceController {
 
     /**
      * 轮询，每隔一段时间发送一次拉取请求
-     * 只有在is_whole=true时才会返回Data
+     * TODO: 其他问题很容易解决，但是Instance返回时node怎么处理？
      * @param request
      */
     @PostMapping(value = "/build")
-    public void UpdateInstance(@RequestBody Map<String, Object> request){
-        try{
+    public Map<String, Object> UpdateInstance(@RequestBody Map<String, Object> request){
 
+        int uuid = (int)request.get("uuid");
+        try {
+            Instance instance = instanceService.findInstanceByID(uuid);
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("code", 20000);
+            response.put("uuid", uuid);
+            response.put("data", instance);
+
+            return response;
         } catch (Exception e) {
-
+            Map<String, Object> response = new HashMap<>();
+            response.put("code", 40000);
+            response.put("data", null);
+            LoggerManager.logger().warn(String.format("[com.zulong.web.controller]InstanceController.UpdateInstance@pulling instance failed|uuid=%d", uuid), e);
+            return response;
         }
     }
 }

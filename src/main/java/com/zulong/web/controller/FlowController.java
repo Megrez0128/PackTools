@@ -27,48 +27,115 @@ public class FlowController
     {
         this.flowService = flowService;
     }
-
-
-    @PostMapping(value="/list")
-    public Map<String, Object> getFlowList() {
-        List<Flow> flowlist = flowService.getFlowList();
-        Map<String, Object> response = new HashMap<>();
-        response.put("code", 20000);
-        response.put("data", flowlist);
-        return response;
-    }
-
-    @PostMapping(value="/detail")
-    public Map<String, Object> getFlowDetails(@RequestBody Map<String, Integer> request) {
-        int flow_id = request.get("flow_id");
-        int version = request.get("version");
+    /**
+     * 对应flow-创建流程-create接口
+     * @param core_meta_id,extra_meta_id,name,des,graph_data,blackboard
+     * @return
+     */
+    @PostMapping(value = "/create")
+    public Map<String, Object> createFlow(@RequestBody Map<String, String> request) {
         try {
-            Flow flow = flowService.getFlowDetails(flow_id, version);
+            Integer core_meta_id = Integer.parseInt(request.get("core_meta_id"));
+            Integer extra_meta_id = Integer.parseInt(request.get("extra_meta_id"));
+            String graph_data = request.get("graph_data");
+            String blackboard = request.get("blackboard");
+            String name = request.get("name");
+            String des = request.get("des");
+            LoggerManager.logger().debug(String.format("[com.zulong.web.controller]FlowController.createFlowchart@ success receive post|name=%s|des=%s",name,des));
+            Flow flow = flowService.createFlow(name, des, graph_data, blackboard, core_meta_id, extra_meta_id);
+
             Map<String, Object> response = new HashMap<>();
             response.put("code", 20000);
             response.put("data", flow);
+
             return response;
         } catch (Exception e) {
+            LoggerManager.logger().warn("[com.zulong.web.controller]FlowController.createFlow@operation failed|", e);
             Map<String, Object> response = new HashMap<>();
-            response.put("code", 40000);
-            response.put("data", null);
+            response.put("code", 50000);
+            response.put("message", null);
             return response;
         }
     }
 
+    @PostMapping(value = "/clone")
+    public Map<String, Object> cloneFlow(@RequestBody Map<String, Object> request) {
+        try {
+            
+            int record_id = (int) request.get("record_id");
+            String name = (String) request.get("name");
+            String des = (String) request.get("des");
+            LoggerManager.logger().debug(String.format("[com.zulong.web.controller]FlowController.cloneFlow@ success receive post|record_id=%d|name=%s|des=%s",record_id,name,des));
+            Flow flow = flowService.cloneFlow(record_id, name, des);
 
-    @PostMapping(value = "/create")
-    public Map<String, Object> createFlow(@RequestBody Map<String, String> request) {
-        String name = request.get("name");
-        String des = request.get("des");
-        LoggerManager.logger().debug(String.format("[com.zulong.web.controller]FlowController.createFlowchart@ success receive post|name=%s|des=%s",name,des));
-        Flow flow = flowService.createFlow(name, des);
+            Map<String, Object> response = new HashMap<>();
+            response.put("code", 20000);
+            response.put("data", flow);
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("code", 20000);
-        response.put("data", flow);
+            return response;
+        } catch (Exception e) {
+            LoggerManager.logger().warn("[com.zulong.web.controller]FlowController.cloneFlow@operation failed|", e);
+            Map<String, Object> response = new HashMap<>();
+            response.put("code", 50000);
+            response.put("message", e.getMessage()); // 修改message的值为报错信息
+            return response;
+        }
+                }
 
-        return response;
+    @PostMapping(value = "/commit")
+    public Map<String, Object> commitFlow(@RequestBody Map<String, Object> request) {
+        try {
+            int record_id = (int) request.get("record_id");
+            String commit_message = (String) request.get("commit_message");
+            LoggerManager.logger().debug(String.format("[com.zulong.web.controller]FlowController.commitFlow@ success receive post|record_id=%d|commit_message=%s",record_id,commit_message));
+            Flow flow = flowService.commitFlow(record_id, commit_message);
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("code", 20000);
+            response.put("data", flow);
+
+            return response;
+        } catch (Exception e) {
+            LoggerManager.logger().warn("[com.zulong.web.controller]FlowController.commitFlow@operation failed|", e);
+            Map<String, Object> response = new HashMap<>();
+            response.put("code", 50000);
+            response.put("message", e.getMessage()); // 修改message的值为报错信息
+            return response;
+        }
+    }
+    
+    /**
+     * 删除Flow，先验证有无实例，否则不能删除
+     * @param request
+     * @return
+     */
+    @PostMapping(value = "/delete")
+    public Map<String, Object> deleteFlow(@RequestBody Map<String, Object> request) {
+        try {
+            int record_id = (int) request.get("record_id");
+            int result = flowService.deleteFlow(record_id);
+            Map<String, Object> response = new HashMap<>();
+            if(result == 1) {
+                response.put("code", 20000);
+                response.put("message", true);
+            }
+            if(result == 0) {
+                // TODO: 表示flow有对应的Instance，不能删除，可能可以调整返回码
+                response.put("code", 40100);
+                response.put("message", false);
+            }
+            else {
+                response.put("code", 30400);
+                response.put("message", false);
+            }
+            return response;
+        } catch (Exception e) {
+            LoggerManager.logger().warn("[com.zulong.web.controller]FlowController.saveFlowchart@deletion operation failed|", e);
+            Map<String, Object> response = new HashMap<>();
+            response.put("code", 50000);
+            response.put("message", e.getMessage()); // 修改message的值为报错信息
+            return response;
+        }
     }
 
     /**
@@ -79,11 +146,16 @@ public class FlowController
     @PostMapping(value = "/save")
     public Map<String, Object> saveFlow(@RequestBody Map<String, Object> request) {
         try {
-            int fid = (int) request.get("fid");
+            int flow_id = (int) request.get("flow_id");
             // 这里的graph_data和blackboard理论上是json，先用String存储，不手动处理
+            String commit_message = (String) request.get("commit_message");
+            Integer core_meta_id = (Integer) request.get("core_meta_id");
+            Integer extra_meta_id = (Integer) request.get("extra_meta_id");
             String graph_data = (String) request.get("graph_data");
             String blackboard = (String) request.get("blackboard");
-            boolean result = flowService.saveFlow(fid, graph_data, blackboard);
+            String name = (String) request.get("name");
+            String des = (String) request.get("des");
+            Flow result = flowService.saveFlow(flow_id, commit_message, core_meta_id, extra_meta_id, graph_data, blackboard, name, des);
 
             Map<String, Object> response = new HashMap<>();
             response.put("code", 20000);
@@ -92,42 +164,44 @@ public class FlowController
         } catch (Exception e) {
             LoggerManager.logger().warn("[com.zulong.web.controller]FlowController.saveFlowchart@saving operation failed|", e);
             Map<String, Object> response = new HashMap<>();
-            response.put("code", 40000);
-            response.put("data", null);
+            response.put("code", 50000);
+            response.put("message", e.getMessage()); // 修改message的值为报错信息
             return response;
         }
     }
 
-    /**
-     * 删除Flow，先验证有无实例，否则不能删除
-     * @param request
-     * @return
-     */
-    @PostMapping(value = "/delete")
-    public Map<String, Object> deleteFlow(@RequestBody Map<String, Object> request) {
+    @PostMapping(value="/detail")
+    public Map<String, Object> getFlowDetails(@RequestBody Map<String, Integer> request) {
         try {
-            int fid = (int) request.get("fid");
-            int result = flowService.deleteFlow(fid);
+            int flow_id = request.get("flow_id");
+            int version = request.get("version");
+            Flow flow = flowService.getFlowDetails(flow_id, version);
             Map<String, Object> response = new HashMap<>();
-            if(result == 1) {
-                response.put("code", 20000);
-                response.put("data", true);
-            }
-            if(result == 0) {
-                // TODO: 表示flow有对应的Instance，不能删除，可能可以调整返回码
-                response.put("code", 40100);
-                response.put("data", false);
-            }
-            else {
-                response.put("code", 30400);
-                response.put("data", false);
-            }
+            response.put("code", 20000);
+            response.put("data", flow);
             return response;
         } catch (Exception e) {
-            LoggerManager.logger().warn("[com.zulong.web.controller]FlowController.saveFlowchart@deletion operation failed|", e);
+            LoggerManager.logger().warn("[com.zulong.web.controller]FlowController.getFlowDetails@operation failed|", e);
             Map<String, Object> response = new HashMap<>();
-            response.put("code", 30400);
-            response.put("data", false);
+            response.put("code", 50000);
+            response.put("message", e.getMessage()); // 修改message的值为报错信息
+            return response;
+        }
+    }
+    
+    @PostMapping(value="/list")
+    public Map<String, Object> getFlowList() {
+        try {
+            List<Flow> flowlist = flowService.getFlowList();
+            Map<String, Object> response = new HashMap<>();
+            response.put("code", 20000);
+            response.put("data", flowlist);
+            return response;
+        } catch (Exception e) {
+            LoggerManager.logger().warn("[com.zulong.web.controller]FlowController.getFlowList@operation failed|", e);
+            Map<String, Object> response = new HashMap<>();
+            response.put("code", 50000);
+            response.put("message", e.getMessage()); // 修改message的值为报错信息
             return response;
         }
     }

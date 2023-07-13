@@ -41,7 +41,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public boolean insertUser(User user) {
         String sql = "insert into test_user(user_id, token, projects, administrator)values(?,?,?,?)";
-        Object[] params = {user.getUser_id(), user.isAdministrator()};
+        Object[] params = {user.getUser_id(), user.is_admin()};
         boolean flag = jdbcTemplate.update(sql, params) > 0;
         if(!flag){
             LoggerManager.logger().warn("[com.zulong.web.dao.daoimpl]UserDaoImpl.insertUser@insertion failed");

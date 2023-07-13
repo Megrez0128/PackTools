@@ -48,7 +48,7 @@ public class UserDaoTest {
         assertEquals(1, userList.size());
         assertEquals("admin", userList.get(0).getUser_id());
         assertEquals("123456", userList.get(0).getToken());
-        assertTrue(userList.get(0).isAdministrator());
+        assertTrue(userList.get(0).isIs_admin());
 //        jdbcTemplate.execute("drop table test_user");
     }
 
@@ -60,7 +60,7 @@ public class UserDaoTest {
         assertNotNull(user);
         assertEquals("admin", user.getUser_id());
         assertEquals("123456", user.getToken());
-        assertTrue(user.isAdministrator());
+        assertTrue(user.isIs_admin());
 //        jdbcTemplate.execute("drop table test_user");
     }
 
@@ -71,7 +71,7 @@ public class UserDaoTest {
         User user = new User();
         user.setUser_id("test");
         user.setToken("123");
-        user.setAdministrator(false);
+        user.setIs_admin(false);
         boolean result = userDao.insertUser(user);
         assertTrue(result);
 
@@ -79,7 +79,7 @@ public class UserDaoTest {
         assertNotNull(newUser);
         assertEquals("test", newUser.getUser_id());
         assertEquals("123", newUser.getToken());
-        assertFalse(newUser.isAdministrator());
+        assertFalse(newUser.isIs_admin());
 //        jdbcTemplate.execute("drop table test_user");
     }
 

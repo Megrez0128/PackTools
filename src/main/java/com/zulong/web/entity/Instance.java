@@ -12,10 +12,9 @@ import java.util.Date;
 @Data
 public class Instance {
     private int uuid;  // 唯一id
-    private int flow_record_id;  // 流程id
+    private int flow_record_id;
     private String node_id;  // 运行到的节点的id
     private String option;  // 参数，不需要处理
-    // 以上信息都不需要修改
     private String startTime;
     private String endTime;
     private Boolean complete;

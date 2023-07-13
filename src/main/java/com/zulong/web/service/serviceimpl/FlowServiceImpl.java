@@ -22,7 +22,7 @@ public class FlowServiceImpl implements FlowService {
     int tempId = 0;
 
     @Override
-    public Flow createFlow(String name, String des) {
+    public Flow createFlow(String name, String des, String graph_data, String blackboard, int core_meta_id, int extra_meta_id){
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
         String current_time = df.format(new Date());// new Date()为获取当前系统时间
         LoggerManager.logger().info(String.format(
@@ -31,19 +31,19 @@ public class FlowServiceImpl implements FlowService {
     }
 
     @Override
-    public boolean saveFlow(int fid, String graphData, String blackboard) {
-        return false;
+    public Flow saveFlow(int flow_id, String commit_message, int core_meta_id,int extra_meta_id, String graphData, String blackboard, String name, String des) {
+        return null;
     }
 
     /**
      *
-     * @param fid
+     * @param flow_id
      * @return
      * 返回1表示正常删除，返回0表示Flow有对应的instance实例不能删除，返回2表示发生了数据库错误
      */
     @Override
-    public int deleteFlow(int fid) {
-        return flowDao.deleteFlow(fid);
+    public int deleteFlow(int flow_id) {
+        return flowDao.deleteFlow(flow_id);
     }
 
     public List<Flow> getFlowList(){
@@ -53,5 +53,16 @@ public class FlowServiceImpl implements FlowService {
 
     public Flow getFlowDetails(int flow_id, int version) {
         return flowDao.getFlowDetails(flow_id, version);
+    }
+
+    @Override
+    public Flow cloneFlow(int record_id, String name, String des) {
+        return flowDao.cloneFlow(record_id, name, des);
+    }
+
+    @Override
+    public Flow commitFlow(int record_id, String commit_message) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'commitFlow'");
     }
 }
