@@ -9,10 +9,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 public class ExtraMeta {
-    private int id;
     private int meta_id;
-    private int group;
+    private int group_id;
     private int version;
-    private JSONObject data;
+    private String data;
 
 }

@@ -11,8 +11,7 @@ import java.util.HashMap;
 @AllArgsConstructor
 @Data
 public class CoreMeta {
-    private int id;
     private int meta_id;
     private int version;
-    private JSONObject data;
+    private String data;
 }

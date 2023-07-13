@@ -5,4 +5,5 @@ public interface AuthenticationService {
     boolean hasMetaPermission(Integer group_id, Integer meta_id);
     boolean hasFlowPermission(Integer group_id, Integer flow_id);
     boolean hasInstancePermission(Integer group_id, Integer instance_id);
+    String getUserIdFromToken(String header);
 }

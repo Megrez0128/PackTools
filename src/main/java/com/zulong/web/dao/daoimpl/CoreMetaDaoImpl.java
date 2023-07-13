@@ -17,4 +17,9 @@ public class CoreMetaDaoImpl implements CoreMetaDao {
     }
     public boolean insertCoreMeta(CoreMeta coreMeta){return false;}
     public boolean deleteCoreMeta(int coreMetaID){return false; }
+    @Override
+    public int getMaxVersion(int meta_id) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getMaxVersion'");
+    }
 }

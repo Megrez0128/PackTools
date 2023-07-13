@@ -6,4 +6,5 @@ public interface CoreMetaDao {
     CoreMeta findCoreMetaByID(int coreMetaID);
     public boolean insertCoreMeta(CoreMeta coreMeta);
     public boolean deleteCoreMeta(int coreMetaID);
+    int getMaxVersion(int meta_id);
 }

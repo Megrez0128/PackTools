@@ -16,7 +16,6 @@ public class Instance extends Flow {
     private String node_id;  // 运行到的节点的id
     private String option;  // 参数，不需要处理
     // 以上信息都不需要修改
-    // 指定为private类型，需要添加接口
     private String startTime;
     private String endTime;
     private Boolean complete;
@@ -37,7 +36,5 @@ public class Instance extends Flow {
         this.complete = false;
         this.hasError = false;
     }
-
-
 
 }

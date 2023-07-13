@@ -30,7 +30,7 @@ public class ExtraMetaDaoImpl implements ExtraMetaDao {
     @Override
     public boolean insertExtraMeta(ExtraMeta extraMeta) {
         String sql = "insert into extra_meta (group_id, version, data) values (?, ?, ?)";
-        int result = jdbcTemplate.update(sql, extraMeta.getGroup(), extraMeta.getVersion(), JSON.toJSONString(extraMeta.getData()));
+        int result = jdbcTemplate.update(sql, extraMeta.getGroup_id(), extraMeta.getVersion(), JSON.toJSONString(extraMeta.getData()));
         return result > 0;
     }
 

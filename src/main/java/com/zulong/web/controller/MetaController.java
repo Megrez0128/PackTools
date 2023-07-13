@@ -39,11 +39,19 @@ public class MetaController {
             Integer meta_id = Integer.valueOf(request.get("meta_id"));
             Integer group_id = Integer.valueOf(request.get("group_id"));
             String data = request.get("data");
-            String user_id = httpServletRequest.getHeader("user_id");
+            String user_id = authenticationService.getUserIdFromToken(httpServletRequest.getHeader("Authorization")); //从token中解析出user_id
+            //验证user_id和group_id是否合法        
             boolean is_valid = authenticationService.isUserInGroup(user_id, group_id);
             if (!is_valid) {
                 response.put("code", "40300");
                 response.put("message","user or group not authorized");
+                return response;
+            }
+            //验证group_id和meta_id是否合法
+            is_valid = authenticationService.hasMetaPermission(group_id, meta_id);
+            if (!is_valid) {
+                response.put("code", "40300");
+                response.put("message","group or meta not authorized");
                 return response;
             }
             boolean is_success = metaService.createMeta(meta_id,group_id,data);

@@ -7,4 +7,5 @@ public interface ExtraMetaDao {
     boolean insertExtraMeta(ExtraMeta extraMeta);
     boolean deleteExtraMeta(int extraMetaID);
     boolean hasMetaPermission(Integer group_id, Integer meta_id);
+    int getMaxVersion(int meta_id);
 }

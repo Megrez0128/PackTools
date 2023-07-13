@@ -10,7 +10,7 @@ import com.zulong.web.dao.InstanceDao;
 import com.zulong.web.dao.AdministrationDao;
 
 import com.zulong.web.entity.Instance;
-
+import org.springframework.beans.factory.annotation.Value;
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService{
         
@@ -69,5 +69,23 @@ public class AuthenticationServiceImpl implements AuthenticationService{
             return true;
         }
         return false;
+    }
+
+    @Value("${jwt.secret}")
+    private String SECRET_KEY;
+
+    @Override
+    public String getUserIdFromToken(String header) {
+        // if (header != null && header.startsWith("Bearer ")) {
+        //     String token = header.substring(7);
+        //     Claims claims = Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
+        //     return claims.getSubject();
+        // }
+        // return null;
+
+        //TODO: 从token中解析出user_id
+        //暂时先写死，有一些保留的user_id，就像有一些保留的group_id一样
+        String user_id = "admin";
+        return user_id;        
     }
 }
