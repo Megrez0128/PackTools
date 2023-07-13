@@ -43,7 +43,15 @@ public class ExtraMetaDaoImpl implements ExtraMetaDao {
 
     @Override
     public boolean hasMetaPermission(Integer group_id, Integer meta_id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'hasMetaPermission'");
+        String sql = "SELECT COUNT(*) FROM extra_meta WHERE group_id = ? AND id = ?";
+        int count = jdbcTemplate.queryForObject(sql, Integer.class, group_id, meta_id);
+        return count > 0;
+    }
+
+    @Override
+    public int getMaxVersion(int meta_id) {
+        String sql = "SELECT MAX(version) FROM extra_meta WHERE id = ?";
+        Integer maxVersion = jdbcTemplate.queryForObject(sql, Integer.class, meta_id);
+        return maxVersion != null ? maxVersion : 0;
     }
 }

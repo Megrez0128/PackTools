@@ -1,6 +1,6 @@
 package com.zulong.web.entity;
 
-// TODO: 根据后续操作决定是否保留
+// 不是新建类，但需要建表，之后修改
 public class Template {
     private int template_id;
     private String name;

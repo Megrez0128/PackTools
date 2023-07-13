@@ -10,8 +10,8 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class Instance extends Flow {
-    private int uuid;  // TODO：暂时指定为int类型，标记唯一id
+public class Instance {
+    private int uuid;  // 唯一id
     private int flow_record_id;  // 流程id
     private String node_id;  // 运行到的节点的id
     private String option;  // 参数，不需要处理

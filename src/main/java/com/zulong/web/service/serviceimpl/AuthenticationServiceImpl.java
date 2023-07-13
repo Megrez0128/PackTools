@@ -64,7 +64,7 @@ public class AuthenticationServiceImpl implements AuthenticationService{
         }
 
         //再查询group_flow表，判断flow_id和group_id是否存在于该表中
-        boolean is_in = groupFlowDao.hasFlowPermission(group_id, instance.getFlow_id());
+        boolean is_in = groupFlowDao.hasFlowPermission(group_id, instance.getFlow_record_id());
         if(is_in){
             return true;
         }
