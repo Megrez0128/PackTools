@@ -1,4 +1,4 @@
-package com.zulong.web.entity;
+package com.zulong.web.entity.relation;
 
 /**
  * todo:暂时废弃

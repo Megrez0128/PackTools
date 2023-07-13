@@ -1,6 +1,8 @@
 package com.zulong.web.dao.daoimpl;
 
 import com.zulong.web.dao.InstanceDao;
+import com.zulong.web.entity.Instance;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.batch.BatchProperties;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -23,6 +25,12 @@ public class InstanceDaoImpl implements InstanceDao {
         String sql = "select count(*) from instance where flow_record_id = ?";
         int count = jdbcTemplate.queryForObject(sql, new Object[]{record_id}, Integer.class);
         return count > 0;
+    }
+
+    @Override
+    public Instance findInstanceByID(Integer instance_id) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'findInstanceByID'");
     }
 
 }

@@ -1,6 +1,7 @@
 package com.zulong.web.entity;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.text.SimpleDateFormat;
@@ -8,6 +9,7 @@ import java.util.Date;
 
 @NoArgsConstructor
 @AllArgsConstructor
+@Data
 public class Instance extends Flow {
     private int uuid;  // TODO：暂时指定为int类型，标记唯一id
     private int flow_record_id;  // 流程id

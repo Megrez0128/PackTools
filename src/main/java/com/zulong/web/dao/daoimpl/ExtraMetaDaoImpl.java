@@ -40,4 +40,10 @@ public class ExtraMetaDaoImpl implements ExtraMetaDao {
         int result = jdbcTemplate.update(sql, extraMetaID);
         return result > 0;
     }
+
+    @Override
+    public boolean hasMetaPermission(Integer group_id, Integer meta_id) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'hasMetaPermission'");
+    }
 }
