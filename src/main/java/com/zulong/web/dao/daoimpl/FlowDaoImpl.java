@@ -35,20 +35,31 @@ public class FlowDaoImpl implements FlowDao {
         }
     }
 
-    public Flow getFlowDetails(int record_id){
+    public Flow getFlowDetails(int flow_id, int version){
         // TODO: 确定MySQL中Flow表的名称
-        String sql = "select * from flow where record_id = ?";
-        Object[] params = new Object[]{record_id};
+        String sql = "select * from flow where flow_id = ? and version = ?";
+        Object[] params = new Object[]{flow_id, version};
         try{
             return jdbcTemplate.queryForObject(sql, params, new BeanPropertyRowMapper<>(Flow.class));
         } catch (Exception e) {
-            LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]FlowDaoImpl.getFlowDetails@record_id is invalid|record_id=%d", record_id), e);
+            LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]FlowDaoImpl.getFlowDetails@record_id is invalid|record_id=%d|version=%d", flow_id, version), e);
             return null;
         }
     }
 
-    public boolean deleteFlow(int record_id) {
-
-        return false;
+    public int deleteFlow(int record_id) {
+        boolean flag = instanceDao.findInstanceByFlowID(record_id);
+        if(!flag){
+            LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]FlowDaoImpl.deleteFlow@flow has instances|record_id=%d", record_id));
+            return 0;
+        }
+        String sql = "delete from flow where record_id=?";
+        Object[] params = {record_id};
+        boolean flag1 = jdbcTemplate.update(sql, params) > 0;
+        if(!flag1){
+            LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]FlowDaoImpl.deleteFlow@something wrong happened during deletion|"));
+            return 2;
+        }
+        return 1;
     }
 }

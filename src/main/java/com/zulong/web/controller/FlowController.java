@@ -38,6 +38,25 @@ public class FlowController
         return response;
     }
 
+    @PostMapping(value="/detail")
+    public Map<String, Object> getFlowDetails(@RequestBody Map<String, Integer> request) {
+        int flow_id = request.get("flow_id");
+        int version = request.get("version");
+        try {
+            Flow flow = flowService.getFlowDetails(flow_id, version);
+            Map<String, Object> response = new HashMap<>();
+            response.put("code", 20000);
+            response.put("data", flow);
+            return response;
+        } catch (Exception e) {
+            Map<String, Object> response = new HashMap<>();
+            response.put("code", 40000);
+            response.put("data", null);
+            return response;
+        }
+    }
+
+
     @PostMapping(value = "/create")
     public Map<String, Object> createFlow(@RequestBody Map<String, String> request) {
         String name = request.get("name");
@@ -80,21 +99,29 @@ public class FlowController
     }
 
     /**
-     * 对应flow-delete接口
+     * 删除Flow，先验证有无实例，否则不能删除
      * @param request
      * @return
      */
     @PostMapping(value = "/delete")
     public Map<String, Object> deleteFlow(@RequestBody Map<String, Object> request) {
-        // TODO:验证有无操作该flow的权限，以及flow有无对应的instance
-        // 若不满足该TODO，返回40100
-
         try {
             int fid = (int) request.get("fid");
-            boolean result = flowService.deleteFlow(fid);
+            int result = flowService.deleteFlow(fid);
             Map<String, Object> response = new HashMap<>();
-            response.put("code", 20000);
-            response.put("data", true);
+            if(result == 1) {
+                response.put("code", 20000);
+                response.put("data", true);
+            }
+            if(result == 0) {
+                // TODO: 表示flow有对应的Instance，不能删除，可能可以调整返回码
+                response.put("code", 40100);
+                response.put("data", false);
+            }
+            else {
+                response.put("code", 30400);
+                response.put("data", false);
+            }
             return response;
         } catch (Exception e) {
             LoggerManager.logger().warn("[com.zulong.web.controller]FlowController.saveFlowchart@deletion operation failed|", e);

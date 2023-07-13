@@ -6,10 +6,11 @@ import java.util.List;
 public interface FlowService
 {
 
-    Flow createFlow(String name, String des);
+    public Flow createFlow(String name, String des);
 
-    boolean saveFlow(int fid, String graphData, String blackboard);
+    public boolean saveFlow(int fid, String graphData, String blackboard);
 
-    boolean deleteFlow(int fid);
-    List<Flow> getFlowList();
+    public int deleteFlow(int fid);
+    public List<Flow> getFlowList();
+    public Flow getFlowDetails(int flow_id, int version);
 }

@@ -35,13 +35,23 @@ public class FlowServiceImpl implements FlowService {
         return false;
     }
 
+    /**
+     *
+     * @param fid
+     * @return
+     * 返回1表示正常删除，返回0表示Flow有对应的instance实例不能删除，返回2表示发生了数据库错误
+     */
     @Override
-    public boolean deleteFlow(int fid) {
-        return false;
+    public int deleteFlow(int fid) {
+        return flowDao.deleteFlow(fid);
     }
 
     public List<Flow> getFlowList(){
         List<Flow> flowlist = flowDao.getFlowList();
         return flowlist;
+    }
+
+    public Flow getFlowDetails(int flow_id, int version) {
+        return flowDao.getFlowDetails(flow_id, version);
     }
 }
