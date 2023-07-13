@@ -74,4 +74,16 @@ public class FlowDaoImpl implements FlowDao {
         // TODO: 并且修改record_id和版本，可以在写完FlowSummary后继续补充
         return flow;
     }
+
+    @Override
+    public Flow findByFlowID(int record_id) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'findByFlowID'");
+    }
+
+    @Override
+    public boolean insertFlow(Flow flow) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'insertFlow'");
+    }
 }
