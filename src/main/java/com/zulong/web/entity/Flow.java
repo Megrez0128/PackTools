@@ -1,5 +1,6 @@
 package com.zulong.web.entity;
 
+import com.alibaba.fastjson.JSONObject;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,7 +13,7 @@ public class Flow {
 
     private int flow_id;
     private int version;
-    private String state;
+
     private String name;
     private String des;
     private String last_build;

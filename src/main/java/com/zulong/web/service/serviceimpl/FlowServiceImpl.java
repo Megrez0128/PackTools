@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 @Service
 public class FlowServiceImpl implements FlowService {
@@ -39,9 +40,8 @@ public class FlowServiceImpl implements FlowService {
         return false;
     }
 
-    public ArrayList<HashMap> getFlowList(){
-        // TODO：在MySQL中筛选
-
-        return null;
+    public List<Flow> getFlowList(){
+        List<Flow> flowlist = flowDao.getFlowList();
+        return flowlist;
     }
 }

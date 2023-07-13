@@ -8,6 +8,7 @@ import com.zulong.web.service.FlowService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.zulong.web.utils.ResultCode;
@@ -30,7 +31,7 @@ public class FlowController
 
     @PostMapping(value="/list")
     public Map<String, Object> getFlowList() {
-        ArrayList<HashMap> flowlist = flowService.getFlowList();
+        List<Flow> flowlist = flowService.getFlowList();
         Map<String, Object> response = new HashMap<>();
         response.put("code", 20000);
         response.put("data", flowlist);

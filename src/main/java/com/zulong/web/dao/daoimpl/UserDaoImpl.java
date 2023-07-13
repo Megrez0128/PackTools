@@ -38,7 +38,6 @@ public class UserDaoImpl implements UserDao {
         }
     }
 
-    // TODO：已经增加了日志输出，根据测试实际情况决定是否打印异常
     @Override
     public boolean insertUser(User user) {
         String sql = "insert into test_user(user_id, token, projects, administrator)values(?,?,?,?)";

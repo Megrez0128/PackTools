@@ -13,7 +13,5 @@ import java.util.ArrayList;
 public class User implements Serializable
 {
     private String user_id;
-    private String token;
     private boolean administrator;
-
 }

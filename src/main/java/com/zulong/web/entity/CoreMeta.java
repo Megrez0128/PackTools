@@ -1,5 +1,6 @@
 package com.zulong.web.entity;
 
+import com.alibaba.fastjson.JSONObject;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,5 +14,5 @@ public class CoreMeta {
     private int id;
     private int meta_id;
     private int version;
-    private HashMap<String,Object> data;
+    private JSONObject data;
 }

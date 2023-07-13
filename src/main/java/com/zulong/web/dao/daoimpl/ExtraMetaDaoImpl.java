@@ -15,8 +15,29 @@ public class ExtraMetaDaoImpl implements ExtraMetaDao {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
-    
-    public ExtraMeta findExtraMetaByID(int extraMetaID){ return null; }
-    public boolean insertExtraMeta(ExtraMeta extraMeta){ return false; }
-    public boolean deleteExtraMeta(int extraMetaID){ return false; }
+
+    @Override
+    public ExtraMeta findExtraMetaByID(int extraMetaID) {
+        String sql = "select * from extra_meta where id = ?";
+        try {
+            return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(ExtraMeta.class), extraMetaID);
+        } catch (DataAccessException e) {
+            return null;
+
+        }
+    }
+
+    @Override
+    public boolean insertExtraMeta(ExtraMeta extraMeta) {
+        String sql = "insert into extra_meta (group_id, version, data) values (?, ?, ?)";
+        int result = jdbcTemplate.update(sql, extraMeta.getGroup(), extraMeta.getVersion(), JSON.toJSONString(extraMeta.getData()));
+        return result > 0;
+    }
+
+    @Override
+    public boolean deleteExtraMeta(int extraMetaID) {
+        String sql = "delete from extra_meta where id = ?";
+        int result = jdbcTemplate.update(sql, extraMetaID);
+        return result > 0;
+    }
 }
