@@ -27,10 +27,7 @@ public class UserDaoImpl implements UserDao {
         String sql = "select * from test_user where user_id=?";
         Object[] params = new Object[]{userID};
         try {
-            return jdbcTemplate.queryForObject(
-                    sql,
-                    params,
-                    new BeanPropertyRowMapper<>(User.class));
+            return jdbcTemplate.queryForObject(sql, params, new BeanPropertyRowMapper<>(User.class));
         } catch (Exception e) {
             // 如果没有找到对应的记录，返回null；添加一条warn日志
             LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]UserDaoImpl.findByUserID@userID is invalid|userID=%s", userID), e);
@@ -53,7 +50,7 @@ public class UserDaoImpl implements UserDao {
     public boolean deleteByUserID(String UserID) {
         String sql = "delete from test_user where user_id=?";
         Object[] params = {UserID};
-        boolean flag = jdbcTemplate.update(sql,params) > 0;
+        boolean flag = jdbcTemplate.update(sql, params) > 0;
         if(!flag){
             LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]UserDaoImpl.insertUser@deletion failed|userID=%s", UserID));
         }

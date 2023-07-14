@@ -11,4 +11,7 @@ public interface FlowDao {
     public Flow getFlowDetails(int flow_id, int version);
     public int deleteFlow(int record_id);
     public Flow cloneFlow(int record_id, String name, String des);
+    public boolean updateFlow(Flow flow);
+	int findMaxVersion(int flow_id);
+	Flow findByFlowIDAndVersion(int flow_id, int version);
 }

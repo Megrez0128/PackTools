@@ -23,20 +23,18 @@ public class FlowDaoImpl implements FlowDao {
     }
 
     public List<Flow> getFlowList(){
-        // TODO: 确定MySQL中Flow表的名称
         // 被筛选的列按照文档确定
         try {
             String sql = "select record_id, flow_id, version, name, des, core_meta_id, last_build, extra_meta_id from flow";
             List<Flow> flowList = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Flow.class));
             return flowList;
         } catch (Exception e){
-            LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]FlowDaoImpl.getFlowDetails@record_id is invalid|"), e);
+            LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]FlowDaoImpl.getFlowList@cannot find flow list|"), e);
             return null;
         }
     }
 
     public Flow getFlowDetails(int flow_id, int version){
-        // TODO: 确定MySQL中Flow表的名称
         String sql = "select * from flow where flow_id = ? and version = ?";
         Object[] params = new Object[]{flow_id, version};
         try{
@@ -70,20 +68,71 @@ public class FlowDaoImpl implements FlowDao {
         Flow flow = new Flow(sample);
         flow.setName(name);
         flow.setDes(des);
-        // TODO: 写insertFlow
-        // TODO: 并且修改record_id和版本，可以在写完FlowSummary后继续补充
+        // TODO: 修改record_id和版本，可以在写完FlowSummary后继续补充
+        insertFlow(flow);
         return flow;
     }
 
     @Override
     public Flow findByFlowID(int record_id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findByFlowID'");
+        String sql = "select * from flow where record_id=?";
+        Object[] params = new Object[]{record_id};
+        try {
+            return jdbcTemplate.queryForObject(sql,params,new BeanPropertyRowMapper<>(Flow.class));
+        } catch (Exception e) {
+            // 如果没有找到对应的记录，返回null；添加一条warn日志
+            LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]UserDaoImpl.findByFlowID@record_id is invalid|record_id=%d", record_id), e);
+            return null;
+        }
     }
 
     @Override
     public boolean insertFlow(Flow flow) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'insertFlow'");
+        String sql = "insert flow values(?,?,?,?,?,?,?,?,?,?)";
+        Object[] params = {flow.getRecord_id(), flow.getFlow_id(), flow.getVersion(), flow.getName(), flow.getDes(), 
+            flow.getLast_build(), flow.getCore_meta_id(), flow.getExtra_meta_id(), flow.getGraph_data(), flow.getBlackboard()};
+        boolean flag = jdbcTemplate.update(sql, params) > 0;
+        if(!flag){
+            LoggerManager.logger().warn("[com.zulong.web.dao.daoimpl]FlowDaoImpl.insertFlow@insertion failed");
+        }
+        return flag;
+    }
+
+    @Override
+    public boolean updateFlow(Flow flow) {
+        String sql = "update flow set name=?, des=?, last_build=?, core_meta_id=?, extra_meta_id=?, graph_data=?, blackboard=? where record_id=?";
+        Object[] params = {flow.getName(), flow.getDes(), flow.getLast_build(), flow.getCore_meta_id(), flow.getExtra_meta_id(), flow.getGraph_data(), flow.getBlackboard(), flow.getRecord_id()};
+        boolean flag = jdbcTemplate.update(sql, params) > 0;
+        if(!flag){
+            LoggerManager.logger().warn("[com.zulong.web.dao.daoimpl]FlowDaoImpl.updateFlow@update failed");
+        }
+        return flag;
+    }
+
+    @Override
+    public int findMaxVersion(int flow_id) {
+        //找到当前flow_id对应的最大version
+        String sql = "select max(version) from flow where flow_id=?";
+        Object[] params = {flow_id};
+        try {            
+            return jdbcTemplate.queryForObject(sql, params, Integer.class);
+        } catch (Exception e) {
+            LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]FlowDaoImpl.findMaxVersion@cannot find max version|flow_id=%d", flow_id), e);
+            return -1;
+        }
+    }
+
+    @Override
+    public Flow findByFlowIDAndVersion(int flow_id, int version) {
+        //根据flow_id和version找到对应的flow
+        String sql = "select * from flow where flow_id=? and version=?";
+        Object[] params = {flow_id, version};
+        try {
+            return jdbcTemplate.queryForObject(sql, params, new BeanPropertyRowMapper<>(Flow.class));
+        } catch (Exception e) {
+            LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]FlowDaoImpl.findByFlowIDAndVersion@cannot find flow|flow_id=%d|version=%d", flow_id, version), e);
+            return null;
+        }
+
     }
 }

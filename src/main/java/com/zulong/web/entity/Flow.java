@@ -13,8 +13,13 @@ public class Flow {
     private int flow_id;
     private int version;
 
-    private String name;
+
+    private boolean is_committed;
+    private String commit_message;
+
+    private String name; //todo: name和des放在flow_summary里面
     private String des;
+
     private String last_build;
     private int core_meta_id;
     private int extra_meta_id;
