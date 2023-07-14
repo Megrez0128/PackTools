@@ -27,9 +27,10 @@ public class FlowController
     {
         this.flowService = flowService;
     }
+
     /**
-     * 对应flow-创建流程-create接口
-     * @param core_meta_id,extra_meta_id,name,des,graph_data,blackboard
+     * 创建Flow，不需要手动更新id和version
+     * @param request
      * @return
      */
     @PostMapping(value = "/create")
@@ -83,7 +84,7 @@ public class FlowController
             response.put("message", e.getMessage()); // 修改message的值为报错信息
             return response;
         }
-                }
+    }
 
     @PostMapping(value = "/commit")
     public Map<String, Object> commitFlow(@RequestBody Map<String, Object> request) {
@@ -123,7 +124,6 @@ public class FlowController
                 response.put("message", true);
             }
             if(result == 0) {
-                // TODO: 表示flow有对应的Instance，不能删除，可能可以调整返回码
                 response.put("code", 40100);
                 response.put("message", false);
             }
@@ -204,7 +204,25 @@ public class FlowController
             LoggerManager.logger().warn("[com.zulong.web.controller]FlowController.getFlowList@operation failed|", e);
             Map<String, Object> response = new HashMap<>();
             response.put("code", 50000);
-            response.put("message", e.getMessage()); // 修改message的值为报错信息
+            response.put("message", e.getMessage());
+            return response;
+        }
+    }
+
+    @PostMapping(value="/history")
+    public Map<String, Object> getFlowHistoryList(@RequestBody Map<String, Integer> request) {
+        try {
+            int flow_id = request.get("flow_id");
+            List<Flow> flowlist = flowService.getHistoryFlowList(flow_id);
+            Map<String, Object> response = new HashMap<>();
+            response.put("code", 20000);
+            response.put("data", flowlist);
+            return response;
+        } catch (Exception e) {
+            LoggerManager.logger().warn("[com.zulong.web.controller]FlowController.getFlowHistoryList@cannot get history list|", e);
+            Map<String, Object> response = new HashMap<>();
+            response.put("code", 50000);
+            response.put("message", e.getMessage());
             return response;
         }
     }

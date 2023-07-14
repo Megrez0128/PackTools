@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Node {
+    public String instance_id;
     public int node_id;
     public String start_time;
     public String end_time;

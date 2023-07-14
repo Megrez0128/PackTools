@@ -6,10 +6,13 @@ import com.zulong.web.log.LoggerManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service("FlowSummaryDaoImpl")
 public class FlowSummaryDaoImpl implements FlowSummaryDao {
+
     @Autowired
     private final JdbcTemplate jdbcTemplate;
 

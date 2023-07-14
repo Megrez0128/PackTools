@@ -25,9 +25,9 @@ public class Instance {
 //     * 固定设置startTime, complete, hasError
 //     * 其余信息都在调用Instance上传时更新
 //     */
-    final public void initInstance(int uuid, int flow_id, String node_id, String option){
+    final public void initInstance(int uuid, int flow_record_id, String node_id, String option){
         this.uuid = uuid;
-        this.flow_record_id = flow_id;
+        this.flow_record_id = flow_record_id;
         this.node_id = node_id;
         this.option = option;
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

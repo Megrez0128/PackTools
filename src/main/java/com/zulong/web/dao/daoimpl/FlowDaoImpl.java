@@ -23,9 +23,9 @@ public class FlowDaoImpl implements FlowDao {
     }
 
     public List<Flow> getFlowList(){
-        // 被筛选的列按照文档确定
+        // 目前认为返回的是全部的列
         try {
-            String sql = "select record_id, flow_id, version, name, des, core_meta_id, last_build, extra_meta_id from flow";
+            String sql = "select * from flow";
             List<Flow> flowList = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Flow.class));
             return flowList;
         } catch (Exception e){
@@ -133,6 +133,18 @@ public class FlowDaoImpl implements FlowDao {
             LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]FlowDaoImpl.findByFlowIDAndVersion@cannot find flow|flow_id=%d|version=%d", flow_id, version), e);
             return null;
         }
+    }
 
+    @Override
+    public List<Flow> getHistoryFlowList(int flow_id) {
+        try {
+            String sql = "select * from flow where flow_id=? order by version desc";
+            Object[] params = {flow_id};
+            List<Flow> flowList = jdbcTemplate.query(sql, params, new BeanPropertyRowMapper<>(Flow.class));
+            return flowList;
+        } catch (Exception e){
+            LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]FlowDaoImpl.getFlowList@cannot find flow list|"), e);
+            return null;
+        }
     }
 }

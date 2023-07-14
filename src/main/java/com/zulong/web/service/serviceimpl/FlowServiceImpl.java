@@ -64,6 +64,10 @@ public class FlowServiceImpl implements FlowService {
         return flow;
     }
 
+    @Override public Flow findFlowByID(int record_id) {
+        return flowDao.findByFlowID(record_id);
+    }
+
     @Override
     public Flow cloneFlow(int record_id, String name, String des) {
         return flowDao.cloneFlow(record_id, name, des);
@@ -140,12 +144,18 @@ public class FlowServiceImpl implements FlowService {
         return flowDao.deleteFlow(flow_id);
     }
 
+    @Override
     public List<Flow> getFlowList(){
         return flowDao.getFlowList();
     }
 
+    @Override
     public Flow getFlowDetails(int flow_id, int version) {
         return flowDao.getFlowDetails(flow_id, version);
     }
 
+    @Override
+    public List<Flow> getHistoryFlowList(int flow_id) {
+        return flowDao.getHistoryFlowList(flow_id);
+    }
 }
