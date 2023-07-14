@@ -14,12 +14,18 @@ public class InstanceServiceImpl implements InstanceService {
     @Autowired
     private InstanceDao instanceDao;
 
-    int tmpuuid = 0;
 
     @Override
-    final public Instance CreateInstance(int flow_id, String node_id, String option){
+    final public Instance CreateInstance(String uuid, int flow_record_id, String node_id, String start_time, boolean complete,boolean has_error, String option){
         Instance instance = new Instance();
-        instance.initInstance(tmpuuid++, flow_id, node_id, option);
+        instance.setUuid(uuid);
+        instance.setFlow_record_id(flow_record_id);
+        instance.setNode_id(node_id);
+        instance.setStartTime(start_time);
+        instance.setComplete(complete);
+        instance.setHasError(has_error);
+        instance.setOption(option);
+        //instanceDao.create
         return instance;
     }
 

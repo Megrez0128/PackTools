@@ -3,7 +3,9 @@ package com.zulong.web.dao.daoimpl;
 import com.zulong.web.dao.UserDao;
 import com.zulong.web.entity.User;
 import com.zulong.web.log.LoggerManager;
+import com.zulong.web.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,8 @@ public class UserDaoImpl implements UserDao {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
 
     @Override
     public List<User> findAll() {
@@ -24,6 +28,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     public User findByUserID(String userID) {
+
         String sql = "select * from test_user where user_id=?";
         Object[] params = new Object[]{userID};
         try {

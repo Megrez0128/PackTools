@@ -2,7 +2,6 @@ package com.zulong.web.controller;
 
 import com.zulong.web.service.MetaService;
 import com.zulong.web.service.AuthenticationService;
-import com.zulong.web.service.AuthenticationService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -71,5 +70,15 @@ public class MetaController {
         }
         return response;
     }
+
+//    @PostMapping(value = "/list")
+//    public Map<String, Object> getMetaList() {
+//        Map<String, Object> response = new HashMap<>();
+//        try {
+//            return response;
+//        } catch (Exception e) {
+//            return null;
+//        }
+//    }
 
 }

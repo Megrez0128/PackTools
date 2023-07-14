@@ -51,6 +51,7 @@ public class FlowServiceImpl implements FlowService {
         flow.setGraph_data(graph_data);
         flow.setBlackboard(blackboard);
         flowDao.insertFlow(flow);
+        //创建对应的flow_summary
         FlowSummary flowSummary = new FlowSummary();
         flowSummary.setFlow_id(curr_flow_id);
         flowSummary.setName(name);

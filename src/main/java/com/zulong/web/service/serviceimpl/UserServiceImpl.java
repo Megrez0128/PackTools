@@ -18,14 +18,12 @@ public class UserServiceImpl implements UserService {
 
     /**
      * TODO：尝试写一个旁路缓存的模型，可能会重构
-     * 以下是一个简单示例
      * @param id
      * @return
      */
     @Override
     @Cacheable(value = "users", key = "id")
     public User getUserByID(String id){
-
         // 从缓存中获取数据
         ValueOperations<String, Object> operations = redisTemplate.opsForValue();
         if(redisTemplate.hasKey(id)){
