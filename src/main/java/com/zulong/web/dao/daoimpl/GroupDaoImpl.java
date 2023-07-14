@@ -5,6 +5,8 @@ import com.zulong.web.dao.GroupDao;
 import org.springframework.stereotype.Service;
 import com.zulong.web.log.LoggerManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.jdbc.core.JdbcTemplate;
 @Service("GroupDaoImpl")
 public class GroupDaoImpl implements GroupDao {
@@ -16,6 +18,8 @@ public class GroupDaoImpl implements GroupDao {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    @CacheEvict(value = "groupCache", allEntries = true)
+    @CachePut(value = "groupCache", key="#group.getGroup_id()")
     @Override
     public boolean insertGroup(Group group) {
         String sql = "insert into group(group_id, group_name)values(?, ?)";

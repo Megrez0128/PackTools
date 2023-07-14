@@ -5,6 +5,9 @@ import com.zulong.web.entity.User;
 import com.zulong.web.log.LoggerManager;
 import com.zulong.web.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -27,6 +30,7 @@ public class UserDaoImpl implements UserDao {
         return userList;
     }
 
+    @Cacheable(value="userCache", key="#userID")
     public User findByUserID(String userID) {
 
         String sql = "select * from test_user where user_id=?";
@@ -40,6 +44,8 @@ public class UserDaoImpl implements UserDao {
         }
     }
 
+    @CacheEvict(value = "userCache", allEntries = true)
+    @CachePut(value = "userCache", key = "#user.user_id")
     @Override
     public boolean insertUser(User user) {
         String sql = "insert into test_user(user_id, token, projects, administrator)values(?,?,?,?)";
@@ -51,6 +57,7 @@ public class UserDaoImpl implements UserDao {
         return flag;
     }
 
+    @CacheEvict(value = "userCache", key = "#UserID")
     @Override
     public boolean deleteByUserID(String UserID) {
         String sql = "delete from test_user where user_id=?";

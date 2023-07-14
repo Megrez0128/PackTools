@@ -5,6 +5,9 @@ import com.zulong.web.dao.InstanceDao;
 import com.zulong.web.entity.Flow;
 import com.zulong.web.log.LoggerManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -34,6 +37,7 @@ public class FlowDaoImpl implements FlowDao {
         }
     }
 
+    @Cacheable(value="flowCache", key="#flow_id+'_'+#version")
     public Flow getFlowDetails(int flow_id, int version){
         String sql = "select * from flow where flow_id = ? and version = ?";
         Object[] params = new Object[]{flow_id, version};
@@ -45,6 +49,7 @@ public class FlowDaoImpl implements FlowDao {
         }
     }
 
+    @CacheEvict(value="flowCache", key="#record_id")
     public int deleteFlow(int record_id) {
         boolean flag = instanceDao.findInstanceByFlowID(record_id);
         if(!flag){
@@ -61,6 +66,7 @@ public class FlowDaoImpl implements FlowDao {
         return 1;
     }
 
+    @Cacheable(value = "flowCache", key = "#record_id")
     public Flow cloneFlow(int record_id, String name, String des){
         String sql = "select * from flow where record_id=?";
         Object[] params = {record_id};
@@ -73,6 +79,7 @@ public class FlowDaoImpl implements FlowDao {
         return flow;
     }
 
+    @Cacheable(value = "flowCache", key = "#record_id")
     @Override
     public Flow findByFlowID(int record_id) {
         String sql = "select * from flow where record_id=?";
@@ -86,6 +93,8 @@ public class FlowDaoImpl implements FlowDao {
         }
     }
 
+    @CacheEvict(value = "flowCache", allEntries = true)
+    @CachePut(value = "flowCache", key = "#flow.record_id")
     @Override
     public boolean insertFlow(Flow flow) {
         String sql = "insert flow values(?,?,?,?,?,?,?,?,?,?)";
@@ -98,6 +107,8 @@ public class FlowDaoImpl implements FlowDao {
         return flag;
     }
 
+    @CacheEvict(value = "flowCache", allEntries = true)
+    @CachePut(value = "flowCache", key = "#flow.record_id")
     @Override
     public boolean updateFlow(Flow flow) {
         String sql = "update flow set name=?, des=?, last_build=?, core_meta_id=?, extra_meta_id=?, graph_data=?, blackboard=? where record_id=?";
@@ -135,8 +146,7 @@ public class FlowDaoImpl implements FlowDao {
         }
     }
 
-    @Override
-    public List<Flow> getHistoryFlowList(int flow_id) {
+     public List<Flow> getHistoryFlowList(int flow_id) {
         try {
             String sql = "select * from flow where flow_id=? order by version desc";
             Object[] params = {flow_id};

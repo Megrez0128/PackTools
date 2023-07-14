@@ -2,6 +2,7 @@ package com.zulong.web.dao.daoimpl;
 
 import com.zulong.web.dao.InstanceDao;
 import com.zulong.web.entity.Instance;
+import com.zulong.web.log.LoggerManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.batch.BatchProperties;
@@ -28,10 +29,16 @@ public class InstanceDaoImpl implements InstanceDao {
     }
 
     @Override
-    public Instance findInstanceByID(Integer uuid) {
+    public Instance findInstanceByID(int uuid) {
         String sql = "select count(*) from instance where uuid = ?";
         Instance instance = jdbcTemplate.queryForObject(sql, new Object[]{uuid}, Instance.class);
         return instance;
+    }
+
+    @Override
+    public void insertInstance(Instance instance) {
+        String sql = "insert into instance (uuid, flow_record_id, node_id, start_time, end_time, complete, has_error) values (?, ?, ?, ?, ?)";
+        jdbcTemplate.update(sql, instance.getUuid(), instance.getFlow_record_id(),instance.getNode_id(),instance.getStart_time(),instance.getEnd_time(),instance.getComplete(),instance.getHas_error());
     }
 
 }

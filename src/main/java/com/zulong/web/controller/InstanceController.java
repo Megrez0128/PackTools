@@ -25,7 +25,7 @@ public class InstanceController {
     }
 
     @PostMapping(value = "/report/start")
-    public Map<String, Object> CreateInstance(@RequestBody Map<String, Object> request){
+    public Map<String, Object> instanceStartNode(@RequestBody Map<String, Object> request){
         String uuid = (String) request.get("uuid");
         int flow_record_id = (int)request.get("flow_record_id");
         String node_id = (String)request.get("node_id");
@@ -34,27 +34,27 @@ public class InstanceController {
         boolean has_error = (boolean)request.get("has_error");
         String option = (String)request.get("option");
 
-        // 全局查询flow_id是否存在，并返回对应的flow
-//        try {
-//            Flow tmpFlow = flowService.findFlowByID(flow_record_id);
-//            if(tmpFlow == null) {
-//                Map<String, Object> response = new HashMap<>();
-//                response.put("code", 40000);
-//                response.put("data", null);
-//                LoggerManager.logger().warn(String.format("[com.zulong.web.controller]InstanceController.CreateInstance@flow doesn't exist|flow_id=%d", flow_record_id));
-//                return response;
-//            }
-//        } catch (Exception e) {
-//            Map<String, Object> response = new HashMap<>();
-//            response.put("code", 40000);
-//            response.put("data", null);
-//            LoggerManager.logger().warn(String.format("[com.zulong.web.controller]InstanceController.CreateInstance@create operation failed|flow_id=%d|node_id=%s", flow_record_id, node_id), e);
-//            return response;
-//        }
+        //全局查询flow_id是否存在，并返回对应的flow
+        try {
+            Flow tmpFlow = flowService.findFlowByID(flow_record_id);
+            if(tmpFlow == null) {
+                Map<String, Object> response = new HashMap<>();
+                response.put("code", 40000);
+                response.put("data", null);
+                LoggerManager.logger().warn(String.format("[com.zulong.web.controller]InstanceController.CreateInstance@flow doesn't exist|flow_id=%d", flow_record_id));
+                return response;
+            }
+        } catch (Exception e) {
+            Map<String, Object> response = new HashMap<>();
+            response.put("code", 40000);
+            response.put("data", null);
+            LoggerManager.logger().warn(String.format("[com.zulong.web.controller]InstanceController.CreateInstance@create operation failed|flow_id=%d|node_id=%s", flow_record_id, node_id), e);
+            return response;
+        }
 
         // 创建instance
         try{
-            Instance instance = instanceService.CreateInstance(uuid, flow_record_id, node_id,start_time,complete,has_error, option);
+            Instance instance = instanceService.instanceStartNode(uuid, flow_record_id, node_id,start_time,complete,has_error, option);
             Map<String, Object> response = new HashMap<>();
             response.put("code", 20000);
             response.put("data", "success");
@@ -69,6 +69,49 @@ public class InstanceController {
         }
     }
 
+    @PostMapping(value = "/report/end")
+    public Map<String, Object> instanceEndNode(@RequestBody Map<String, Object> request){
+        String uuid = (String) request.get("uuid");
+        int flow_record_id = (int)request.get("flow_record_id");
+        String node_id = (String)request.get("node_id");
+        String end_time = (String)request.get("end_time");
+        boolean complete = (boolean)request.get("complete");
+        boolean has_error = (boolean)request.get("has_error");
+        String option = (String)request.get("option");
+
+        //全局查询flow_id是否存在，并返回对应的flow
+        try {
+            Flow tmpFlow = flowService.findFlowByID(flow_record_id);
+            if(tmpFlow == null) {
+                Map<String, Object> response = new HashMap<>();
+                response.put("code", 40000);
+                response.put("data", null);
+                LoggerManager.logger().warn(String.format("[com.zulong.web.controller]InstanceController.CreateInstance@flow doesn't exist|flow_id=%d", flow_record_id));
+                return response;
+            }
+        } catch (Exception e) {
+            Map<String, Object> response = new HashMap<>();
+            response.put("code", 40000);
+            response.put("data", null);
+            LoggerManager.logger().warn(String.format("[com.zulong.web.controller]InstanceController.CreateInstance@create operation failed|flow_id=%d|node_id=%s", flow_record_id, node_id), e);
+            return response;
+        }
+        // 创建instance
+        try{
+            Instance instance = instanceService.instanceEndNode(uuid, flow_record_id, node_id, end_time, complete,has_error, option);
+            Map<String, Object> response = new HashMap<>();
+            response.put("code", 20000);
+            response.put("data", "success");
+            // TODO: 如果查找成功，需要更新flow的last_build
+            return response;
+        } catch (Exception e) {
+            Map<String, Object> response = new HashMap<>();
+            response.put("code", 40000);
+            response.put("data", null);
+            LoggerManager.logger().warn(String.format("[com.zulong.web.controller]InstanceController.CreateInstance@create operation failed|flow_id=%d|node_id=%s", flow_record_id, node_id), e);
+            return response;
+        }
+    }
     /**
      * 轮询，每隔一段时间发送一次拉取请求
      * TODO: 其他问题很容易解决，但是Instance返回时node怎么处理？

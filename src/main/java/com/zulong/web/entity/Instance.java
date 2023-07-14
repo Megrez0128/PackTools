@@ -15,10 +15,10 @@ public class Instance {
     private int flow_record_id;
     private String node_id;  // 运行到的节点的id
     private String option;  // 参数，不需要处理
-    private String startTime;
-    private String endTime;
+    private String start_time;
+    private String end_time;
     private Boolean complete;
-    private Boolean hasError;
+    private Boolean has_error;
 
 //    /**
 //     * 设置Instance初始化函数
@@ -31,9 +31,9 @@ public class Instance {
         this.node_id = node_id;
         this.option = option;
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        this.startTime = df.format(new Date());
+        this.start_time = df.format(new Date());
         this.complete = false;
-        this.hasError = false;
+        this.has_error = false;
     }
 
 }
