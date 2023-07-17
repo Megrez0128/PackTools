@@ -28,7 +28,7 @@ public class InstanceController {
     public Map<String, Object> instanceStartNode(@RequestBody Map<String, Object> request){
         String uuid = (String) request.get("uuid");
         int flow_record_id = (int)request.get("flow_record_id");
-        String node_id = (String)request.get("node_id");
+        int node_id = (int)request.get("node_id");
         String start_time = (String)request.get("start_time");
         boolean complete = (boolean)request.get("complete");
         boolean has_error = (boolean)request.get("has_error");
@@ -36,7 +36,7 @@ public class InstanceController {
 
         //全局查询flow_id是否存在，并返回对应的flow
         try {
-            Flow tmpFlow = flowService.findFlowByID(flow_record_id);
+            Flow tmpFlow = flowService.findFlowByRecordId(flow_record_id);
             if(tmpFlow == null) {
                 Map<String, Object> response = new HashMap<>();
                 response.put("code", 40000);
@@ -54,7 +54,7 @@ public class InstanceController {
 
         // 创建instance
         try{
-            Instance instance = instanceService.instanceStartNode(uuid, flow_record_id, node_id,start_time,complete,has_error, option);
+            instanceService.instanceStartNode(uuid, flow_record_id, node_id,start_time,complete,has_error, option);
             Map<String, Object> response = new HashMap<>();
             response.put("code", 20000);
             response.put("data", "success");
@@ -73,7 +73,7 @@ public class InstanceController {
     public Map<String, Object> instanceEndNode(@RequestBody Map<String, Object> request){
         String uuid = (String) request.get("uuid");
         int flow_record_id = (int)request.get("flow_record_id");
-        String node_id = (String)request.get("node_id");
+        int node_id = (int)request.get("node_id");
         String end_time = (String)request.get("end_time");
         boolean complete = (boolean)request.get("complete");
         boolean has_error = (boolean)request.get("has_error");
@@ -81,7 +81,7 @@ public class InstanceController {
 
         //全局查询flow_id是否存在，并返回对应的flow
         try {
-            Flow tmpFlow = flowService.findFlowByID(flow_record_id);
+            Flow tmpFlow = flowService.findFlowByRecordId(flow_record_id);
             if(tmpFlow == null) {
                 Map<String, Object> response = new HashMap<>();
                 response.put("code", 40000);
@@ -98,7 +98,7 @@ public class InstanceController {
         }
         // 创建instance
         try{
-            Instance instance = instanceService.instanceEndNode(uuid, flow_record_id, node_id, end_time, complete,has_error, option);
+            instanceService.instanceEndNode(uuid, flow_record_id, node_id, end_time, complete,has_error, option);
             Map<String, Object> response = new HashMap<>();
             response.put("code", 20000);
             response.put("data", "success");
@@ -120,9 +120,9 @@ public class InstanceController {
     @PostMapping(value = "/build")
     public Map<String, Object> UpdateInstance(@RequestBody Map<String, Object> request){
 
-        int uuid = (int)request.get("uuid");
+        String uuid = (String)request.get("uuid");
         try {
-            Instance instance = instanceService.findInstanceByID(uuid);
+            Instance instance = instanceService.findInstanceByUuid(uuid);
             Map<String, Object> response = new HashMap<>();
             response.put("code", 20000);
             response.put("uuid", uuid);

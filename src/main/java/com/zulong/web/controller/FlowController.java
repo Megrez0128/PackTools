@@ -40,10 +40,8 @@ public class FlowController
             Integer extra_meta_id = Integer.parseInt(request.get("extra_meta_id"));
             String graph_data = request.get("graph_data");
             String blackboard = request.get("blackboard");
-            String name = request.get("name");
-            String des = request.get("des");
-            LoggerManager.logger().debug(String.format("[com.zulong.web.controller]FlowController.createFlowchart@ success receive post|name=%s|des=%s",name,des));
-            Flow flow = flowService.createFlow(name, des, graph_data, blackboard, core_meta_id, extra_meta_id);
+            LoggerManager.logger().debug(String.format("[com.zulong.web.controller]FlowController.createFlowchart@ success receive post|"));
+            Flow flow = flowService.createFlow(graph_data, blackboard, core_meta_id, extra_meta_id);
 
             Map<String, Object> response = new HashMap<>();
             response.put("code", 20000);
@@ -67,10 +65,10 @@ public class FlowController
         try {
             
             int record_id = (int) request.get("record_id");
-            String name = (String) request.get("name");
-            String des = (String) request.get("des");
-            LoggerManager.logger().debug(String.format("[com.zulong.web.controller]FlowController.cloneFlow@ success receive post|record_id=%d|name=%s|des=%s",record_id,name,des));
-            Flow flow = flowService.cloneFlow(record_id, name, des);
+            boolean is_committed = (boolean) request.get("is_committed");
+            String commit_message = (String) request.get("commit_message");
+            LoggerManager.logger().debug(String.format("[com.zulong.web.controller]FlowController.cloneFlow@ success receive post|record_id=%d",record_id));
+            Flow flow = flowService.cloneFlow(record_id, is_committed, commit_message);
 
             Map<String, Object> response = new HashMap<>();
             response.put("code", 20000);
@@ -156,9 +154,7 @@ public class FlowController
             Integer extra_meta_id = (Integer) request.get("extra_meta_id");
             String graph_data = (String) request.get("graph_data");
             String blackboard = (String) request.get("blackboard");
-            String name = (String) request.get("name");
-            String des = (String) request.get("des");
-            Flow result = flowService.saveFlow(flow_id, commit_message, core_meta_id, extra_meta_id, graph_data, blackboard, name, des);
+            Flow result = flowService.saveFlow(flow_id, commit_message, core_meta_id, extra_meta_id, graph_data, blackboard);
 
             Map<String, Object> response = new HashMap<>();
             response.put("code", 20000);

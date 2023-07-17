@@ -23,7 +23,6 @@ public class ExtraMetaDaoImpl implements ExtraMetaDao {
             return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(ExtraMeta.class), extraMetaID);
         } catch (DataAccessException e) {
             return null;
-
         }
     }
 

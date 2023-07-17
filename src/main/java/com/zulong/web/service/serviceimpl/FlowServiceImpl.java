@@ -36,11 +36,11 @@ public class FlowServiceImpl implements FlowService {
     int curr_flow_id = START_FLOW_ID;
 
     @Override
-    public Flow createFlow(String name, String des, String graph_data, String blackboard, int core_meta_id, int extra_meta_id){
+    public Flow createFlow(String graph_data, String blackboard, int core_meta_id, int extra_meta_id){
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
         String current_time = df.format(new Date());// new Date()为获取当前系统时间
         LoggerManager.logger().info(String.format(
-                "[com.zulong.web.daoimpl.serviceimpl]FlowServiceImpl.createFlowchart@create flowchart|id=%s|version=%s|name=%s|des=%s|current_time=%s|inner=%s", curr_record_id, 0, name, des, current_time, "false"));
+                "[com.zulong.web.daoimpl.serviceimpl]FlowServiceImpl.createFlowchart@create flowchart|id=%s|version=%s|current_time=%s|inner=%s", curr_record_id, 0, current_time, "false"));
        // 找到最大的flow_id
         Flow flow = new Flow();
         flow.setRecord_id(curr_record_id);
@@ -54,8 +54,6 @@ public class FlowServiceImpl implements FlowService {
         //创建对应的flow_summary
         FlowSummary flowSummary = new FlowSummary();
         flowSummary.setFlow_id(curr_flow_id);
-        flowSummary.setName(name);
-        flowSummary.setDes(des);
         flowSummary.setLast_build(START_LAST_BUILD);
         flowSummary.setLast_commit(START_LAST_COMMIT);
         flowSummary.setLast_version(START_VERSION);
@@ -65,20 +63,33 @@ public class FlowServiceImpl implements FlowService {
         return flow;
     }
 
-    @Override public Flow findFlowByID(int record_id) {
-        return flowDao.findByFlowID(record_id);
+    @Override public Flow findFlowByRecordId(int record_id) {
+        return flowDao.findFlowByRecordId(record_id);
     }
 
     @Override
-    public Flow cloneFlow(int record_id, String name, String des) {
-        return flowDao.cloneFlow(record_id, name, des);
+    public Flow cloneFlow(int record_id, boolean is_committed, String commit_message) {
+        //找到record_id为record_id的flow
+        Flow flow = flowDao.findFlowByRecordId(record_id);
+
+        //更新record_id,version
+        flow.setRecord_id(curr_record_id);
+        int version = flow.getVersion();
+        flow.setVersion(version+1);
+        //修改is_committed 为 false, commit_message为null
+        flow.set_committed(false);
+        flow.setCommit_message("");
+        flow.setLast_build(START_LAST_BUILD);
+        flowDao.insertFlow(flow);
+        //插入新记录
+        return flow;
     }
 
     @Override
     public Flow commitFlow(int record_id, String commit_message) {
         try {
             //根据record_id找到对应的flow
-            Flow flow = flowDao.findByFlowID(record_id);
+            Flow flow = flowDao.findFlowByRecordId(record_id);
             //更新flow的last_commit，is_committed
             //如果已经commit过了，就不再commit
             if(flow.is_committed()){
@@ -105,7 +116,7 @@ public class FlowServiceImpl implements FlowService {
     }
 
     @Override
-    public Flow saveFlow(int flow_id, String commit_message, int core_meta_id,int extra_meta_id, String graphData, String blackboard, String name, String des) {
+    public Flow saveFlow(int flow_id, String commit_message, int core_meta_id,int extra_meta_id, String graphData, String blackboard) {
         try {
             //找到当前flow_id对应的最大version
             int version = flowDao.findMaxVersion(flow_id);
@@ -122,9 +133,6 @@ public class FlowServiceImpl implements FlowService {
 
             //根据flow_id找到对应的flow_summary
             FlowSummary flowSummary = flowSummaryDao.findFlowSummaryByID(flow_id);
-            //更新flow_summary的name，des，last_build，last_commit，last_version
-            flowSummary.setName(name);
-            flowSummary.setDes(des);
             flowSummary.setLast_version(version + 1);
             flowSummaryDao.updateFlowSummary(flowSummary);
 

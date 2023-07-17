@@ -2,10 +2,9 @@ package com.zulong.web.dao.daoimpl;
 
 import com.zulong.web.dao.InstanceDao;
 import com.zulong.web.entity.Instance;
-import com.zulong.web.log.LoggerManager;
 
+import com.zulong.web.log.LoggerManager;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.batch.BatchProperties;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
@@ -29,16 +28,31 @@ public class InstanceDaoImpl implements InstanceDao {
     }
 
     @Override
-    public Instance findInstanceByID(int uuid) {
-        String sql = "select count(*) from instance where uuid = ?";
+    public Instance findInstanceByUuid(String uuid) {
+        String sql = "select * from instance where uuid = ?";
         Instance instance = jdbcTemplate.queryForObject(sql, new Object[]{uuid}, Instance.class);
         return instance;
     }
 
     @Override
-    public void insertInstance(Instance instance) {
-        String sql = "insert into instance (uuid, flow_record_id, node_id, start_time, end_time, complete, has_error) values (?, ?, ?, ?, ?)";
-        jdbcTemplate.update(sql, instance.getUuid(), instance.getFlow_record_id(),instance.getNode_id(),instance.getStart_time(),instance.getEnd_time(),instance.getComplete(),instance.getHas_error());
+    public boolean insertInstance(Instance instance) {
+        String sql = "insert into instance (uuid, flow_record_id, start_time, complete, has_error) values (?, ?, ?, ?, ?)";
+        Object[] params = {instance.getUuid(), instance.getFlow_record_id(),instance.getBuild_time(),instance.getComplete(),instance.getHas_error()};
+        boolean flag = jdbcTemplate.update(sql, params) > 0;
+        if(!flag){
+            LoggerManager.logger().warn("[com.zulong.web.dao.daoimpl]InstanceDaoImpl.insertInstance@insert failed");
+        }
+        return flag;
     }
 
+    @Override
+    public boolean updateInstance(int flow_record_id,boolean complete,boolean has_error,String uuid) {
+        String sql = "update instance set flow_record_id=?, complete=?, has_error=? where uuid=?";
+        Object[] params = {flow_record_id,complete,has_error,uuid};
+        boolean flag = jdbcTemplate.update(sql, params) > 0;
+        if(!flag){
+            LoggerManager.logger().warn("[com.zulong.web.dao.daoimpl]InstanceDaoImpl.updateInstance@update failed");
+        }
+        return flag;
+    }
 }

@@ -67,25 +67,25 @@ public class FlowDaoImpl implements FlowDao {
     }
 
     @Cacheable(value = "flowCache", key = "#record_id")
-    public Flow cloneFlow(int record_id, String name, String des){
+    public Flow cloneFlow(int record_id, boolean is_committed, String committed_message){
         String sql = "select * from flow where record_id=?";
         Object[] params = {record_id};
         Flow sample = jdbcTemplate.queryForObject(sql, params, new BeanPropertyRowMapper<>(Flow.class));
         Flow flow = new Flow(sample);
-        flow.setName(name);
-        flow.setDes(des);
-        // TODO: 修改record_id和版本，可以在写完FlowSummary后继续补充
+        flow.set_committed(is_committed);
+        flow.setCommit_message(committed_message);
+        // TODO: 修改record_id，可以在写完FlowSummary后继续补充
         insertFlow(flow);
         return flow;
     }
 
     @Cacheable(value = "flowCache", key = "#record_id")
     @Override
-    public Flow findByFlowID(int record_id) {
+    public Flow findFlowByRecordId(int record_id) {
         String sql = "select * from flow where record_id=?";
         Object[] params = new Object[]{record_id};
         try {
-            return jdbcTemplate.queryForObject(sql,params,new BeanPropertyRowMapper<>(Flow.class));
+            return jdbcTemplate.queryForObject(sql, params, new BeanPropertyRowMapper<>(Flow.class));
         } catch (Exception e) {
             // 如果没有找到对应的记录，返回null；添加一条warn日志
             LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]UserDaoImpl.findByFlowID@record_id is invalid|record_id=%d", record_id), e);
@@ -98,7 +98,7 @@ public class FlowDaoImpl implements FlowDao {
     @Override
     public boolean insertFlow(Flow flow) {
         String sql = "insert flow values(?,?,?,?,?,?,?,?,?,?)";
-        Object[] params = {flow.getRecord_id(), flow.getFlow_id(), flow.getVersion(), flow.getName(), flow.getDes(), 
+        Object[] params = {flow.getRecord_id(), flow.getFlow_id(), flow.getVersion(), flow.is_committed(), flow.getCommit_message(),
             flow.getLast_build(), flow.getCore_meta_id(), flow.getExtra_meta_id(), flow.getGraph_data(), flow.getBlackboard()};
         boolean flag = jdbcTemplate.update(sql, params) > 0;
         if(!flag){
@@ -111,8 +111,8 @@ public class FlowDaoImpl implements FlowDao {
     @CachePut(value = "flowCache", key = "#flow.record_id")
     @Override
     public boolean updateFlow(Flow flow) {
-        String sql = "update flow set name=?, des=?, last_build=?, core_meta_id=?, extra_meta_id=?, graph_data=?, blackboard=? where record_id=?";
-        Object[] params = {flow.getName(), flow.getDes(), flow.getLast_build(), flow.getCore_meta_id(), flow.getExtra_meta_id(), flow.getGraph_data(), flow.getBlackboard(), flow.getRecord_id()};
+        String sql = "update flow set is_committed=?, commit_message=?, last_build=?, core_meta_id=?, extra_meta_id=?, graph_data=?, blackboard=? where record_id=?";
+        Object[] params = {flow.is_committed(), flow.getCommit_message(), flow.getLast_build(), flow.getCore_meta_id(), flow.getExtra_meta_id(), flow.getGraph_data(), flow.getBlackboard(), flow.getRecord_id()};
         boolean flag = jdbcTemplate.update(sql, params) > 0;
         if(!flag){
             LoggerManager.logger().warn("[com.zulong.web.dao.daoimpl]FlowDaoImpl.updateFlow@update failed");

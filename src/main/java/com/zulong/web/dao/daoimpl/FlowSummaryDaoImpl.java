@@ -4,6 +4,7 @@ import com.zulong.web.dao.FlowSummaryDao;
 import com.zulong.web.entity.FlowSummary;
 import com.zulong.web.log.LoggerManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ public class FlowSummaryDaoImpl implements FlowSummaryDao {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    @Cacheable(value="flowSummaryCache", key="#flow_id")
     @Override
     public FlowSummary findFlowSummaryByID(int flow_id) {
         String sql = "select * from flow where flow_id=?";

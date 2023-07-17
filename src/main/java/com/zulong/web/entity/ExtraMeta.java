@@ -13,5 +13,4 @@ public class ExtraMeta {
     private int group_id;
     private int version;
     private String data;
-
 }

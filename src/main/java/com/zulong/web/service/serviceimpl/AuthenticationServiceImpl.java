@@ -56,9 +56,9 @@ public class AuthenticationServiceImpl implements AuthenticationService{
     }
 
     @Override
-    public boolean hasInstancePermission(Integer group_id, Integer instance_id) {
+    public boolean hasInstancePermission(Integer group_id, String uuid) {
         //先查询instance表，找到Instance_id对应的flow_id
-        Instance instance = instanceDao.findInstanceByID(instance_id);
+        Instance instance = instanceDao.findInstanceByUuid(uuid);
         if(instance == null){
             return false;
         }
