@@ -25,6 +25,7 @@ public class FlowController
     @Autowired
     public FlowController(FlowService flowService)
     {
+        LoggerManager.init();
         this.flowService = flowService;
     }
 
@@ -46,8 +47,8 @@ public class FlowController
             Map<String, Object> response = new HashMap<>();
             response.put("code", 20000);
             response.put("data", flow);
-
             return response;
+
         } catch (Exception e) {
             LoggerManager.logger().warn("[com.zulong.web.controller]FlowController.createFlow@operation failed|", e);
             Map<String, Object> response = new HashMap<>();
@@ -57,18 +58,16 @@ public class FlowController
         }
     }
 
-    /**
-     * 后续在FlowDaoImpl中修改
-     */
+
     @PostMapping(value = "/clone")
     public Map<String, Object> cloneFlow(@RequestBody Map<String, Object> request) {
         try {
             
             int record_id = (int) request.get("record_id");
-            boolean is_committed = (boolean) request.get("is_committed");
-            String commit_message = (String) request.get("commit_message");
+            String name = (String) request.get("name");
+            String des = (String) request.get("des");
             LoggerManager.logger().debug(String.format("[com.zulong.web.controller]FlowController.cloneFlow@ success receive post|record_id=%d",record_id));
-            Flow flow = flowService.cloneFlow(record_id, is_committed, commit_message);
+            Flow flow = flowService.cloneFlow(record_id, name, des);
 
             Map<String, Object> response = new HashMap<>();
             response.put("code", 20000);
@@ -192,9 +191,11 @@ public class FlowController
     public Map<String, Object> getFlowList() {
         try {
             List<Flow> flowlist = flowService.getFlowList();
+            Map<String, Object> data = new HashMap<>();
+            data.put("items", flowlist);
             Map<String, Object> response = new HashMap<>();
             response.put("code", 20000);
-            response.put("data", flowlist);
+            response.put("data", data);
             return response;
         } catch (Exception e) {
             LoggerManager.logger().warn("[com.zulong.web.controller]FlowController.getFlowList@operation failed|", e);
@@ -210,9 +211,11 @@ public class FlowController
         try {
             int flow_id = request.get("flow_id");
             List<Flow> flowlist = flowService.getHistoryFlowList(flow_id);
+            Map<String, Object> data = new HashMap<>();
+            data.put("items", flowlist);
             Map<String, Object> response = new HashMap<>();
             response.put("code", 20000);
-            response.put("data", flowlist);
+            response.put("data", data);
             return response;
         } catch (Exception e) {
             LoggerManager.logger().warn("[com.zulong.web.controller]FlowController.getFlowHistoryList@cannot get history list|", e);

@@ -66,18 +66,17 @@ public class FlowDaoImpl implements FlowDao {
         return 1;
     }
 
-    @Cacheable(value = "flowCache", key = "#record_id")
-    public Flow cloneFlow(int record_id, boolean is_committed, String committed_message){
-        String sql = "select * from flow where record_id=?";
-        Object[] params = {record_id};
-        Flow sample = jdbcTemplate.queryForObject(sql, params, new BeanPropertyRowMapper<>(Flow.class));
-        Flow flow = new Flow(sample);
-        flow.set_committed(is_committed);
-        flow.setCommit_message(committed_message);
-        // TODO: 修改record_id，可以在写完FlowSummary后继续补充
-        insertFlow(flow);
-        return flow;
-    }
+//    @Cacheable(value = "flowCache", key = "#record_id")
+//    public Flow cloneFlow(int record_id, boolean is_committed, String committed_message){
+//        String sql = "select * from flow where record_id=?";
+//        Object[] params = {record_id};
+//        Flow sample = jdbcTemplate.queryForObject(sql, params, new BeanPropertyRowMapper<>(Flow.class));
+//        Flow flow = new Flow(sample);
+//        flow.set_committed(is_committed);
+//        flow.setCommit_message(committed_message);
+//        insertFlow(flow);
+//        return flow;
+//    }
 
     @Cacheable(value = "flowCache", key = "#record_id")
     @Override
@@ -97,7 +96,7 @@ public class FlowDaoImpl implements FlowDao {
     @CachePut(value = "flowCache", key = "#flow.record_id")
     @Override
     public boolean insertFlow(Flow flow) {
-        String sql = "insert flow values(?,?,?,?,?,?,?,?,?,?)";
+        String sql = "insert into flow(record_id, flow_id, version, is_committed, commit_message, last_build, core_meta_id, extra_meta_id, graph_data, blackboard) values(?,?,?,?,?,?,?,?,?,?)";
         Object[] params = {flow.getRecord_id(), flow.getFlow_id(), flow.getVersion(), flow.is_committed(), flow.getCommit_message(),
             flow.getLast_build(), flow.getCore_meta_id(), flow.getExtra_meta_id(), flow.getGraph_data(), flow.getBlackboard()};
         boolean flag = jdbcTemplate.update(sql, params) > 0;

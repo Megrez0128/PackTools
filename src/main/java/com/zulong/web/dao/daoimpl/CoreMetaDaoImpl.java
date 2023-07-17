@@ -12,6 +12,7 @@ import java.util.List;
 
 @Service("coreMetaImpl")
 public class CoreMetaDaoImpl implements CoreMetaDao {
+
     @Autowired
     private JdbcTemplate jdbcTemplate;
 

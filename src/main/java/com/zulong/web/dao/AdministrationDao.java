@@ -8,4 +8,6 @@ public interface AdministrationDao {
     boolean createAdministration(Administration administration);
     boolean deleteAdministration(String user_id, Integer group_id);
     boolean isUserInGroup(String user_id, Integer group_id);
+    boolean getUpdateAllowance(String user_id, Integer group_id);
+    boolean getDeleteAllowance(String user_id, Integer group_id);
 }

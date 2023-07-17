@@ -15,7 +15,7 @@ public interface FlowService
     public List<Flow> getFlowList();
     public Flow getFlowDetails(int flow_id, int version);
 
-    public Flow cloneFlow(int record_id, boolean is_committed, String commit_message);
+    public Flow cloneFlow(int record_id, String name, String des);
 
     public Flow commitFlow(int record_id, String commit_message);
     public List<Flow> getHistoryFlowList(int flow_id);

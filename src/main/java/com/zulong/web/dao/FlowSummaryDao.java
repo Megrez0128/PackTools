@@ -9,4 +9,5 @@ public interface FlowSummaryDao {
     public List<FlowSummary> getFlowSummaryList();
     public FlowSummary findFlowSummaryByID(int flow_id);
 	public void updateFlowSummary(FlowSummary flowSummary);
+    public boolean updateFlowSummary(int flow_id, String name,String des);
 }

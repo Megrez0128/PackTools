@@ -8,4 +8,5 @@ public interface UserDao {
     User findByUserID(String UserID);
     boolean insertUser(User user);
     boolean deleteByUserID(String UserID);
+    List<Integer> findAllGroups(String user_id);
 }

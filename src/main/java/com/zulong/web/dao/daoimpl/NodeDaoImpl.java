@@ -2,12 +2,14 @@ package com.zulong.web.dao.daoimpl;
 
 import com.zulong.web.dao.NodeDao;
 import com.zulong.web.entity.Node;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 @Service("NodeDaoImpl")
 public class NodeDaoImpl implements NodeDao {
 
+    @Autowired
     private JdbcTemplate jdbcTemplate;
 
     public NodeDaoImpl(JdbcTemplate jdbcTemplate) {
@@ -17,7 +19,7 @@ public class NodeDaoImpl implements NodeDao {
     @Override
     public void insert(Node node) {
         String sql = "INSERT INTO node(instance_id, node_id, start_time, end_time, options) VALUES (?, ?, ?, ?, ?)";
-        jdbcTemplate.update(sql,  node.getInstance_id(),node.getNode_id(), node.getStart_time(), node.getEnd_time(), node.getOptions());
+        jdbcTemplate.update(sql, node.getInstance_id(),node.getNode_id(), node.getStart_time(), node.getEnd_time(), node.getOptions());
     }
 
     @Override

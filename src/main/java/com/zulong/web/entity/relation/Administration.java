@@ -1,15 +1,17 @@
 package com.zulong.web.entity.relation;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Administration {
-    public boolean update_allowed;
-    public boolean delete_allowed;
-    public String user_id;  // primary
-    public int group_id;  // primary
+    private boolean update_allowed;
+    private boolean delete_allowed;
+    private String user_id;  // primary
+    private int group_id;  // primary
 
     public Administration(Administration ad) {
         this.update_allowed = ad.update_allowed;

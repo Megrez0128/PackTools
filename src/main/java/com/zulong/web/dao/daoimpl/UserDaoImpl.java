@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -20,8 +19,6 @@ public class UserDaoImpl implements UserDao {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
-    @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
 
     @Override
     public List<User> findAll() {
@@ -67,5 +64,13 @@ public class UserDaoImpl implements UserDao {
             LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]UserDaoImpl.insertUser@deletion failed|userID=%s", UserID));
         }
         return flag;
+    }
+
+    @Override
+    public List<Integer> findAllGroups(String user_id) {
+        String sql = "select group_id from administration where user_id=?";
+        Object[] params = {user_id};
+        List<Integer> groupList = jdbcTemplate.query(sql, params, new BeanPropertyRowMapper<>(Integer.class));
+        return groupList;
     }
 }

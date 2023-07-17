@@ -4,17 +4,16 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Flow {
+public class Flow implements Serializable {
     private int record_id;
 
     private int flow_id;
     private int version;
-
-
-    //private boolean is_committed;
 
     private boolean is_committed;
     private String commit_message;
