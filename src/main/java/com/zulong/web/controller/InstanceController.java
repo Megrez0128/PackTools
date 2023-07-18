@@ -20,7 +20,7 @@ import static com.zulong.web.config.ConstantConfig.*;
 @RestController
 @RequestMapping(value = "/myinstance")
 public class InstanceController {
-    private InstanceService instanceService;
+    private final InstanceService instanceService;
     private FlowService flowService;
     @Autowired
     public InstanceController(InstanceService instanceService, FlowService flowService)
@@ -204,4 +204,5 @@ public class InstanceController {
         }
 
     }
+
 }

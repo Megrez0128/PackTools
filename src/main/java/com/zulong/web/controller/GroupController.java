@@ -1,6 +1,7 @@
 package com.zulong.web.controller;
 
 import com.zulong.web.entity.Group;
+import com.zulong.web.entity.User;
 import com.zulong.web.log.LoggerManager;
 import com.zulong.web.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ import java.util.Map;
 import static com.zulong.web.config.ConstantConfig.*;
 
 @RestController
-@RequestMapping(value = "/group")
+@RequestMapping(value = "/auth/group")
 public class GroupController {
     private final GroupService groupService;
 
@@ -37,7 +38,7 @@ public class GroupController {
             return response;
         }
         try {
-            List<String> userlist = groupService.getAllUsers(group_id);
+            List<User> userlist = groupService.getAllUsers(group_id);
             response.put("code", RETURN_SUCCESS);
             data.put("group_id", group_id);
             data.put("items", userlist);

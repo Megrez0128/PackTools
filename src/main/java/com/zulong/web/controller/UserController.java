@@ -16,9 +16,9 @@ import java.util.List;
 import static com.zulong.web.config.ConstantConfig.*;
 
 @RestController
-@RequestMapping(value = "/user")
+@RequestMapping(value = "/auth/user")
 public class UserController {
-    private UserService userService;
+    private final UserService userService;
 
     @Autowired
     public UserController(UserService userService){ this.userService = userService; }

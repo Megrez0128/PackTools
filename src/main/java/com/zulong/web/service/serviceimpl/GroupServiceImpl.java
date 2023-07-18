@@ -2,6 +2,7 @@ package com.zulong.web.service.serviceimpl;
 
 import com.zulong.web.dao.GroupDao;
 import com.zulong.web.entity.Group;
+import com.zulong.web.entity.User;
 import com.zulong.web.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,7 @@ public class GroupServiceImpl implements GroupService {
     @Autowired
     private GroupDao groupDao;
 
-    public List<String> getAllUsers(int group_id){
+    public List<User> getAllUsers(int group_id){
         return groupDao.getAllUsers(group_id);
     }
 

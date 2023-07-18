@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 @Data
 @NoArgsConstructor
@@ -13,5 +12,5 @@ import java.util.ArrayList;
 public class User implements Serializable
 {
     private String user_id;
-    private boolean is_admin;
+    private boolean admin;
 }

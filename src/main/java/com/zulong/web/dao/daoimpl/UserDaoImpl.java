@@ -4,7 +4,6 @@ import com.zulong.web.dao.UserDao;
 import com.zulong.web.entity.Group;
 import com.zulong.web.entity.User;
 import com.zulong.web.log.LoggerManager;
-import com.zulong.web.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -46,8 +45,8 @@ public class UserDaoImpl implements UserDao {
     @CachePut(value = "userCache", key = "#user.user_id")
     @Override
     public boolean insertUser(User user) {
-        String sql = "insert into user(user_id, is_admin)values(?,?)";
-        Object[] params = {user.getUser_id(), user.is_admin()};
+        String sql = "insert into user(user_id, admin)values(?,?)";
+        Object[] params = {user.getUser_id(), user.isAdmin()};
         boolean flag = jdbcTemplate.update(sql, params) > 0;
         if(!flag){
             LoggerManager.logger().warn("[com.zulong.web.dao.daoimpl]UserDaoImpl.insertUser@insertion failed");

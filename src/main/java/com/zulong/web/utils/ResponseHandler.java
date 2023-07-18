@@ -35,14 +35,14 @@ public class ResponseHandler implements ResponseBodyAdvice<Object>
             org.springframework.http.server.ServerHttpResponse response)
     {
 
-        if (body instanceof Result)
-        {
-            return body;
-        }
-        if (body instanceof String)
-        {
-            return JsonUtil.object2Json(Result.suc(body));
-        }
-        return Result.suc(body);
+//        if (body instanceof Result)
+//        {
+//            return body;
+//        }
+//        if (body instanceof String)
+//        {
+//            return JsonUtil.object2Json(Result.suc(body));
+//        }
+        return body;
     }
 }

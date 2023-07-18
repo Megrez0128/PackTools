@@ -58,8 +58,8 @@ public class FlowServiceImpl implements FlowService {
         flowSummary.setLast_build(START_LAST_BUILD);
         flowSummary.setLast_commit(START_LAST_COMMIT);
         flowSummary.setLast_version(START_VERSION);
-        flowSummaryDao.insertFlowSummary(flowSummary);
         curr_record_id++;
+        flowSummaryDao.insertFlowSummary(flowSummary);
         curr_flow_id++;
         return flow;
     }
@@ -79,7 +79,7 @@ public class FlowServiceImpl implements FlowService {
         int version = flow.getVersion();
         flow.setVersion(version+1);
         //修改is_committed 为 false, commit_message为null
-        flow.set_committed(false);
+        flow.setCommitted(false);
         flow.setCommit_message("");
         flow.setLast_build(START_LAST_BUILD);
         //插入新记录
@@ -98,14 +98,14 @@ public class FlowServiceImpl implements FlowService {
             Flow flow = flowDao.findFlowByRecordId(record_id);
             //更新flow的last_commit，is_committed
             //如果已经commit过了，就不再commit
-            if(flow.is_committed()){
+            if(flow.isCommitted()){
                 LoggerManager.logger().warn(String.format("[com.zulong.web.daoimpl.serviceimpl]FlowServiceImpl.commitFlow@flow has been committed|record_id=%d", record_id));
                 return null;
             }
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
             String current_time = df.format(new Date());// new Date()为获取当前系统时间
             flow.setCommit_message(commit_message);
-            flow.set_committed(true);
+            flow.setCommitted(true);
             flow.setLast_build(current_time);
             boolean flag = flowDao.updateFlow(flow);
             if (flag) {

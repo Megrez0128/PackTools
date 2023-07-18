@@ -87,8 +87,8 @@ public class FlowDaoImpl implements FlowDao {
     @CachePut(value = "flowCache", key = "#flow.record_id")
     @Override
     public boolean insertFlow(Flow flow) {
-        String sql = "insert into flow(record_id, flow_id, version, is_committed, commit_message, last_build, core_meta_id, extra_meta_id, graph_data, blackboard) values(?,?,?,?,?,?,?,?,?,?)";
-        Object[] params = {flow.getRecord_id(), flow.getFlow_id(), flow.getVersion(), flow.is_committed(), flow.getCommit_message(),
+        String sql = "insert into flow(record_id, flow_id, version, committed, commit_message, last_build, core_meta_id, extra_meta_id, graph_data, blackboard) values(?,?,?,?,?,?,?,?,?,?)";
+        Object[] params = {flow.getRecord_id(), flow.getFlow_id(), flow.getVersion(), flow.isCommitted(), flow.getCommit_message(),
             flow.getLast_build(), flow.getCore_meta_id(), flow.getExtra_meta_id(), flow.getGraph_data(), flow.getBlackboard()};
         boolean flag = jdbcTemplate.update(sql, params) > 0;
         if(!flag){
@@ -101,8 +101,8 @@ public class FlowDaoImpl implements FlowDao {
     @CachePut(value = "flowCache", key = "#flow.record_id")
     @Override
     public boolean updateFlow(Flow flow) {
-        String sql = "update flow set is_committed=?, commit_message=?, last_build=?, core_meta_id=?, extra_meta_id=?, graph_data=?, blackboard=? where record_id=?";
-        Object[] params = {flow.is_committed(), flow.getCommit_message(), flow.getLast_build(), flow.getCore_meta_id(), flow.getExtra_meta_id(), flow.getGraph_data(), flow.getBlackboard(), flow.getRecord_id()};
+        String sql = "update flow set committed=?, commit_message=?, last_build=?, core_meta_id=?, extra_meta_id=?, graph_data=?, blackboard=? where record_id=?";
+        Object[] params = {flow.isCommitted(), flow.getCommit_message(), flow.getLast_build(), flow.getCore_meta_id(), flow.getExtra_meta_id(), flow.getGraph_data(), flow.getBlackboard(), flow.getRecord_id()};
         boolean flag = jdbcTemplate.update(sql, params) > 0;
         if(!flag){
             LoggerManager.logger().warn("[com.zulong.web.dao.daoimpl]FlowDaoImpl.updateFlow@update failed");

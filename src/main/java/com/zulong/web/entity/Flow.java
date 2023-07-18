@@ -15,7 +15,7 @@ public class Flow implements Serializable {
     private int flow_id;
     private int version;
 
-    private boolean is_committed;
+    private boolean committed;
     private String commit_message;
 
     private String last_build;
@@ -25,10 +25,10 @@ public class Flow implements Serializable {
     private String graph_data;
     private String blackboard;
 
-    public Flow(int record_id, int version, boolean is_committed, String commit_message, String currentTime) {
+    public Flow(int record_id, int version, boolean committed, String commit_message, String currentTime) {
         this.record_id = record_id;
         this.version = version;
-        this.is_committed = is_committed;
+        this.committed = committed;
         this.commit_message = commit_message;
         this.last_build = currentTime;
     }
@@ -36,7 +36,7 @@ public class Flow implements Serializable {
     public Flow(Flow flow){
         this.flow_id = flow.flow_id;
         this.version = flow.version + 1;
-        this.is_committed = flow.is_committed;
+        this.committed = flow.committed;
         this.commit_message = flow.commit_message;
         this.core_meta_id = flow.core_meta_id;
         this.extra_meta_id = flow.extra_meta_id;
@@ -47,4 +47,6 @@ public class Flow implements Serializable {
     public void setLast_build(String last_build) {
         this.last_build = last_build;
     }
+
+
 }

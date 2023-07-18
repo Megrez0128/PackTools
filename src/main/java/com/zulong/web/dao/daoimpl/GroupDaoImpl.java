@@ -2,6 +2,7 @@ package com.zulong.web.dao.daoimpl;
 
 import com.zulong.web.entity.Group;
 import com.zulong.web.dao.GroupDao;
+import com.zulong.web.entity.User;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Service;
 import com.zulong.web.log.LoggerManager;
@@ -35,10 +36,10 @@ public class GroupDaoImpl implements GroupDao {
         return flag;
     }
 
-    public List<String> getAllUsers(int group_id){
-        String sql = "select user_id from administration where group_id=?";
+    public List<User> getAllUsers(int group_id){
+        String sql = "select * from administration where group_id=?";
         Object[] params = {group_id};
-        List<String> userList = jdbcTemplate.query(sql, params, new BeanPropertyRowMapper<>(String.class));
+        List<User> userList = jdbcTemplate.query(sql, params, new BeanPropertyRowMapper<>(User.class));
         return userList;
     }
 

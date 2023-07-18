@@ -38,7 +38,7 @@ public class FlowController
             extra_meta_id = Integer.parseInt(request.get("extra_meta_id"));
             graph_data = request.get("graph_data");
             blackboard = request.get("blackboard");
-            LoggerManager.logger().debug(String.format("[com.zulong.web.controller]FlowController.createFlowchart@ success receive post|"));
+            LoggerManager.logger().debug(String.format("[com.zulong.web.controller]FlowController.createFLow@ success receive post|"));
         } catch(Exception e) {
             LoggerManager.logger().warn("[com.zulong.web.controller]FlowController.createFlow@params are wrong|", e);
             response.put("code", RETURN_PARAMS_WRONG);

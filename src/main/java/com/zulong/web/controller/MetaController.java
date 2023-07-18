@@ -20,8 +20,8 @@ import static com.zulong.web.config.ConstantConfig.RETURN_PARAMS_WRONG;
 @RestController
 @RequestMapping(value = "/mymeta")
 public class MetaController {
-    private MetaService metaService;
-    private AuthenticationService authenticationService;
+    private final MetaService metaService;
+    private final AuthenticationService authenticationService;
 
     @Autowired
     public MetaController(MetaService metaService, AuthenticationService authenticationService) {
