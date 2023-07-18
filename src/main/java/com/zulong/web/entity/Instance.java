@@ -4,13 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class Instance {
+public class Instance implements Serializable {
     private String uuid;  // 唯一id,由客户端生成
     private int flow_record_id;
     private String build_time;

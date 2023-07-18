@@ -9,6 +9,8 @@ import com.zulong.web.service.InstanceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 @Service
 public class InstanceServiceImpl implements InstanceService {
@@ -31,7 +33,7 @@ public class InstanceServiceImpl implements InstanceService {
             node.setStart_time(start_time);
             node.setEnd_time(CONST_INIT_END_TIME);
             node.setOptions(option);
-            nodeDao.insert(node);
+            nodeDao.insertNode(node);
         }catch (Exception e){
             LoggerManager.logger().warn("[com.zulong.web.dao.serviceimpl]InstanceServiceImpl.instanceStartNode@nodeDao insert failed");
             return false;
@@ -57,9 +59,13 @@ public class InstanceServiceImpl implements InstanceService {
     final public boolean instanceEndNode(String uuid, int flow_record_id, int node_id, String end_time, boolean complete,boolean has_error, String option){
         //todo 更新node表，再更新instance表
         try{
-            nodeDao.update(flow_record_id, flow_record_id, end_time, option);
-            LoggerManager.logger().warn("[com.zulong.web.dao.serviceimpl]InstanceServiceImpl.instanceEndNode@nodeDao update failed");
+            boolean flag = nodeDao.updateNode(flow_record_id, flow_record_id, end_time, option);
+            if(!flag){
+                LoggerManager.logger().warn("[com.zulong.web.dao.serviceimpl]InstanceServiceImpl.instanceEndNode@nodeDao update flag is false");
+                return false;
+            }
         }catch (Exception e){
+            LoggerManager.logger().warn("[com.zulong.web.dao.serviceimpl]InstanceServiceImpl.instanceEndNode@nodeDao update failed");
             return false;
         }
 
@@ -73,14 +79,20 @@ public class InstanceServiceImpl implements InstanceService {
 
 
     }
-    @Override
-    public void PullAndBuild() {
-
-    }
 
     @Override
     public Instance findInstanceByUuid(String uuid) {
-
         return instanceDao.findInstanceByUuid(uuid);
+    }
+
+    @Override
+    public List<Instance> findInstanceByFlowRecordId(int record_id) {
+        return instanceDao.getInstanceByFlowRecordId(record_id);
+    }
+
+    @Override
+    public boolean insertInstance(Instance instance) {
+        instanceDao.insertInstance(instance);
+        return true;
     }
 }

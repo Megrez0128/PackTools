@@ -1,20 +1,17 @@
 package com.zulong.web.controller;
 
 import com.zulong.web.entity.Flow;
-import com.zulong.web.entity.User;
-import com.zulong.web.exception.ClientArgIllegalException;
 import com.zulong.web.log.LoggerManager;
 import com.zulong.web.service.FlowService;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.zulong.web.utils.ResultCode;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import static com.zulong.web.config.ConstantConfig.*;
 
 @RestController
 @RequestMapping(value = "/myflow")
@@ -29,31 +26,34 @@ public class FlowController
         this.flowService = flowService;
     }
 
-    /**
-     * 创建Flow，不需要手动更新id和version
-     * @param request
-     * @return
-     */
     @PostMapping(value = "/create")
     public Map<String, Object> createFlow(@RequestBody Map<String, String> request) {
+        Integer core_meta_id;
+        Integer extra_meta_id;
+        String graph_data;
+        String blackboard;
+        Map<String, Object> response = new HashMap<>();
         try {
-            Integer core_meta_id = Integer.parseInt(request.get("core_meta_id"));
-            Integer extra_meta_id = Integer.parseInt(request.get("extra_meta_id"));
-            String graph_data = request.get("graph_data");
-            String blackboard = request.get("blackboard");
+            core_meta_id = Integer.parseInt(request.get("core_meta_id"));
+            extra_meta_id = Integer.parseInt(request.get("extra_meta_id"));
+            graph_data = request.get("graph_data");
+            blackboard = request.get("blackboard");
             LoggerManager.logger().debug(String.format("[com.zulong.web.controller]FlowController.createFlowchart@ success receive post|"));
+        } catch(Exception e) {
+            LoggerManager.logger().warn("[com.zulong.web.controller]FlowController.createFlow@params are wrong|", e);
+            response.put("code", RETURN_PARAMS_WRONG);
+            response.put("message", e.getMessage());
+            return response;
+        }
+        try {
             Flow flow = flowService.createFlow(graph_data, blackboard, core_meta_id, extra_meta_id);
-
-            Map<String, Object> response = new HashMap<>();
-            response.put("code", 20000);
+            response.put("code", RETURN_SUCCESS);
             response.put("data", flow);
             return response;
-
         } catch (Exception e) {
             LoggerManager.logger().warn("[com.zulong.web.controller]FlowController.createFlow@operation failed|", e);
-            Map<String, Object> response = new HashMap<>();
-            response.put("code", 50000);
-            response.put("message", null);
+            response.put("code", RETURN_SERVER_WRONG);
+            response.put("message", e.getMessage());
             return response;
         }
     }
@@ -61,46 +61,58 @@ public class FlowController
 
     @PostMapping(value = "/clone")
     public Map<String, Object> cloneFlow(@RequestBody Map<String, Object> request) {
+        int record_id;
+        String name;
+        String des;
+        Map<String, Object> response = new HashMap<>();
         try {
-            
-            int record_id = (int) request.get("record_id");
-            String name = (String) request.get("name");
-            String des = (String) request.get("des");
-            LoggerManager.logger().debug(String.format("[com.zulong.web.controller]FlowController.cloneFlow@ success receive post|record_id=%d",record_id));
+            record_id = (int) request.get("record_id");
+            name = (String) request.get("name");
+            des = (String) request.get("des");
+        } catch (Exception e) {
+            LoggerManager.logger().warn(String.format("[com.zulong.web.controller]FlowController.cloneFlow@params are wrong|"), e);
+            response.put("code", RETURN_PARAMS_WRONG);
+            response.put("message", e.getMessage());
+            return response;
+        }
+        try {
             Flow flow = flowService.cloneFlow(record_id, name, des);
-
-            Map<String, Object> response = new HashMap<>();
-            response.put("code", 20000);
+            response.put("code", RETURN_SUCCESS);
             response.put("data", flow);
-
             return response;
         } catch (Exception e) {
-            LoggerManager.logger().warn("[com.zulong.web.controller]FlowController.cloneFlow@operation failed|", e);
-            Map<String, Object> response = new HashMap<>();
-            response.put("code", 50000);
-            response.put("message", e.getMessage()); // 修改message的值为报错信息
+            LoggerManager.logger().warn(String.format("[com.zulong.web.controller]FlowController.cloneFlow@operation failed|record_id=%d", record_id), e);
+            response.put("code", RETURN_SERVER_WRONG);
+            response.put("message", e.getMessage());
             return response;
         }
     }
 
     @PostMapping(value = "/commit")
     public Map<String, Object> commitFlow(@RequestBody Map<String, Object> request) {
+        int record_id;
+        String commit_message;
         try {
-            int record_id = (int) request.get("record_id");
-            String commit_message = (String) request.get("commit_message");
-            LoggerManager.logger().debug(String.format("[com.zulong.web.controller]FlowController.commitFlow@ success receive post|record_id=%d|commit_message=%s",record_id,commit_message));
-            Flow flow = flowService.commitFlow(record_id, commit_message);
-
+            record_id = (int) request.get("record_id");
+            commit_message = (String) request.get("commit_message");
+        } catch (Exception e){
+            LoggerManager.logger().warn("[com.zulong.web.controller]FlowController.commitFlow@params are wrong|", e);
             Map<String, Object> response = new HashMap<>();
-            response.put("code", 20000);
+            response.put("code", RETURN_PARAMS_WRONG);
+            response.put("message", e.getMessage());
+            return response;
+        }
+        try {
+            Flow flow = flowService.commitFlow(record_id, commit_message);
+            Map<String, Object> response = new HashMap<>();
+            response.put("code", RETURN_SUCCESS);
             response.put("data", flow);
-
             return response;
         } catch (Exception e) {
             LoggerManager.logger().warn("[com.zulong.web.controller]FlowController.commitFlow@operation failed|", e);
             Map<String, Object> response = new HashMap<>();
-            response.put("code", 50000);
-            response.put("message", e.getMessage()); // 修改message的值为报错信息
+            response.put("code", RETURN_SERVER_WRONG);
+            response.put("message", e.getMessage());
             return response;
         }
     }
@@ -112,28 +124,35 @@ public class FlowController
      */
     @PostMapping(value = "/delete")
     public Map<String, Object> deleteFlow(@RequestBody Map<String, Object> request) {
+        int record_id;
+        Map<String, Object> response = new HashMap<>();
         try {
-            int record_id = (int) request.get("record_id");
+            record_id = (int) request.get("record_id");
+        } catch (Exception e) {
+            LoggerManager.logger().warn("[com.zulong.web.controller]FlowController.deleteFlow@params are wrong|", e);
+            response.put("code", RETURN_PARAMS_WRONG);
+            response.put("message", e.getMessage());
+            return response;
+        }
+        try {
             int result = flowService.deleteFlow(record_id);
-            Map<String, Object> response = new HashMap<>();
-            if(result == 1) {
-                response.put("code", 20000);
+            if(result == DELETE_SUCCESS) {
+                response.put("code", RETURN_SUCCESS);
                 response.put("message", true);
             }
-            if(result == 0) {
-                response.put("code", 40100);
+            else if(result == DELETE_HAVE_INSTANCE) {
+                response.put("code", RETURN_EXIST_INSTANCE);
                 response.put("message", false);
             }
             else {
-                response.put("code", 30400);
+                response.put("code", RETURN_DATABASE_WRONG);
                 response.put("message", false);
             }
             return response;
         } catch (Exception e) {
-            LoggerManager.logger().warn("[com.zulong.web.controller]FlowController.saveFlowchart@deletion operation failed|", e);
-            Map<String, Object> response = new HashMap<>();
-            response.put("code", 50000);
-            response.put("message", e.getMessage()); // 修改message的值为报错信息
+            LoggerManager.logger().warn(String.format("[com.zulong.web.controller]FlowController.deleteFlow@deletion operation failed|record_id=%d", record_id), e);
+            response.put("code", RETURN_SERVER_WRONG);
+            response.put("message", e.getMessage());
             return response;
         }
     }
@@ -145,44 +164,63 @@ public class FlowController
      */
     @PostMapping(value = "/save")
     public Map<String, Object> saveFlow(@RequestBody Map<String, Object> request) {
+        int flow_id;
+        String commit_message;
+        int core_meta_id;
+        int extra_meta_id;
+        String graph_data;
+        String blackboard;
+        Map<String, Object> response = new HashMap<>();
         try {
-            int flow_id = (int) request.get("flow_id");
-            // 这里的graph_data和blackboard理论上是json，先用String存储，不手动处理
-            String commit_message = (String) request.get("commit_message");
-            Integer core_meta_id = (Integer) request.get("core_meta_id");
-            Integer extra_meta_id = (Integer) request.get("extra_meta_id");
-            String graph_data = (String) request.get("graph_data");
-            String blackboard = (String) request.get("blackboard");
+            flow_id = (int) request.get("flow_id");
+            commit_message = (String) request.get("commit_message");
+            core_meta_id = (Integer) request.get("core_meta_id");
+            extra_meta_id = (Integer) request.get("extra_meta_id");
+            graph_data = (String) request.get("graph_data");
+            blackboard = (String) request.get("blackboard");
+        } catch (Exception e) {
+            LoggerManager.logger().warn("[com.zulong.web.controller]FlowController.saveFlow@params are wrong|", e);
+            response.put("code", RETURN_PARAMS_WRONG);
+            response.put("message", e.getMessage());
+            return response;
+        }
+        try {
             Flow result = flowService.saveFlow(flow_id, commit_message, core_meta_id, extra_meta_id, graph_data, blackboard);
-
-            Map<String, Object> response = new HashMap<>();
-            response.put("code", 20000);
+            response.put("code", RETURN_SUCCESS);
             response.put("data", result);
             return response;
         } catch (Exception e) {
-            LoggerManager.logger().warn("[com.zulong.web.controller]FlowController.saveFlowchart@saving operation failed|", e);
-            Map<String, Object> response = new HashMap<>();
-            response.put("code", 50000);
-            response.put("message", e.getMessage()); // 修改message的值为报错信息
+            LoggerManager.logger().warn(String.format("[com.zulong.web.controller]FlowController.saveFlow@saving operation failed|flow_id=%d", flow_id), e);
+            response.put("code", RETURN_SERVER_WRONG);
+            response.put("message", e.getMessage());
             return response;
         }
     }
 
     @PostMapping(value="/detail")
     public Map<String, Object> getFlowDetails(@RequestBody Map<String, Integer> request) {
+        int flow_id;
+        int version;
+        Map<String, Object> response = new HashMap<>();
         try {
-            int flow_id = request.get("flow_id");
-            int version = request.get("version");
+            flow_id = request.get("flow_id");
+            version = request.get("version");
+        } catch (Exception e) {
+            LoggerManager.logger().warn("[com.zulong.web.controller]FlowController.getFlowDetails@params are wrong|", e);
+
+            response.put("code", RETURN_PARAMS_WRONG);
+            response.put("message", e.getMessage());
+            return response;
+        }
+        try {
             Flow flow = flowService.getFlowDetails(flow_id, version);
-            Map<String, Object> response = new HashMap<>();
-            response.put("code", 20000);
+            response.put("code", RETURN_SUCCESS);
             response.put("data", flow);
             return response;
         } catch (Exception e) {
             LoggerManager.logger().warn("[com.zulong.web.controller]FlowController.getFlowDetails@operation failed|", e);
-            Map<String, Object> response = new HashMap<>();
-            response.put("code", 50000);
-            response.put("message", e.getMessage()); // 修改message的值为报错信息
+            response.put("code", RETURN_SERVER_WRONG);
+            response.put("message", e.getMessage());
             return response;
         }
     }
@@ -194,13 +232,13 @@ public class FlowController
             Map<String, Object> data = new HashMap<>();
             data.put("items", flowlist);
             Map<String, Object> response = new HashMap<>();
-            response.put("code", 20000);
+            response.put("code", RETURN_SUCCESS);
             response.put("data", data);
             return response;
         } catch (Exception e) {
             LoggerManager.logger().warn("[com.zulong.web.controller]FlowController.getFlowList@operation failed|", e);
             Map<String, Object> response = new HashMap<>();
-            response.put("code", 50000);
+            response.put("code", RETURN_SERVER_WRONG);
             response.put("message", e.getMessage());
             return response;
         }
@@ -214,13 +252,32 @@ public class FlowController
             Map<String, Object> data = new HashMap<>();
             data.put("items", flowlist);
             Map<String, Object> response = new HashMap<>();
-            response.put("code", 20000);
+            response.put("code", RETURN_SUCCESS);
             response.put("data", data);
             return response;
         } catch (Exception e) {
             LoggerManager.logger().warn("[com.zulong.web.controller]FlowController.getFlowHistoryList@cannot get history list|", e);
             Map<String, Object> response = new HashMap<>();
-            response.put("code", 50000);
+            response.put("code", RETURN_SERVER_WRONG);
+            response.put("message", e.getMessage());
+            return response;
+        }
+    }
+
+    @PostMapping(value = "/newversion")
+    public Map<String, Object> getNewVersionFlow(@RequestBody Map<String, Integer> request) {
+        Map<String, Object> data = new HashMap<>();
+        Map<String, Object> response = new HashMap<>();
+        try {
+            int flow_id = request.get("flow_id");
+            Flow flow = flowService.getNewVersionFlow(flow_id);
+            data.put("items", flow);
+            response.put("code", RETURN_SUCCESS);
+            response.put("data", data);
+            return response;
+        } catch (Exception e) {
+            LoggerManager.logger().warn("[com.zulong.web.controller]FlowController.getNewVersionFlow@cannot get the flow|", e);
+            response.put("code", RETURN_SERVER_WRONG);
             response.put("message", e.getMessage());
             return response;
         }

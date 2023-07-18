@@ -10,6 +10,10 @@ import java.util.List;
 
 @Service
 public class GroupServiceImpl implements GroupService {
+    final static int START_GROUP_ID = 1;
+
+    int curr_group_id = START_GROUP_ID;
+
     @Autowired
     private GroupDao groupDao;
 
@@ -17,8 +21,10 @@ public class GroupServiceImpl implements GroupService {
         return groupDao.getAllUsers(group_id);
     }
 
-    public void createGroup(int group_id, String group_name) {
-        Group group = new Group(group_id, group_name);
+    public Group createGroup(String group_name) {
+        Group group = new Group(curr_group_id, group_name);
         groupDao.insertGroup(group);
+        curr_group_id++;
+        return group;
     }
 }

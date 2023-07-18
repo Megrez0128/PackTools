@@ -1,6 +1,7 @@
 package com.zulong.web.dao.daoimpl;
 
 import com.zulong.web.dao.UserDao;
+import com.zulong.web.entity.Group;
 import com.zulong.web.entity.User;
 import com.zulong.web.log.LoggerManager;
 import com.zulong.web.service.UserService;
@@ -22,7 +23,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public List<User> findAll() {
-        String sql = "select * from test_user";
+        String sql = "select * from user";
         List<User> userList = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(User.class));
         return userList;
     }
@@ -30,7 +31,7 @@ public class UserDaoImpl implements UserDao {
     @Cacheable(value="userCache", key="#userID")
     public User findByUserID(String userID) {
 
-        String sql = "select * from test_user where user_id=?";
+        String sql = "select * from user where user_id=?";
         Object[] params = new Object[]{userID};
         try {
             return jdbcTemplate.queryForObject(sql, params, new BeanPropertyRowMapper<>(User.class));
@@ -45,7 +46,7 @@ public class UserDaoImpl implements UserDao {
     @CachePut(value = "userCache", key = "#user.user_id")
     @Override
     public boolean insertUser(User user) {
-        String sql = "insert into test_user(user_id, token, projects, administrator)values(?,?,?,?)";
+        String sql = "insert into user(user_id, is_admin)values(?,?)";
         Object[] params = {user.getUser_id(), user.is_admin()};
         boolean flag = jdbcTemplate.update(sql, params) > 0;
         if(!flag){
@@ -57,7 +58,7 @@ public class UserDaoImpl implements UserDao {
     @CacheEvict(value = "userCache", key = "#UserID")
     @Override
     public boolean deleteByUserID(String UserID) {
-        String sql = "delete from test_user where user_id=?";
+        String sql = "delete from user where user_id=?";
         Object[] params = {UserID};
         boolean flag = jdbcTemplate.update(sql, params) > 0;
         if(!flag){
@@ -67,10 +68,10 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public List<Integer> findAllGroups(String user_id) {
-        String sql = "select group_id from administration where user_id=?";
+    public List<Group> findAllGroups(String user_id) {
+        String sql = "select * from administration where user_id=?";
         Object[] params = {user_id};
-        List<Integer> groupList = jdbcTemplate.query(sql, params, new BeanPropertyRowMapper<>(Integer.class));
+        List<Group> groupList = jdbcTemplate.query(sql, params, new BeanPropertyRowMapper<>(Group.class));
         return groupList;
     }
 }

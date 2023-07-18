@@ -26,7 +26,7 @@ public class GroupDaoImpl implements GroupDao {
     @CachePut(value = "groupCache", key="#group.getGroup_id()")
     @Override
     public boolean insertGroup(Group group) {
-        String sql = "insert into group(group_id, group_name)values(?, ?)";
+        String sql = "insert into pack_group(group_id, group_name)values(?, ?)";
         Object[] params = {group.getGroup_id(), group.getGroup_name()};
         boolean flag = jdbcTemplate.update(sql, params) > 0;
         if(!flag){

@@ -174,4 +174,7 @@ public class FlowServiceImpl implements FlowService {
     public List<Flow> getHistoryFlowList(int flow_id) {
         return flowDao.getHistoryFlowList(flow_id);
     }
+
+    @Override
+    public Flow getNewVersionFlow(int flow_id){ return flowDao.getNewVersionFlow(flow_id); }
 }

@@ -4,10 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Administration {
+public class Administration implements Serializable {
     private boolean update_allowed;
     private boolean delete_allowed;
     private String user_id;  // primary

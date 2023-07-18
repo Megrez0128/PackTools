@@ -3,7 +3,7 @@ package com.zulong.web.controller;
 import com.zulong.web.entity.Group;
 import com.zulong.web.log.LoggerManager;
 import com.zulong.web.service.GroupService;
-import org.apache.logging.log4j.util.PerformanceSensitive;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,27 +13,39 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.zulong.web.config.ConstantConfig.*;
+
 @RestController
 @RequestMapping(value = "/group")
 public class GroupController {
-    private GroupService groupService;
+    private final GroupService groupService;
+
+    @Autowired
+    public  GroupController(GroupService groupService){ this.groupService = groupService;}
 
     @PostMapping(value = "/listuser")
     public Map<String, Object> getAllUsers(@RequestBody Map<String, String> request){
+        Map<String, Object> response = new HashMap<>();
+        Map<String, Object> data = new HashMap<>();
+        int group_id;
+        try{
+            group_id = Integer.parseInt(request.get("group_id"));
+        }catch (Exception e){
+            LoggerManager.logger().warn(String.format("[com.zulong.web.controller]GroupController.getAllUsers@params are wrong|"), e);
+            response.put("code", RETURN_PARAMS_WRONG);
+            response.put("message", e.getMessage());
+            return response;
+        }
         try {
-            Integer group_id = Integer.parseInt(request.get("group_id"));
             List<String> userlist = groupService.getAllUsers(group_id);
-            Map<String, Object> response = new HashMap<>();
-            Map<String, Object> data = new HashMap<>();
-            response.put("code", 20000);
+            response.put("code", RETURN_SUCCESS);
             data.put("group_id", group_id);
             data.put("items", userlist);
             response.put("data", data);
             return response;
         } catch (Exception e) {
             LoggerManager.logger().warn("[com.zulong.web.controller]GroupController.getAllUsers@operation failed|", e);
-            Map<String, Object> response = new HashMap<>();
-            response.put("code", 50000);
+            response.put("code", RETURN_SERVER_WRONG);
             response.put("message", e.getMessage());
             return response;
         }
@@ -41,21 +53,29 @@ public class GroupController {
 
     @PostMapping(value = "/create")
     public Map<String, Object> createGroup(@RequestBody Map<String, String> request) {
+        String group_name;
+        try{
+            group_name = request.get("group_name");
+        }catch (Exception e){
+            LoggerManager.logger().warn(String.format("[com.zulong.web.controller]GroupController.createGroup@params are wrong|"), e);
+            Map<String, Object> response = new HashMap<>();
+            response.put("code", RETURN_PARAMS_WRONG);
+            response.put("message", e.getMessage());
+            return response;
+        }
         try {
             Map<String, Object> response = new HashMap<>();
             Map<String, Object> data = new HashMap<>();
-            Integer group_id = Integer.parseInt(request.get("group_id"));
-            String group_name = request.get("group_name");
-            groupService.createGroup(group_id, group_name);
-            data.put("group_id", group_id);
-            data.put("group_name", group_name);
-            response.put("code", 20000);
+            Group return_group = groupService.createGroup(group_name);
+            data.put("group_id", return_group.getGroup_id());
+            data.put("group_name", return_group.getGroup_name());
+            response.put("code", RETURN_SUCCESS);
             response.put("data", data);
             return response;
         } catch (Exception e) {
             Map<String, Object> response = new HashMap<>();
-            LoggerManager.logger().warn("[com.zulong.web.controller]GroupController.createGroup@operation failed|", e);
-            response.put("code", 50000);
+            LoggerManager.logger().warn(String.format("[com.zulong.web.controller]GroupController.createGroup@operation failed|group_name=%s", group_name), e);
+            response.put("code", RETURN_SERVER_WRONG);
             response.put("message", e.getMessage());
             return response;
         }

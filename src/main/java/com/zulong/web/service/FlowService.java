@@ -19,4 +19,5 @@ public interface FlowService
 
     public Flow commitFlow(int record_id, String commit_message);
     public List<Flow> getHistoryFlowList(int flow_id);
+    public Flow getNewVersionFlow(int flow_id);
 }

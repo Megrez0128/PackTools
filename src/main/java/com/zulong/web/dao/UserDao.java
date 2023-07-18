@@ -1,5 +1,6 @@
 package com.zulong.web.dao;
 
+import com.zulong.web.entity.Group;
 import com.zulong.web.entity.User;
 import java.util.List;
 
@@ -8,5 +9,5 @@ public interface UserDao {
     User findByUserID(String UserID);
     boolean insertUser(User user);
     boolean deleteByUserID(String UserID);
-    List<Integer> findAllGroups(String user_id);
+    List<Group> findAllGroups(String user_id);
 }

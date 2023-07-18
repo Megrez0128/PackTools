@@ -1,5 +1,6 @@
 package com.zulong.web.controller;
 
+import com.zulong.web.log.LoggerManager;
 import com.zulong.web.service.MetaService;
 import com.zulong.web.service.AuthenticationService;
 
@@ -13,6 +14,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+
+import static com.zulong.web.config.ConstantConfig.RETURN_PARAMS_WRONG;
 
 @RestController
 @RequestMapping(value = "/mymeta")
@@ -33,11 +36,25 @@ public class MetaController {
      */
     @PostMapping(value = "/create")
     public Map<String, Object> createMeta(@RequestBody Map<String, String> request, HttpServletRequest httpServletRequest) {
+        Integer group_id;
+        Integer meta_id;
+        String data;
+        try{
+            group_id = Integer.parseInt(request.get("group_id"));
+            meta_id = Integer.valueOf(request.get("meta_id"));
+            data = request.get("data");
+        }catch (Exception e){
+            LoggerManager.logger().warn(String.format("[com.zulong.web.controller]MetaController.createMeta@params are wrong|"), e);
+            Map<String, Object> response = new HashMap<>();
+            response.put("code", RETURN_PARAMS_WRONG);
+            response.put("message", e.getMessage());
+            return response;
+        }
+
+
+
         Map<String, Object> response = new HashMap<>();
         try {
-            Integer meta_id = Integer.valueOf(request.get("meta_id"));
-            Integer group_id = Integer.valueOf(request.get("group_id"));
-            String data = request.get("data");
             String user_id = authenticationService.getUserIdFromToken(httpServletRequest.getHeader("Authorization")); //从token中解析出user_id
             //验证user_id和group_id是否合法        
             boolean is_valid = authenticationService.isUserInGroup(user_id, group_id);

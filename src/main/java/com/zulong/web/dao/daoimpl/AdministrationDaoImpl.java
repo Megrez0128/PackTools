@@ -18,8 +18,6 @@ public class AdministrationDaoImpl implements AdministrationDao {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    // 或许已经被重写了，请调用createAdministration和deleteAdministration
-    public boolean insertAdministration(String user_id, Integer group_id, boolean update_allowed, boolean delete_allowed) { return true; }
     public boolean updateAdministration(String user_id, Integer group_id, boolean update_allowed,boolean delete_allowed) {
         if(!isUserInGroup(user_id, group_id)) {
             LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]AdministrationDaoImpl.updateAdministration@the user isn't in the group|user_id=%s|group_id=%d", user_id, group_id));
@@ -30,7 +28,7 @@ public class AdministrationDaoImpl implements AdministrationDao {
             Object[] params = {update_allowed, delete_allowed, user_id, group_id};
             boolean flag = jdbcTemplate.update(sql, params) > 0;
             if(!flag){
-                LoggerManager.logger().warn("[com.zulong.web.dao.daoimpl]FlowDaoImpl.updateFlow@update failed|user_id=%s|group_id=%d", user_id, group_id);
+                LoggerManager.logger().warn("[com.zulong.web.dao.daoimpl]administrationDaoImpl.updateAdministration@update failed|user_id=%s|group_id=%d", user_id, group_id);
             }
             return flag;
         } catch (Exception e) {
@@ -39,7 +37,7 @@ public class AdministrationDaoImpl implements AdministrationDao {
         }
     }
 
-    public boolean createAdministration(Administration administration) {
+    public boolean insertAdministration(Administration administration) {
         try {
             String sql = "insert into administration(user_id, group_id, update_allowed, delete_allowed)values(?, ?, ?, ?)";
             Object[] params = {administration.getUser_id(), administration.getGroup_id(), administration.isUpdate_allowed(), administration.isDelete_allowed()};
@@ -59,7 +57,7 @@ public class AdministrationDaoImpl implements AdministrationDao {
             return false;
         }
         try {
-            String sql = "delete from flow where user_id=? and group_id=?";
+            String sql = "delete from administration where user_id=? and group_id=?";
             Object[] params = {user_id, group_id};
             boolean flag1 = jdbcTemplate.update(sql, params) > 0;
             if(!flag1) {
@@ -75,9 +73,10 @@ public class AdministrationDaoImpl implements AdministrationDao {
     @Cacheable(value="administrationCache", key="#user_id+'_'+#group_id")
     public boolean isUserInGroup(String user_id, Integer group_id) {
         try {
-            String sql = "select * from flow where user_id = ? and group_id = ?";
+            String sql = "select count(*) from administration where user_id = ? and group_id = ?";
             Object[] params = new Object[]{user_id, group_id};
-            return jdbcTemplate.queryForObject(sql, params, new BeanPropertyRowMapper<>(boolean.class));
+            int count = jdbcTemplate.queryForObject(sql, params, Integer.class);
+            return count > 0;
         } catch (Exception e) {
             LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]AdministrationDaoImpl.isUserInGroup@cannot find connected administration|user_id=%s|group_id=%d", user_id, group_id), e);
             return false;
@@ -90,9 +89,10 @@ public class AdministrationDaoImpl implements AdministrationDao {
             return false;
         }
         try {
-            String sql = "select update_allowed from flow where user_id = ? and group_id = ?";
+            String sql = "select update_allowed from administration where user_id = ? and group_id = ?";
             Object[] params = new Object[]{user_id, group_id};
-            return jdbcTemplate.queryForObject(sql, params, new BeanPropertyRowMapper<>(boolean.class));
+            int count = jdbcTemplate.queryForObject(sql, params, Integer.class);
+            return count > 0;
         } catch (Exception e) {
             LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]AdministrationDaoImpl.getUpdateAllowance@something wrong happens when searching|user_id=%s|group_id=%d", user_id, group_id));
             return false;
@@ -105,9 +105,10 @@ public class AdministrationDaoImpl implements AdministrationDao {
             return false;
         }
         try {
-            String sql = "select delete_allowed from flow where user_id = ? and group_id = ?";
+            String sql = "select delete_allowed from administration where user_id = ? and group_id = ?";
             Object[] params = new Object[]{user_id, group_id};
-            return jdbcTemplate.queryForObject(sql, params, new BeanPropertyRowMapper<>(boolean.class));
+            int count = jdbcTemplate.queryForObject(sql, params, Integer.class);
+            return count > 0;
         } catch (Exception e) {
             LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]AdministrationDaoImpl.getDeleteAllowance@something wrong happens when searching|user_id=%s|group_id=%d", user_id, group_id));
             return false;

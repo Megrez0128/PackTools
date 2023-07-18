@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.zulong.web.config.ConstantConfig.*;
+
 @Service("FlowDaoImpl")
 public class FlowDaoImpl implements FlowDao {
 
@@ -52,31 +54,20 @@ public class FlowDaoImpl implements FlowDao {
     @CacheEvict(value="flowCache", key="#record_id")
     public int deleteFlow(int record_id) {
         boolean flag = instanceDao.findInstanceByFlowID(record_id);
-        if(!flag){
+        if(flag){
             LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]FlowDaoImpl.deleteFlow@flow has instances|record_id=%d", record_id));
-            return 0;
+            return DELETE_HAVE_INSTANCE;
         }
         String sql = "delete from flow where record_id=?";
         Object[] params = {record_id};
         boolean flag1 = jdbcTemplate.update(sql, params) > 0;
         if(!flag1){
             LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]FlowDaoImpl.deleteFlow@something wrong happened during deletion|"));
-            return 2;
+            return DELETE_DATABASE_WRONG;
         }
-        return 1;
+        return DELETE_SUCCESS;
     }
 
-//    @Cacheable(value = "flowCache", key = "#record_id")
-//    public Flow cloneFlow(int record_id, boolean is_committed, String committed_message){
-//        String sql = "select * from flow where record_id=?";
-//        Object[] params = {record_id};
-//        Flow sample = jdbcTemplate.queryForObject(sql, params, new BeanPropertyRowMapper<>(Flow.class));
-//        Flow flow = new Flow(sample);
-//        flow.set_committed(is_committed);
-//        flow.setCommit_message(committed_message);
-//        insertFlow(flow);
-//        return flow;
-//    }
 
     @Cacheable(value = "flowCache", key = "#record_id")
     @Override
@@ -87,7 +78,7 @@ public class FlowDaoImpl implements FlowDao {
             return jdbcTemplate.queryForObject(sql, params, new BeanPropertyRowMapper<>(Flow.class));
         } catch (Exception e) {
             // 如果没有找到对应的记录，返回null；添加一条warn日志
-            LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]UserDaoImpl.findByFlowID@record_id is invalid|record_id=%d", record_id), e);
+            LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]FlowDaoImpl.findByFlowID@record_id is invalid|record_id=%d", record_id), e);
             return null;
         }
     }
@@ -132,6 +123,7 @@ public class FlowDaoImpl implements FlowDao {
         }
     }
 
+    @Cacheable(value="flowCache", key="#flow_id+'_'+#version")
     @Override
     public Flow findByFlowIDAndVersion(int flow_id, int version) {
         //根据flow_id和version找到对应的flow
@@ -153,6 +145,18 @@ public class FlowDaoImpl implements FlowDao {
             return flowList;
         } catch (Exception e){
             LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]FlowDaoImpl.getFlowList@cannot find flow list|"), e);
+            return null;
+        }
+    }
+
+    public Flow getNewVersionFlow(int flow_id) {
+        try {
+            String sql = "SELECT * FROM Flow WHERE flow_id =? ORDER BY version DESC LIMIT 1";
+            Object[] params = {flow_id};
+            Flow flow = jdbcTemplate.queryForObject(sql, params, new BeanPropertyRowMapper<>(Flow.class));
+            return flow;
+        } catch (Exception e) {
+            LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]FlowDaoImpl.getNewVersionFlow@cannot find the flow|flow_id=%d", flow_id), e);
             return null;
         }
     }
