@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @AllArgsConstructor
-public class GroupFlow {
+public class  GroupFlow {
     private int group_id;
     private int flow_id;
 }

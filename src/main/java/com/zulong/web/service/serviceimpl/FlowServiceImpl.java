@@ -2,16 +2,17 @@ package com.zulong.web.service.serviceimpl;
 
 import com.zulong.web.dao.FlowDao;
 import com.zulong.web.dao.FlowSummaryDao;
+import com.zulong.web.dao.GroupFlowDao;
 import com.zulong.web.entity.Flow;
 import com.zulong.web.entity.FlowSummary;
+import com.zulong.web.entity.relation.GroupFlow;
 import com.zulong.web.log.LoggerManager;
 import com.zulong.web.service.FlowService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class FlowServiceImpl implements FlowService {
@@ -33,11 +34,17 @@ public class FlowServiceImpl implements FlowService {
     @Autowired
     private FlowSummaryDao flowSummaryDao;
 
+    @Autowired
+    private GroupFlowDao groupFlowDao;
+
+
+
+
     int curr_record_id = START_RECORD_ID;
     int curr_flow_id = START_FLOW_ID;
 
     @Override
-    public Flow createFlow(String graph_data, String blackboard, int core_meta_id, int extra_meta_id){
+    public Flow createFlow(String graph_data, String blackboard, int meta_id, int group_id, String name, String des){
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
         String current_time = df.format(new Date());// new Date()为获取当前系统时间
         LoggerManager.logger().info(String.format(
@@ -47,20 +54,23 @@ public class FlowServiceImpl implements FlowService {
         flow.setRecord_id(curr_record_id);
         flow.setFlow_id(curr_flow_id);
         flow.setVersion(START_VERSION);
-        flow.setCore_meta_id(core_meta_id);
-        flow.setExtra_meta_id(extra_meta_id);
+        flow.setMeta_id(meta_id);
         flow.setGraph_data(graph_data);
         flow.setBlackboard(blackboard);
         flowDao.insertFlow(flow);
+        curr_record_id++;
         //创建对应的flow_summary
         FlowSummary flowSummary = new FlowSummary();
         flowSummary.setFlow_id(curr_flow_id);
         flowSummary.setLast_build(START_LAST_BUILD);
         flowSummary.setLast_commit(START_LAST_COMMIT);
         flowSummary.setLast_version(START_VERSION);
-        curr_record_id++;
+        flowSummary.setName(name);
+        flowSummary.setDes(des);
         flowSummaryDao.insertFlowSummary(flowSummary);
         curr_flow_id++;
+        //创建对应的flow_group
+        groupFlowDao.insertGroupFlow(group_id,curr_flow_id);
         return flow;
     }
 
@@ -122,7 +132,7 @@ public class FlowServiceImpl implements FlowService {
     }
 
     @Override
-    public Flow saveFlow(int flow_id, String commit_message, int core_meta_id,int extra_meta_id, String graphData, String blackboard) {
+    public Flow saveFlow(int flow_id, String commit_message, int meta_id, String graphData, String blackboard) {
         try {
             //找到当前flow_id对应的最大version
             int version = flowDao.findMaxVersion(flow_id);
@@ -131,8 +141,7 @@ public class FlowServiceImpl implements FlowService {
             //更新flow的commit_message，core_meta_id，extra_meta_id，graph_data，blackboard
             flow.setRecord_id(curr_record_id);
             flow.setCommit_message(commit_message);
-            flow.setCore_meta_id(core_meta_id);
-            flow.setExtra_meta_id(extra_meta_id);
+            flow.setMeta_id(meta_id);
             flow.setGraph_data(graphData);
             flow.setBlackboard(blackboard);
             flow.setVersion(version + 1);
@@ -161,8 +170,23 @@ public class FlowServiceImpl implements FlowService {
     }
 
     @Override
-    public List<Flow> getFlowList(){
-        return flowDao.getFlowList();
+    public List<Flow> getFlowList(int group_id) {
+        List<GroupFlow> groupFlowList = groupFlowDao.getFlowListByGroupId(group_id);
+        List<Flow> flowList = flowDao.getFlowList();
+
+        Set<Integer> flowIdSet = new HashSet<>();
+        for (GroupFlow groupFlow : groupFlowList) {
+            flowIdSet.add(groupFlow.getFlow_id());
+        }
+
+        List<Flow> filteredFlowList = new ArrayList<>();
+        for (Flow flow : flowList) {
+            if (flowIdSet.contains(flow.getFlow_id())) {
+                filteredFlowList.add(flow);
+            }
+        }
+
+        return filteredFlowList;
     }
 
     @Override

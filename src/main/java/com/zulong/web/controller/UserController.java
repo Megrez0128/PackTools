@@ -23,7 +23,7 @@ public class UserController {
     @Autowired
     public UserController(UserService userService){ this.userService = userService; }
 
-    @PostMapping(value = "/list")
+    @PostMapping(value = "/listgroup")
     public Map<String, Object> getAllGroups(@RequestBody Map<String, String> request) {
         String user_id;
         Map<String, Object> response = new HashMap<>();

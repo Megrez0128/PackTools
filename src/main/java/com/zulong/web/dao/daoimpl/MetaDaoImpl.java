@@ -1,0 +1,48 @@
+package com.zulong.web.dao.daoimpl;
+
+import com.zulong.web.dao.MetaDao;
+import com.zulong.web.entity.CoreMeta;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Service;
+import com.zulong.web.entity.Meta;
+import java.util.List;
+
+@Service("MetaImpl")
+public class MetaDaoImpl implements MetaDao {
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+    @Override
+    public Meta findMetaByID(int metaId){
+        String sql = "SELECT * FROM pack_meta WHERE meta_id = ?";
+        List<Meta> metaList = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Meta.class), metaId);
+        return metaList.isEmpty() ? null : metaList.get(0);
+    }
+    @Override
+    public boolean insertMeta(Meta coreMeta){
+        String sql = "INSERT INTO pack_meta (meta_id, version, data) VALUES (?, ?, ?)";
+        int result = jdbcTemplate.update(sql, coreMeta.getMeta_id(), coreMeta.getVersion(), coreMeta.getData());
+        return result > 0;
+    }
+    @Override
+    public boolean deleteMeta(int metaId){
+        String sql = "DELETE FROM pack_meta WHERE meta_id = ?";
+        int result = jdbcTemplate.update(sql, metaId);
+        return result > 0;
+    }
+    @Override
+    public List<Meta> getAllMeta(){
+        String sql = "SELECT * FROM pack_meta ";
+        List<Meta> metaList = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Meta.class));
+        return metaList;
+    }
+
+    @Override
+    public int getMaxVersion(int meta_id) {
+        String sql = "SELECT MAX(version) FROM pack_meta WHERE meta_id = ?";
+        Integer maxVersion = jdbcTemplate.queryForObject(sql, Integer.class, meta_id);
+        return maxVersion != null ? maxVersion : 0;
+    }
+}

@@ -19,8 +19,7 @@ public class Flow implements Serializable {
     private String commit_message;
 
     private String last_build;
-    private int core_meta_id;
-    private int extra_meta_id;
+    private int meta_id;
 
     private String graph_data;
     private String blackboard;
@@ -38,8 +37,7 @@ public class Flow implements Serializable {
         this.version = flow.version + 1;
         this.committed = flow.committed;
         this.commit_message = flow.commit_message;
-        this.core_meta_id = flow.core_meta_id;
-        this.extra_meta_id = flow.extra_meta_id;
+        this.meta_id = flow.meta_id;
         this.graph_data = flow.graph_data;
         this.blackboard = flow.blackboard;
     }

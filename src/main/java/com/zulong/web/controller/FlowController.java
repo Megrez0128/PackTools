@@ -28,16 +28,20 @@ public class FlowController
 
     @PostMapping(value = "/create")
     public Map<String, Object> createFlow(@RequestBody Map<String, String> request) {
-        Integer core_meta_id;
-        Integer extra_meta_id;
+        int meta_id;
         String graph_data;
         String blackboard;
+        int group_id;
+        String name;
+        String des;
         Map<String, Object> response = new HashMap<>();
         try {
-            core_meta_id = Integer.parseInt(request.get("core_meta_id"));
-            extra_meta_id = Integer.parseInt(request.get("extra_meta_id"));
+            meta_id = Integer.parseInt(request.get("meta_id"));
             graph_data = request.get("graph_data");
             blackboard = request.get("blackboard");
+            group_id = Integer.parseInt(request.get("group_id"));
+            name =  request.get("name");
+            des =  request.get("des");
             LoggerManager.logger().debug(String.format("[com.zulong.web.controller]FlowController.createFLow@ success receive post|"));
         } catch(Exception e) {
             LoggerManager.logger().warn("[com.zulong.web.controller]FlowController.createFlow@params are wrong|", e);
@@ -46,7 +50,7 @@ public class FlowController
             return response;
         }
         try {
-            Flow flow = flowService.createFlow(graph_data, blackboard, core_meta_id, extra_meta_id);
+            Flow flow = flowService.createFlow(graph_data, blackboard, meta_id, group_id, name, des);
             response.put("code", RETURN_SUCCESS);
             response.put("data", flow);
             return response;
@@ -166,16 +170,14 @@ public class FlowController
     public Map<String, Object> saveFlow(@RequestBody Map<String, Object> request) {
         int flow_id;
         String commit_message;
-        int core_meta_id;
-        int extra_meta_id;
+        int meta_id;
         String graph_data;
         String blackboard;
         Map<String, Object> response = new HashMap<>();
         try {
             flow_id = (int) request.get("flow_id");
             commit_message = (String) request.get("commit_message");
-            core_meta_id = (Integer) request.get("core_meta_id");
-            extra_meta_id = (Integer) request.get("extra_meta_id");
+            meta_id = (Integer) request.get("meta_id");
             graph_data = (String) request.get("graph_data");
             blackboard = (String) request.get("blackboard");
         } catch (Exception e) {
@@ -185,7 +187,7 @@ public class FlowController
             return response;
         }
         try {
-            Flow result = flowService.saveFlow(flow_id, commit_message, core_meta_id, extra_meta_id, graph_data, blackboard);
+            Flow result = flowService.saveFlow(flow_id, commit_message, meta_id, graph_data, blackboard);
             response.put("code", RETURN_SUCCESS);
             response.put("data", result);
             return response;
@@ -224,11 +226,13 @@ public class FlowController
             return response;
         }
     }
-    
+    //todo:获取用户当前组的流程列表,要读取group_id参数
     @PostMapping(value="/list")
-    public Map<String, Object> getFlowList() {
+    public Map<String, Object> getFlowList(@RequestBody Map<String, Integer> request) {
+        int group_id;
         try {
-            List<Flow> flowlist = flowService.getFlowList();
+            group_id = request.get("group_id");
+            List<Flow> flowlist = flowService.getFlowList(group_id);
             Map<String, Object> data = new HashMap<>();
             data.put("items", flowlist);
             Map<String, Object> response = new HashMap<>();

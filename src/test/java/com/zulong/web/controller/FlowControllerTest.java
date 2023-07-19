@@ -110,7 +110,9 @@ public class FlowControllerTest {
         createFlowTest();
         createFlowTest();
 
-        Map<String, Object> result = flowController.getFlowList();
+        Map<String, Integer> request_group = new HashMap<>();
+        request_group.put("group_id", 1);
+        Map<String, Object> result = flowController.getFlowList(request_group);
         assertEquals(20000, result.get("code"));
         assertNotNull(result.get("data"));
 
@@ -138,8 +140,9 @@ public class FlowControllerTest {
         createFlowTest();
         createFlowTest();
         createFlowTest();
-
-        Map<String, Object> result = flowController.getFlowList();
+        Map<String, Integer> request_group = new HashMap<>();
+        request_group.put("group_id", 1);
+        Map<String, Object> result = flowController.getFlowList(request_group);
         assertEquals(20000, result.get("code"));
         assertNotNull(result.get("data"));
     }
@@ -148,7 +151,9 @@ public class FlowControllerTest {
     void commitFlowTest(){
         createFlowTest();
         createFlowTest();
-        Map<String, Object> result = flowController.getFlowList();
+        Map<String, Integer> request_group = new HashMap<>();
+        request_group.put("group_id", 1);
+        Map<String, Object> result = flowController.getFlowList(request_group);
         assertEquals(20000, result.get("code"));
         assertNotNull(result.get("data"));
 
@@ -171,7 +176,9 @@ public class FlowControllerTest {
     void saveFlowTest(){
         createFlowTest();
         createFlowTest();
-        Map<String, Object> result = flowController.getFlowList();
+        Map<String, Integer> request_group = new HashMap<>();
+        request_group.put("group_id", 1);
+        Map<String, Object> result = flowController.getFlowList(request_group);
         assertEquals(20000, result.get("code"));
         assertNotNull(result.get("data"));
 
@@ -201,7 +208,9 @@ public class FlowControllerTest {
     void historyFlowTest(){
         createFlowTest();
         createFlowTest();
-        Map<String, Object> result = flowController.getFlowList();
+        Map<String, Integer> request_group = new HashMap<>();
+        request_group.put("group_id", 1);
+        Map<String, Object> result = flowController.getFlowList(request_group);
         assertEquals(20000, result.get("code"));
         assertNotNull(result.get("data"));
 
@@ -238,7 +247,9 @@ public class FlowControllerTest {
     void detailFlowTest() {
         createFlowTest();
         createFlowTest();
-        Map<String, Object> result = flowController.getFlowList();
+        Map<String, Integer> request_group = new HashMap<>();
+        request_group.put("group_id", 1);
+        Map<String, Object> result = flowController.getFlowList(request_group);
         assertEquals(20000, result.get("code"));
         assertNotNull(result.get("data"));
 
@@ -274,7 +285,9 @@ public class FlowControllerTest {
     void deleteFlowTest() {
         createFlowTest();
         createFlowTest();
-        Map<String, Object> result = flowController.getFlowList();
+        Map<String, Integer> request_group = new HashMap<>();
+        request_group.put("group_id", 1);
+        Map<String, Object> result = flowController.getFlowList(request_group);
         assertEquals(20000, result.get("code"));
         assertNotNull(result.get("data"));
 

@@ -1,5 +1,6 @@
 package com.zulong.web.controller;
 
+import com.zulong.web.entity.Meta;
 import com.zulong.web.log.LoggerManager;
 import com.zulong.web.service.MetaService;
 import com.zulong.web.service.AuthenticationService;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,12 +38,12 @@ public class MetaController {
      */
     @PostMapping(value = "/create")
     public Map<String, Object> createMeta(@RequestBody Map<String, String> request, HttpServletRequest httpServletRequest) {
-        Integer group_id;
-        Integer meta_id;
+        int group_id;
+        String version_display;
         String data;
         try{
             group_id = Integer.parseInt(request.get("group_id"));
-            meta_id = Integer.valueOf(request.get("meta_id"));
+            version_display = request.get("version_display");
             data = request.get("data");
         }catch (Exception e){
             LoggerManager.logger().warn(String.format("[com.zulong.web.controller]MetaController.createMeta@params are wrong|"), e);
@@ -64,13 +66,13 @@ public class MetaController {
                 return response;
             }
             //验证group_id和meta_id是否合法
-            is_valid = authenticationService.hasMetaPermission(group_id, meta_id);
-            if (!is_valid) {
-                response.put("code", "40300");
-                response.put("message","group or meta not authorized");
-                return response;
-            }
-            boolean is_success = metaService.createMeta(meta_id,group_id,data);
+//            is_valid = authenticationService.hasMetaPermission(group_id, meta_id);
+//            if (!is_valid) {
+//                response.put("code", "40300");
+//                response.put("message","group or meta not authorized");
+//                return response;
+//            }
+            boolean is_success = metaService.createMeta(version_display,group_id,data);
             if (is_success) {
                 response.put("code", "20000");
                 response.put("message","success");
@@ -88,14 +90,19 @@ public class MetaController {
         return response;
     }
 
-//    @PostMapping(value = "/list")
-//    public Map<String, Object> getMetaList() {
-//        Map<String, Object> response = new HashMap<>();
-//        try {
-//            return response;
-//        } catch (Exception e) {
-//            return null;
-//        }
-//    }
+    @PostMapping(value = "/list")
+    public Map<String, Object> getMetaList() {
+        Map<String, Object> response = new HashMap<>();
+        Map<String, Object> data = new HashMap<>();
+        try {
+            List<Meta> metaList= metaService.getAllMeta();
+            data.put("items",metaList);
+            response.put("code", "20000");
+            response.put("data",data);
+            return response;
+        } catch (Exception e) {
+            return null;
+        }
+    }
 
 }
