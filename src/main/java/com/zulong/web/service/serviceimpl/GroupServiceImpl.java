@@ -11,7 +11,7 @@ import java.util.List;
 
 @Service
 public class GroupServiceImpl implements GroupService {
-    final static int START_GROUP_ID = 1;
+    final static int START_GROUP_ID = 1023;
 
     int curr_group_id = START_GROUP_ID;
 

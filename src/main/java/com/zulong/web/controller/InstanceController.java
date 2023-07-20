@@ -104,7 +104,7 @@ public class InstanceController {
             has_error = (boolean)request.get("has_error");
             option = (String)request.get("option");
         } catch (Exception e) {
-            LoggerManager.logger().warn(String.format("[com.zulong.web.controller]InstanceController.instanceStartNode@params are wrong|"), e);
+            LoggerManager.logger().warn(String.format("[com.zulong.web.controller]InstanceController.instanceEndNode@params are wrong|"), e);
             Map<String, Object> response = new HashMap<>();
             response.put("code", RETURN_PARAMS_WRONG);
             response.put("message", e.getMessage());

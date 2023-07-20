@@ -1,5 +1,8 @@
 package com.zulong.web.interceptor;
 
+import com.zulong.web.entity.User;
+import com.zulong.web.log.LoggerManager;
+import com.zulong.web.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -11,22 +14,40 @@ import java.util.Map;
 
 @Component
 public class TokenInterceptor implements HandlerInterceptor {
+
+    @Autowired
+    private UserService userService;
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-
+//        return true;
         //跨域请求会首先发一个option请求，直接返回正常状态并通过拦截器
         if(request.getMethod().equals("OPTIONS")){
             response.setStatus(HttpServletResponse.SC_OK);
             return true;
         }
         response.setCharacterEncoding("utf-8");
-        String token = request.getHeader("token");
+        String token = request.getHeader("Authorization");
+        if (token != null && token.startsWith("Bearer ")) {
+            token = token.substring(7);
+        }
         if (token!=null){
-            boolean result= TokenUtils.verify(token);
-            if (result){
-                System.out.println("通过拦截器");
-                return true;
+            LoggerManager.logger().info(String.format(
+                    "[com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=%s",token));
+            String curr_user_id= TokenUtils.verify(token);
+            if (curr_user_id != null){
+                LoggerManager.logger().info(String.format(
+                        "[com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=%s", true));
+                if(curr_user_id.equals("admin")){
+                    return true;
+                }
+                User curr_user = userService.getUserByUserId(curr_user_id);
+                if(curr_user != null){
+
+                    TokenUtils.setAdmin(curr_user.isAdmin());
+                    return true;
+                }
+
             }
         }
         response.setContentType("application/json; charset=utf-8");
@@ -35,7 +56,8 @@ public class TokenInterceptor implements HandlerInterceptor {
             json.put("msg","token verify fail");
             json.put("code","500");
             response.getWriter().append(json.toString());
-            System.out.println("认证失败，未通过拦截器");
+            LoggerManager.logger().info(String.format(
+                    "[com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@认证失败，未通过拦截器|token=%s",token));
         } catch (Exception e) {
             return false;
         }

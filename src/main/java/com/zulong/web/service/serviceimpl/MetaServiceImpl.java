@@ -42,7 +42,7 @@ public class MetaServiceImpl implements MetaService {
 
         if(!flag){
             LoggerManager.logger().info(String.format(
-                    "[com.zulong.web.daoimpl.serviceimpl]MetaServiceImpl.createMeta@create meta|curr_meta_id=%s|group_id=%d|version_display=%s", curr_meta_id, group_id, version_display));
+                    "[com.zulong.web.service.serviceimpl]MetaServiceImpl.createMeta@create meta|curr_meta_id=%s|group_id=%d|version_display=%s", curr_meta_id, group_id, version_display));
 
         }
         return flag;

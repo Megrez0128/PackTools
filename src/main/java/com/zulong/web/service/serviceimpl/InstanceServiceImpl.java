@@ -25,7 +25,6 @@ public class InstanceServiceImpl implements InstanceService {
 
     @Override
     final public boolean instanceStartNode(String uuid, int flow_record_id, int node_id, String start_time, boolean complete,boolean has_error, String option){
-        //todo 插入node表，再更新instance表
         try{
             Node node = new Node();
             node.setInstance_id(uuid);
@@ -35,7 +34,7 @@ public class InstanceServiceImpl implements InstanceService {
             node.setOptions(option);
             nodeDao.insertNode(node);
         }catch (Exception e){
-            LoggerManager.logger().warn("[com.zulong.web.dao.serviceimpl]InstanceServiceImpl.instanceStartNode@nodeDao insert failed");
+            LoggerManager.logger().warn("[com.zulong.web.service.serviceimpl]InstanceServiceImpl.instanceStartNode@nodeDao insert failed");
             return false;
         }
 
@@ -49,7 +48,7 @@ public class InstanceServiceImpl implements InstanceService {
             instanceDao.insertInstance(instance);
             return true;
         }catch (Exception e){
-            LoggerManager.logger().warn("[com.zulong.web.dao.serviceimpl]InstanceServiceImpl.instanceStartNode@insertInstance failed");
+            LoggerManager.logger().warn("[com.zulong.web.service.serviceimpl]InstanceServiceImpl.instanceStartNode@insertInstance failed");
             return false;
         }
 
@@ -61,11 +60,11 @@ public class InstanceServiceImpl implements InstanceService {
         try{
             boolean flag = nodeDao.updateNode(flow_record_id, flow_record_id, end_time, option);
             if(!flag){
-                LoggerManager.logger().warn("[com.zulong.web.dao.serviceimpl]InstanceServiceImpl.instanceEndNode@nodeDao update flag is false");
+                LoggerManager.logger().warn("[com.zulong.web.service.serviceimpl]InstanceServiceImpl.instanceEndNode@nodeDao update flag is false");
                 return false;
             }
         }catch (Exception e){
-            LoggerManager.logger().warn("[com.zulong.web.dao.serviceimpl]InstanceServiceImpl.instanceEndNode@nodeDao update failed");
+            LoggerManager.logger().warn("[com.zulong.web.service.serviceimpl]InstanceServiceImpl.instanceEndNode@nodeDao update failed");
             return false;
         }
 
@@ -73,11 +72,9 @@ public class InstanceServiceImpl implements InstanceService {
             instanceDao.updateInstance(flow_record_id,complete,has_error,uuid);
             return true;
         }catch (Exception e){
-            LoggerManager.logger().warn("[com.zulong.web.dao.serviceimpl]InstanceServiceImpl.instanceEndNode@updateInstance failed");
+            LoggerManager.logger().warn("[com.zulong.web.service.serviceimpl]InstanceServiceImpl.instanceEndNode@updateInstance failed");
             return false;
         }
-
-
     }
 
     @Override

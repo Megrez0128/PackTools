@@ -101,6 +101,7 @@ public class MetaController {
             response.put("data",data);
             return response;
         } catch (Exception e) {
+            LoggerManager.logger().warn(String.format("[com.zulong.web.controller]MetaController.getMetaList@operation failed|"), e);
             return null;
         }
     }

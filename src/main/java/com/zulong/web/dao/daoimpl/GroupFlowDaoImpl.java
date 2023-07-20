@@ -54,4 +54,17 @@ public class GroupFlowDaoImpl implements GroupFlowDao {
             return null;
         }
     }
+
+    @Override
+    public List<Integer> getFlowIdByGroupId(Integer group_id) {
+        try{
+            String sql = "select flow_id from group_flow where group_id = ?";
+            Object[] params = {group_id};
+            List<Integer> groupFlowList = jdbcTemplate.query(sql,params,new BeanPropertyRowMapper<>(Integer.class));
+            return groupFlowList;
+        }catch (Exception e){
+            LoggerManager.logger().warn("[com.zulong.web.dao.daoimpl]GroupFlowDaoImpl.getFlowListByGroupId@getFlowIdByGroupId failed|group_id=%d|",group_id);
+            return null;
+        }
+    }
 }

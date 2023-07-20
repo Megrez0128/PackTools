@@ -1,6 +1,8 @@
 package com.zulong.web.service;
 
 import com.zulong.web.entity.Flow;
+import com.zulong.web.entity.FlowSummary;
+
 import java.util.List;
 
 public interface FlowService
@@ -13,8 +15,9 @@ public interface FlowService
 
     public int deleteFlow(int flow_id);
     public List<Flow> getFlowList(int group_id);
+    public List<FlowSummary> getFlowSummaryList(int group_id);
     public Flow getFlowDetails(int flow_id, int version);
-
+    public Flow getFlowDetailsByID(int record_id);
     public Flow cloneFlow(int record_id, String name, String des);
 
     public Flow commitFlow(int record_id, String commit_message);

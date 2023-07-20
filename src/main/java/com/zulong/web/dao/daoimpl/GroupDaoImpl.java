@@ -42,6 +42,12 @@ public class GroupDaoImpl implements GroupDao {
         List<User> userList = jdbcTemplate.query(sql, params, new BeanPropertyRowMapper<>(User.class));
         return userList;
     }
+    public Group getGroupDetails(int group_id){
+        String sql = "select * from pack_group where group_id=?";
+        Object[] params = {group_id};
+        Group group = jdbcTemplate.queryForObject(sql, params, new BeanPropertyRowMapper<>(Group.class));
+        return group;
+    }
 
     
 }

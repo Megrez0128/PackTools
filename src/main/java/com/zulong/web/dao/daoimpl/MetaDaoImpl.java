@@ -3,6 +3,9 @@ package com.zulong.web.dao.daoimpl;
 import com.zulong.web.dao.MetaDao;
 import com.zulong.web.entity.CoreMeta;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -14,18 +17,25 @@ public class MetaDaoImpl implements MetaDao {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
+    @Cacheable(value = "metaCache", key = "#metaId")
     @Override
     public Meta findMetaByID(int metaId){
         String sql = "SELECT * FROM pack_meta WHERE meta_id = ?";
         List<Meta> metaList = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Meta.class), metaId);
         return metaList.isEmpty() ? null : metaList.get(0);
     }
+
+    @CacheEvict(value = "metaCache", allEntries = true)
+    @CachePut(value = "metaCache", key = "#coreMeta.meta_id")
     @Override
     public boolean insertMeta(Meta coreMeta){
         String sql = "INSERT INTO pack_meta (meta_id, version, data) VALUES (?, ?, ?)";
         int result = jdbcTemplate.update(sql, coreMeta.getMeta_id(), coreMeta.getVersion(), coreMeta.getData());
         return result > 0;
     }
+
+    @CacheEvict(value="metaCache", key="#metaId")
     @Override
     public boolean deleteMeta(int metaId){
         String sql = "DELETE FROM pack_meta WHERE meta_id = ?";

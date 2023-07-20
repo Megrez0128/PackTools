@@ -1,13 +1,17 @@
 package com.zulong.web.controller;
 
 import com.zulong.web.entity.Flow;
+import com.zulong.web.entity.FlowSummary;
 import com.zulong.web.log.LoggerManager;
+import com.zulong.web.service.AuthenticationService;
 import com.zulong.web.service.FlowService;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.zulong.web.utils.TokenUtils;
+import jdk.nashorn.internal.parser.Token;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,16 +22,19 @@ import static com.zulong.web.config.ConstantConfig.*;
 public class FlowController
 {
     private final FlowService flowService;
+    private final AuthenticationService authenticationService;
 
     @Autowired
-    public FlowController(FlowService flowService)
+    public FlowController(FlowService flowService,AuthenticationService authenticationService)
     {
         LoggerManager.init();
         this.flowService = flowService;
+        this.authenticationService = authenticationService;
     }
 
     @PostMapping(value = "/create")
     public Map<String, Object> createFlow(@RequestBody Map<String, String> request) {
+        //todo:验证这个meta是否属于这个group
         int meta_id;
         String graph_data;
         String blackboard;
@@ -49,6 +56,25 @@ public class FlowController
             response.put("message", e.getMessage());
             return response;
         }
+
+        //判断这个curr_user_id是否属于这个group
+        try{
+            boolean flag = authenticationService.isUserInGroup(TokenUtils.getCurr_user_id(),group_id);
+            if(!flag){
+                LoggerManager.logger().warn("[com.zulong.web.controller]FlowController.createFLow@this user may not in the group|");
+                response = new HashMap<>();
+                response.put("code", RETURN_PARAMS_WRONG);
+                response.put("message", "this user may not in the group");
+                return response;
+            }
+        }catch (Exception e){
+            LoggerManager.logger().warn("[com.zulong.web.controller]FlowController.getFlowList@this user may not in the group|", e);
+            response = new HashMap<>();
+            response.put("code", RETURN_SERVER_WRONG);
+            response.put("message", e.getMessage());
+            return response;
+        }
+
         try {
             Flow flow = flowService.createFlow(graph_data, blackboard, meta_id, group_id, name, des);
             response.put("code", RETURN_SUCCESS);
@@ -65,6 +91,7 @@ public class FlowController
 
     @PostMapping(value = "/clone")
     public Map<String, Object> cloneFlow(@RequestBody Map<String, Object> request) {
+        //todo:验证curr_user_id是否有clone这个flow的权限
         int record_id;
         String name;
         String des;
@@ -94,6 +121,7 @@ public class FlowController
 
     @PostMapping(value = "/commit")
     public Map<String, Object> commitFlow(@RequestBody Map<String, Object> request) {
+        //todo:验证curr_user_id是否有commit这个flow的权限
         int record_id;
         String commit_message;
         try {
@@ -128,6 +156,7 @@ public class FlowController
      */
     @PostMapping(value = "/delete")
     public Map<String, Object> deleteFlow(@RequestBody Map<String, Object> request) {
+        //todo:验证curr_user_id是否有删除这个flow的权限
         int record_id;
         Map<String, Object> response = new HashMap<>();
         try {
@@ -168,6 +197,11 @@ public class FlowController
      */
     @PostMapping(value = "/save")
     public Map<String, Object> saveFlow(@RequestBody Map<String, Object> request) {
+        //todo:验证curr_user_id是否有保存这个flow的权限
+
+        //todo:验证curr_user_id是否属于这个group
+
+        //todo:验证这个meta是否属于这个group
         int flow_id;
         String commit_message;
         int meta_id;
@@ -199,11 +233,36 @@ public class FlowController
         }
     }
 
+    /**
+     *
+     * @param request
+     * 当传入record_id，调用getFlowDetailsByID
+     * 当传入flow_id和version，调用getFlowDetails
+     * @return
+     * 返回一个Flow实例
+     */
     @PostMapping(value="/detail")
     public Map<String, Object> getFlowDetails(@RequestBody Map<String, Integer> request) {
+        //todo:验证curr_user_id是否有访问这个flow历史的权限，或许看的权限是所有人都有的，不需要验证
+        int record_id;
+        Map<String, Object> response = new HashMap<>();
+        record_id = request.getOrDefault("record_id",-1);
+        if(record_id != -1){
+            try {
+                Flow flow = flowService.getFlowDetailsByID(record_id);
+                response.put("code", RETURN_SUCCESS);
+                response.put("data", flow);
+                return response;
+            } catch (Exception e) {
+                LoggerManager.logger().warn("[com.zulong.web.controller]FlowController.getFlowDetails@operation failed|", e);
+                response.put("code", RETURN_SERVER_WRONG);
+                response.put("message", e.getMessage());
+                return response;
+            }
+        }
+
         int flow_id;
         int version;
-        Map<String, Object> response = new HashMap<>();
         try {
             flow_id = request.get("flow_id");
             version = request.get("version");
@@ -226,18 +285,46 @@ public class FlowController
             return response;
         }
     }
-    //todo:获取用户当前组的流程列表,要读取group_id参数
+
     @PostMapping(value="/list")
-    public Map<String, Object> getFlowList(@RequestBody Map<String, Integer> request) {
+    public Map<String, Object> getFlowSummaryList(@RequestBody Map<String, Integer> request) {
         int group_id;
-        try {
+        try{
             group_id = request.get("group_id");
-            List<Flow> flowlist = flowService.getFlowList(group_id);
+        }catch (Exception e){
+            LoggerManager.logger().warn("[com.zulong.web.controller]FlowController.getFlowList@params are wrong|", e);
+            Map<String, Object> response = new HashMap<>();
+            response.put("code", RETURN_PARAMS_WRONG);
+            response.put("message", e.getMessage());
+            return response;
+        }
+        //判断这个curr_user_id是否属于这个group
+        try{
+            boolean flag = authenticationService.isUserInGroup(TokenUtils.getCurr_user_id(),group_id);
+            if(!flag){
+                LoggerManager.logger().warn("[com.zulong.web.controller]FlowController.getFlowList@this user may not in the group|");
+                Map<String, Object> response = new HashMap<>();
+                response.put("code", RETURN_PARAMS_WRONG);
+                response.put("message", "this user may not in the group");
+                return response;
+            }
+        }catch (Exception e){
+            LoggerManager.logger().warn("[com.zulong.web.controller]FlowController.getFlowList@this user may not in the group|", e);
+            Map<String, Object> response = new HashMap<>();
+            response.put("code", RETURN_SERVER_WRONG);
+            response.put("message", e.getMessage());
+            return response;
+        }
+
+        try {
+            List<FlowSummary> flowSummarylist = flowService.getFlowSummaryList(group_id);
             Map<String, Object> data = new HashMap<>();
-            data.put("items", flowlist);
+            data.put("items", flowSummarylist);
+            data.put("group_id", group_id);
             Map<String, Object> response = new HashMap<>();
             response.put("code", RETURN_SUCCESS);
             response.put("data", data);
+            LoggerManager.logger().info("[com.zulong.web.controller]FlowController.getFlowList@operation success|");
             return response;
         } catch (Exception e) {
             LoggerManager.logger().warn("[com.zulong.web.controller]FlowController.getFlowList@operation failed|", e);
@@ -250,6 +337,7 @@ public class FlowController
 
     @PostMapping(value="/history")
     public Map<String, Object> getFlowHistoryList(@RequestBody Map<String, Integer> request) {
+        //todo:验证curr_user_id是否有访问这个flow历史的权限，或许看的权限是所有人都有的，不需要验证
         try {
             int flow_id = request.get("flow_id");
             List<Flow> flowlist = flowService.getHistoryFlowList(flow_id);
@@ -270,6 +358,7 @@ public class FlowController
 
     @PostMapping(value = "/newversion")
     public Map<String, Object> getNewVersionFlow(@RequestBody Map<String, Integer> request) {
+        //todo:验证curr_user_id是否有访问这个flow最新版本的权限，或许看的权限是所有人都有的，不需要验证
         Map<String, Object> data = new HashMap<>();
         Map<String, Object> response = new HashMap<>();
         try {

@@ -46,7 +46,19 @@ public class FlowDaoImpl implements FlowDao {
         try{
             return jdbcTemplate.queryForObject(sql, params, new BeanPropertyRowMapper<>(Flow.class));
         } catch (Exception e) {
-            LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]FlowDaoImpl.getFlowDetails@record_id is invalid|record_id=%d|version=%d", flow_id, version), e);
+            LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]FlowDaoImpl.getFlowDetails@record_id is invalid|flow_id=%d|version=%d", flow_id, version), e);
+            return null;
+        }
+    }
+
+    @Cacheable(value = "flowCache", key = "#record_id")
+    public Flow getFlowDetailsByID(int record_id) {
+        String sql = "select * from flow where record_id=?";
+        Object[] params = new Object[]{record_id};
+        try {
+            return jdbcTemplate.queryForObject(sql, params, new BeanPropertyRowMapper<>(Flow.class));
+        } catch (Exception e) {
+            LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]FlowDaoImpl.getFlowDetailsByID@record_id is invalid|record_id=%d", record_id), e);
             return null;
         }
     }
@@ -78,7 +90,7 @@ public class FlowDaoImpl implements FlowDao {
             return jdbcTemplate.queryForObject(sql, params, new BeanPropertyRowMapper<>(Flow.class));
         } catch (Exception e) {
             // 如果没有找到对应的记录，返回null；添加一条warn日志
-            LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]FlowDaoImpl.findByFlowID@record_id is invalid|record_id=%d", record_id), e);
+            LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]FlowDaoImpl.findFlowByRecordId@record_id is invalid|record_id=%d", record_id), e);
             return null;
         }
     }
@@ -144,7 +156,7 @@ public class FlowDaoImpl implements FlowDao {
             List<Flow> flowList = jdbcTemplate.query(sql, params, new BeanPropertyRowMapper<>(Flow.class));
             return flowList;
         } catch (Exception e){
-            LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]FlowDaoImpl.getFlowList@cannot find flow list|"), e);
+            LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]FlowDaoImpl.getHistoryFlowList@cannot find flow list|"), e);
             return null;
         }
     }

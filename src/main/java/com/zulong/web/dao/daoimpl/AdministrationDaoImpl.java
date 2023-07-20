@@ -24,7 +24,7 @@ public class AdministrationDaoImpl implements AdministrationDao {
             return false;
         }
         try {
-            String sql = "update administration set updated_allowed=?, delete_allowed where user_id=? and group_id=?";
+            String sql = "update administration set updated_allowed=?, delete_allowed=? where user_id=? and group_id=?";
             Object[] params = {update_allowed, delete_allowed, user_id, group_id};
             boolean flag = jdbcTemplate.update(sql, params) > 0;
             if(!flag){
@@ -43,11 +43,11 @@ public class AdministrationDaoImpl implements AdministrationDao {
             Object[] params = {administration.getUser_id(), administration.getGroup_id(), administration.isUpdate_allowed(), administration.isDelete_allowed()};
             boolean flag = jdbcTemplate.update(sql, params) > 0;
             if(!flag){
-                LoggerManager.logger().warn("[com.zulong.web.dao.daoimpl]AdministrationDaoImpl.createAdministration@insertion failed");
+                LoggerManager.logger().warn("[com.zulong.web.dao.daoimpl]AdministrationDaoImpl.insertAdministration@insertion failed");
             }
             return flag;
         } catch (Exception e) {
-            LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]AdministrationDaoImpl.createAdministration@insertion failed"), e);
+            LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]AdministrationDaoImpl.insertAdministration@insertion failed"), e);
             return false;
         }
     }
@@ -83,6 +83,7 @@ public class AdministrationDaoImpl implements AdministrationDao {
         }
     }
 
+    @Cacheable(value="administrationCache", key="#user_id+'_'+#group_id")
     public boolean getUpdateAllowance(String user_id, Integer group_id) {
         if(!isUserInGroup(user_id, group_id)) {
             LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]AdministrationDaoImpl.getUpdateAllowance@the user isn't in the group|user_id=%s|group_id=%d", user_id, group_id));
@@ -99,6 +100,7 @@ public class AdministrationDaoImpl implements AdministrationDao {
         }
     }
 
+    @Cacheable(value="administrationCache", key="#user_id+'_'+#group_id")
     public boolean getDeleteAllowance(String user_id, Integer group_id) {
         if(!isUserInGroup(user_id, group_id)) {
             LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]AdministrationDaoImpl.getDeleteAllowance@the user isn't in the group|user_id=%s|group_id=%d", user_id, group_id));
@@ -117,6 +119,5 @@ public class AdministrationDaoImpl implements AdministrationDao {
 
     // 设置修改权限
     // 需要说明的是：若用户在群组内，则默认有且仅有查看权限；删除权限的级别高于更新权限，即若用户有删除权限，则必然有更新权限
-    //public boolean SetUpdateAllowance(String user_id, Integer group_id, )
 
 }

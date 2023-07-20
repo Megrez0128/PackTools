@@ -18,4 +18,6 @@ public class ConstantConfig {
 
     public static final boolean DEFAULT_UPDATE_AUTHORITY = false;
     public static final boolean DEFAULT_DELETE_AUTHORITY = false;
+
+    public static final int ADMINISTRATOR_GROUP_ID = 0;
 }

@@ -9,6 +9,7 @@ public interface FlowDao {
     boolean insertFlow(Flow flow);
     public List<Flow> getFlowList();
     public Flow getFlowDetails(int flow_id, int version);
+    public Flow getFlowDetailsByID(int record_id);
     public int deleteFlow(int record_id);
     //public Flow cloneFlow(int record_id, boolean is_committed, String commit_message);
     public boolean updateFlow(Flow flow);

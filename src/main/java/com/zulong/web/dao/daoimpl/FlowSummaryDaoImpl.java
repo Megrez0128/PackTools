@@ -21,7 +21,7 @@ public class FlowSummaryDaoImpl implements FlowSummaryDao {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    //@Cacheable(value="flowSummaryCache", key="#flow_id")
+    //@Cacheable(value="flowSummaryCache", key="#flow_id")  此处不能用这条注解，否则会报错
     @Override
     public FlowSummary findFlowSummaryByID(int flow_id) {
         String sql = "select * from flow_summary where flow_id=?";
@@ -52,7 +52,7 @@ public class FlowSummaryDaoImpl implements FlowSummaryDao {
     @Override
     public List<FlowSummary> getFlowSummaryList(){
         try{
-            String sql = "select * from flowsummary";
+            String sql = "select * from flow_summary";
             List<FlowSummary> flowSummaryList = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(FlowSummary.class));
             return flowSummaryList;
         } catch (Exception e) {
@@ -69,10 +69,10 @@ public class FlowSummaryDaoImpl implements FlowSummaryDao {
             Object[] params = {flowSummary.getName(), flowSummary.getDes(), flowSummary.getLast_build(), flowSummary.getLast_commit(), flowSummary.getLast_version(), flowSummary.getFlow_id()};
             boolean flag = jdbcTemplate.update(sql, params) > 0;
             if(!flag){
-                LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]FlowSummaryDaoImpl.updateFlowSummary@something wrong happened during update|"));
+                LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]FlowSummaryDaoImpl.updateFlowSummary-FlowSummary@something wrong happened during update|"));
             }
         } catch (Exception e) {
-            LoggerManager.logger().error(String.format("[com.zulong.web.dao.daoimpl]FlowSummaryDaoImpl.updateFlowSummary@something wrong happened during update|"), e);
+            LoggerManager.logger().error(String.format("[com.zulong.web.dao.daoimpl]FlowSummaryDaoImpl.updateFlowSummary-FlowSummary@something wrong happened during update|"), e);
         }
     }
 
@@ -84,11 +84,11 @@ public class FlowSummaryDaoImpl implements FlowSummaryDao {
             Object[] params = {name, des, flow_id};
             boolean flag = jdbcTemplate.update(sql, params) > 0;
             if(!flag){
-                LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]FlowSummaryDaoImpl.updateFlowSummary@something wrong happened during update|"));
+                LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]FlowSummaryDaoImpl.updateFlowSummary-variousParams@something wrong happened during update|"));
             }
             return flag;
         } catch (Exception e) {
-            LoggerManager.logger().error(String.format("[com.zulong.web.dao.daoimpl]FlowSummaryDaoImpl.updateFlowSummary@something wrong happened during update|"), e);
+            LoggerManager.logger().error(String.format("[com.zulong.web.dao.daoimpl]FlowSummaryDaoImpl.updateFlowSummary-variousParams@something wrong happened during update|"), e);
             return false;
         }
     }
