@@ -1,5 +1,7 @@
 package com.zulong.web.service.serviceimpl;
 
+import com.zulong.web.dao.FlowDao;
+import com.zulong.web.dao.FlowSummaryDao;
 import com.zulong.web.dao.InstanceDao;
 import com.zulong.web.dao.NodeDao;
 import com.zulong.web.entity.Instance;
@@ -9,13 +11,17 @@ import com.zulong.web.service.InstanceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import static com.zulong.web.config.ConstantConfig.CONST_INIT_END_TIME;
 
 
 @Service
 public class InstanceServiceImpl implements InstanceService {
 
-    final String CONST_INIT_END_TIME = "CONST_INIT_END_TIME";
+
 
     @Autowired
     private InstanceDao instanceDao;
@@ -23,28 +29,52 @@ public class InstanceServiceImpl implements InstanceService {
     @Autowired
     private NodeDao nodeDao;
 
+    @Autowired
+    private FlowSummaryDao flowSummaryDao;
+
+    @Autowired
+    private FlowDao flowDao;
+
     @Override
-    final public boolean instanceStartNode(String uuid, int flow_record_id, int node_id, String start_time, boolean complete,boolean has_error, String option){
+    final public boolean instanceStartNode(String uuid, int flow_record_id, String node_id, String start_time, boolean complete,boolean has_error, String option){
+        Node node = new Node();
+        node.setInstance_id(uuid);
+        node.setNode_id(node_id);
+        node.setStart_time(start_time);
+        node.setEnd_time(CONST_INIT_END_TIME);
+        node.setOptions(option);
         try{
-            Node node = new Node();
-            node.setInstance_id(uuid);
-            node.setNode_id(node_id);
-            node.setStart_time(start_time);
-            node.setEnd_time(CONST_INIT_END_TIME);
-            node.setOptions(option);
             nodeDao.insertNode(node);
         }catch (Exception e){
             LoggerManager.logger().warn("[com.zulong.web.service.serviceimpl]InstanceServiceImpl.instanceStartNode@nodeDao insert failed");
             return false;
         }
+        //查找instance_id为uuid的instance是否存在
+        Instance tmp = instanceDao.findInstanceByUuid(uuid);
+        if(tmp!=null) {
+            return true;
+        }
 
+        //如果不存在则更新flowSummary,flow的last_build
         try{
-            Instance instance = new Instance();
-            instance.setUuid(uuid);
-            instance.setFlow_record_id(flow_record_id);
-            instance.setBuild_time(start_time);
-            instance.setComplete(complete);
-            instance.setHas_error(has_error);
+            boolean flag = flowDao.updateLastBuild(flow_record_id,start_time)
+                    && flowSummaryDao.buildUpdateFlowSummary(flowDao.getFlowIdByRecordId(flow_record_id),start_time);
+            if(!flag){
+                LoggerManager.logger().warn("[com.zulong.web.service.serviceimpl]InstanceServiceImpl.instanceStartNode@UpdateFlowSummary failed");
+                return false;
+            }
+        }catch (Exception e){
+            LoggerManager.logger().warn("[com.zulong.web.service.serviceimpl]InstanceServiceImpl.instanceStartNode@UpdateFlowSummary failed");
+            return false;
+        }
+        //如果不存在则创建新instance
+        Instance instance = new Instance();
+        instance.setUuid(uuid);
+        instance.setFlow_record_id(flow_record_id);
+        instance.setBuild_time(start_time);
+        instance.setComplete(complete);
+        instance.setHas_error(has_error);
+        try{
             instanceDao.insertInstance(instance);
             return true;
         }catch (Exception e){
@@ -55,10 +85,9 @@ public class InstanceServiceImpl implements InstanceService {
     }
 
     @Override
-    final public boolean instanceEndNode(String uuid, int flow_record_id, int node_id, String end_time, boolean complete,boolean has_error, String option){
-        //todo 更新node表，再更新instance表
+    final public boolean instanceEndNode(String uuid, int flow_record_id, String node_id, String end_time, boolean complete, boolean has_error, String option){
         try{
-            boolean flag = nodeDao.updateNode(flow_record_id, flow_record_id, end_time, option);
+            boolean flag = nodeDao.updateNode(node_id, uuid, end_time, option);
             if(!flag){
                 LoggerManager.logger().warn("[com.zulong.web.service.serviceimpl]InstanceServiceImpl.instanceEndNode@nodeDao update flag is false");
                 return false;
@@ -69,7 +98,7 @@ public class InstanceServiceImpl implements InstanceService {
         }
 
         try{
-            instanceDao.updateInstance(flow_record_id,complete,has_error,uuid);
+            instanceDao.updateInstance(flow_record_id, complete, has_error, uuid);
             return true;
         }catch (Exception e){
             LoggerManager.logger().warn("[com.zulong.web.service.serviceimpl]InstanceServiceImpl.instanceEndNode@updateInstance failed");
@@ -78,8 +107,12 @@ public class InstanceServiceImpl implements InstanceService {
     }
 
     @Override
-    public Instance findInstanceByUuid(String uuid) {
-        return instanceDao.findInstanceByUuid(uuid);
+    public Map<String, Object> findInstanceByUuid(String uuid) {
+        Map<String,Object> instanceAndNodeList = new HashMap<>();
+        instanceAndNodeList.put("instance",instanceDao.findInstanceByUuid(uuid));
+        instanceAndNodeList.put("running_nodes",nodeDao.getRunningNode(uuid));
+        instanceAndNodeList.put("complete_nodes", nodeDao.getCompleteNode(uuid));
+        return instanceAndNodeList;
     }
 
     @Override

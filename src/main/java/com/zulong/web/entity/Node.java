@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class Node {
     public String instance_id;
-    public int node_id;
+    public String node_id;
     public String start_time;
     public String end_time;
     public String options;

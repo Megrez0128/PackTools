@@ -21,6 +21,7 @@ public class InstanceDaoImpl implements InstanceDao {
 
     /**
      * 通过flow_record_id，查找该流程有无对应的instance
+     * 在Flow相关操作时会使用，不返回instance实例
      * @param record_id
      * @return
      */
@@ -41,11 +42,15 @@ public class InstanceDaoImpl implements InstanceDao {
     @Cacheable(value = "instanceCache", key = "#uuid")
     @Override
     public Instance findInstanceByUuid(String uuid) {
-        String sql = "select * from instance where uuid = ?";
-        Object[] params = {uuid};
-        Instance instance = jdbcTemplate.queryForObject(sql, params, new BeanPropertyRowMapper<>(Instance.class));
-        LoggerManager.logger().debug("[com.zulong.web.dao.daoimpl]InstanceDaoImpl.findInstanceByUuid@insert failed|%s",instance);
-        return instance;
+        try {
+            String sql = "select * from instance where uuid = ?";
+            Object[] params = {uuid};
+            Instance instance = jdbcTemplate.queryForObject(sql, params, new BeanPropertyRowMapper<>(Instance.class));
+            return instance;
+        } catch (Exception e) {
+            LoggerManager.logger().debug("[com.zulong.web.dao.daoimpl]InstanceDaoImpl.findInstanceByUuid@insert failed|%s");
+            return null;
+        }
     }
 
     @Override
@@ -62,7 +67,7 @@ public class InstanceDaoImpl implements InstanceDao {
     @Override
     public boolean updateInstance(int flow_record_id, boolean complete, boolean has_error, String uuid) {
         String sql = "update instance set flow_record_id=?, complete=?, has_error=? where uuid=?";
-        Object[] params = {flow_record_id,complete,has_error,uuid};
+        Object[] params = {flow_record_id, complete, has_error, uuid};
         boolean flag = jdbcTemplate.update(sql, params) > 0;
         if(!flag){
             LoggerManager.logger().warn("[com.zulong.web.dao.daoimpl]InstanceDaoImpl.updateInstance@update failed");

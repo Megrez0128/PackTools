@@ -45,37 +45,13 @@ public class UserDaoImpl implements UserDao {
             return null;
         }
     }
+
     @Cacheable(value="userCache", key="#user_id")
     @Override
     public boolean findByUserID(String user_id) {
-//        String sql = "SELECT * FROM pack_user WHERE user_id = ?";
-//        List<User> userList = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(User.class), user_id);
-//        return userList.isEmpty() ? null : userList.get(0);
         String sql = "select count(*) from pack_user where user_id = ?";
         int count = jdbcTemplate.queryForObject(sql, new Object[]{user_id}, Integer.class);
         return count > 0;
-        //String sql = "select * from pack_user where admin=1";
-        //Object[] params = new Object[]{user_id};
-//        try {
-//            User user = jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(User.class));
-//            if(user == null){
-//                LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]UserDaoImpl.findByUserID@user == null|user_id=%s", user_id));
-//            }
-//            return user;
-//        } catch (Exception e) {
-//            // 如果没有找到对应的记录，返回null；添加一条warn日志
-//            LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]UserDaoImpl.findByUserID@user_id is invalid|user_id=%s", user_id), e);
-//            return null;
-//        }
-//        LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]UserDaoImpl.findByUserID@test for user state|user_id=%s", user_id));
-//        //LoggerManager.logger().warn(jdbcTemplate.queryForList(sql, params));
-//        List<Map<String, Object>> userList = jdbcTemplate.queryForList(sql, params);
-////        List<User> result = jdbcTemplate.query(sql, params, new BeanPropertyRowMapper<>(User.class));
-//        LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]UserDaoImpl.findByUserID@test for user state|user_id=%s", user_id));
-//        User user = new User();
-//        user.setUser_id(userList.get(0).get("user_id").toString());
-//        user.setAdmin((Boolean) userList.get(0).get("admin"));
-//        return user;
     }
 
     @CacheEvict(value = "userCache", allEntries = true)
@@ -105,10 +81,15 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public List<Integer> findAllGroups(String user_id) {
-        String sql = "select group_id from administration where user_id=?";
+        try{
+            String sql = "select group_id from administration where user_id=?";
         Object[] params = {user_id};
-
+        LoggerManager.logger().info(String.format("[com.zulong.web.dao.daoimpl]UserDaoImpl.findAllGroups@searching|userID=%s", user_id));
         List<Integer> groupIDList = jdbcTemplate.queryForList(sql, params, Integer.class);
         return groupIDList;
+        } catch (Exception e) {
+            LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]UserDaoImpl.findAllGroups@search failed|userID=%s", user_id), e);
+            return null;
+        }
     }
 }

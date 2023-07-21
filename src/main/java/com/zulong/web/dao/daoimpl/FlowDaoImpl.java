@@ -27,6 +27,7 @@ public class FlowDaoImpl implements FlowDao {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    @Override
     public List<Flow> getFlowList(){
         // 目前认为返回的是全部的列
         try {
@@ -40,6 +41,7 @@ public class FlowDaoImpl implements FlowDao {
     }
 
     @Cacheable(value="flowCache", key="#flow_id+'_'+#version")
+    @Override
     public Flow getFlowDetails(int flow_id, int version){
         String sql = "select * from flow where flow_id = ? and version = ?";
         Object[] params = new Object[]{flow_id, version};
@@ -52,6 +54,7 @@ public class FlowDaoImpl implements FlowDao {
     }
 
     @Cacheable(value = "flowCache", key = "#record_id")
+    @Override
     public Flow getFlowDetailsByID(int record_id) {
         String sql = "select * from flow where record_id=?";
         Object[] params = new Object[]{record_id};
@@ -64,6 +67,7 @@ public class FlowDaoImpl implements FlowDao {
     }
 
     @CacheEvict(value="flowCache", key="#record_id")
+    @Override
     public int deleteFlow(int record_id) {
         boolean flag = instanceDao.findInstanceByFlowID(record_id);
         if(flag){
@@ -123,6 +127,17 @@ public class FlowDaoImpl implements FlowDao {
     }
 
     @Override
+    public boolean updateLastBuild(int record_id, String last_build){
+        String sql = "update flow set last_build =? where record_id=?";
+        Object[] params = {last_build, record_id};
+        boolean flag = jdbcTemplate.update(sql, params) > 0;
+        if(!flag){
+            LoggerManager.logger().warn("[com.zulong.web.dao.daoimpl]FlowDaoImpl.updateLastBuild@update failed");
+        }
+        return flag;
+    }
+
+    @Override
     public int findMaxVersion(int flow_id) {
         //找到当前flow_id对应的最大version
         String sql = "select max(version) from flow where flow_id=?";
@@ -148,7 +163,7 @@ public class FlowDaoImpl implements FlowDao {
             return null;
         }
     }
-
+    @Override
      public List<Flow> getHistoryFlowList(int flow_id) {
         try {
             String sql = "select * from flow where flow_id=? order by version desc";
@@ -160,10 +175,10 @@ public class FlowDaoImpl implements FlowDao {
             return null;
         }
     }
-
+    @Override
     public Flow getNewVersionFlow(int flow_id) {
         try {
-            String sql = "SELECT * FROM Flow WHERE flow_id =? ORDER BY version DESC LIMIT 1";
+            String sql = "SELECT * FROM flow WHERE flow_id =? ORDER BY version DESC LIMIT 1";
             Object[] params = {flow_id};
             Flow flow = jdbcTemplate.queryForObject(sql, params, new BeanPropertyRowMapper<>(Flow.class));
             return flow;
@@ -171,5 +186,24 @@ public class FlowDaoImpl implements FlowDao {
             LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]FlowDaoImpl.getNewVersionFlow@cannot find the flow|flow_id=%d", flow_id), e);
             return null;
         }
+    }
+    @Override
+    public int getCurrRecordId(){
+        String sql = "SELECT MAX(record_id) FROM flow ";
+        Integer maxRecordId = jdbcTemplate.queryForObject(sql, Integer.class);
+        return maxRecordId != null ? maxRecordId : -1;
+    }
+    @Override
+    public int getCurrFlowId(){
+        String sql = "SELECT MAX(flow_id) FROM flow ";
+        Integer maxFlowId = jdbcTemplate.queryForObject(sql, Integer.class);
+        return maxFlowId != null ? maxFlowId : -1;
+    }
+
+    @Override
+    public int getFlowIdByRecordId(int record_id){
+        String sql = "SELECT flow_id from flow where record_id=?";
+        Object[] params = {record_id};
+        return jdbcTemplate.queryForObject(sql, params, Integer.class);
     }
 }

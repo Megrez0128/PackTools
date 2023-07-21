@@ -9,5 +9,7 @@ public interface MetaDao {
     public boolean insertMeta(Meta meta);
     public boolean deleteMeta(int metaId);
     public List<Meta> getAllMeta();
+    public Meta updateMeta(int meta_id,int group_id,String data,String version_display);
     int getMaxVersion(int meta_id);
+    int getCurrMetaId();
 }

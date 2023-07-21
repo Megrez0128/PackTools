@@ -7,5 +7,6 @@ public interface AuthenticationService {
     boolean hasInstancePermission(Integer group_id, String uuid);
     boolean canUserUseFlow(String user_id, Integer flow_id);
     boolean isAdmin(String user_id);
-    String getUserIdFromToken(String header);
+    boolean canUserUpdateFlow(String user_id, Integer flow_id);
+    boolean canUserDeleteFlow(String user_id, Integer flow_id);
 }

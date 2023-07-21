@@ -30,8 +30,8 @@ public class MetaDaoImpl implements MetaDao {
     @CachePut(value = "metaCache", key = "#coreMeta.meta_id")
     @Override
     public boolean insertMeta(Meta coreMeta){
-        String sql = "INSERT INTO pack_meta (meta_id, version, data) VALUES (?, ?, ?)";
-        int result = jdbcTemplate.update(sql, coreMeta.getMeta_id(), coreMeta.getVersion(), coreMeta.getData());
+        String sql = "INSERT INTO pack_meta (meta_id, version, data, group_id, version_display) VALUES (?, ?, ?, ?, ?)";
+        int result = jdbcTemplate.update(sql, coreMeta.getMeta_id(), coreMeta.getVersion(), coreMeta.getData(), coreMeta.getGroup_id(), coreMeta.getVersion_display());
         return result > 0;
     }
 
@@ -48,11 +48,22 @@ public class MetaDaoImpl implements MetaDao {
         List<Meta> metaList = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Meta.class));
         return metaList;
     }
+    @Override
+    public Meta updateMeta(int meta_id,int group_id,String data,String version_display){
+        return null;
+    }
 
     @Override
     public int getMaxVersion(int meta_id) {
         String sql = "SELECT MAX(version) FROM pack_meta WHERE meta_id = ?";
         Integer maxVersion = jdbcTemplate.queryForObject(sql, Integer.class, meta_id);
         return maxVersion != null ? maxVersion : 0;
+    }
+
+    @Override
+    public int getCurrMetaId(){
+        String sql = "SELECT MAX(meta_id) FROM pack_meta ";
+        Integer maxMetaId = jdbcTemplate.queryForObject(sql, Integer.class);
+        return maxMetaId != null ? maxMetaId : -1;
     }
 }

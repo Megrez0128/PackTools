@@ -92,6 +92,8 @@ public class FlowController
     @PostMapping(value = "/clone")
     public Map<String, Object> cloneFlow(@RequestBody Map<String, Object> request) {
         //todo:验证curr_user_id是否有clone这个flow的权限
+        //authenticationService.canUserUseFlow()
+
         int record_id;
         String name;
         String des;
@@ -359,14 +361,12 @@ public class FlowController
     @PostMapping(value = "/newversion")
     public Map<String, Object> getNewVersionFlow(@RequestBody Map<String, Integer> request) {
         //todo:验证curr_user_id是否有访问这个flow最新版本的权限，或许看的权限是所有人都有的，不需要验证
-        Map<String, Object> data = new HashMap<>();
         Map<String, Object> response = new HashMap<>();
         try {
             int flow_id = request.get("flow_id");
             Flow flow = flowService.getNewVersionFlow(flow_id);
-            data.put("items", flow);
             response.put("code", RETURN_SUCCESS);
-            response.put("data", data);
+            response.put("data", flow);
             return response;
         } catch (Exception e) {
             LoggerManager.logger().warn("[com.zulong.web.controller]FlowController.getNewVersionFlow@cannot get the flow|", e);

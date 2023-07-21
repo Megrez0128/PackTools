@@ -7,14 +7,18 @@ import java.util.List;
 public interface FlowDao {
     Flow findFlowByRecordId(int record_id);
     boolean insertFlow(Flow flow);
-    public List<Flow> getFlowList();
-    public Flow getFlowDetails(int flow_id, int version);
-    public Flow getFlowDetailsByID(int record_id);
-    public int deleteFlow(int record_id);
+    List<Flow> getFlowList();
+    Flow getFlowDetails(int flow_id, int version);
+    Flow getFlowDetailsByID(int record_id);
+    int deleteFlow(int record_id);
     //public Flow cloneFlow(int record_id, boolean is_committed, String commit_message);
-    public boolean updateFlow(Flow flow);
+    boolean updateFlow(Flow flow);
+    boolean updateLastBuild(int record_id, String last_build);
 	int findMaxVersion(int flow_id);
 	Flow findByFlowIDAndVersion(int flow_id, int version);
-    public List<Flow> getHistoryFlowList(int flow_id);
-    public Flow getNewVersionFlow(int flow_id);
+    List<Flow> getHistoryFlowList(int flow_id);
+    Flow getNewVersionFlow(int flow_id);
+    int getCurrRecordId();
+    int getCurrFlowId();
+    int getFlowIdByRecordId(int record_id);
 }

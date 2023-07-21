@@ -52,7 +52,6 @@
 //        }
 //
 //        // 检查连接池状态，确保连接池活跃连接数是1
-//        // TODO: getStatValue不存在，暂时换成getStatValueAndReset
 //        DruidDataSourceStatValue statValue = dataSource.getStatValueAndReset();
 //        assertEquals(1, statValue.getActiveCount());
 //    }

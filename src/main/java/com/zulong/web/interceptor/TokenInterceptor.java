@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.zulong.web.config.ConstantConfig.TOKEN_VERIFY_FAILED;
+
 @Component
 public class TokenInterceptor implements HandlerInterceptor {
 
@@ -19,7 +21,15 @@ public class TokenInterceptor implements HandlerInterceptor {
     private UserService userService;
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        String path = request.getRequestURI().substring(request.getContextPath().length()).replaceAll("[/]+$", "");
 
+        // 如果是 /auth/user/login 请求，则放行
+        if ("/auth/user/login".equals(path)) {
+            return true;
+        }
+        if ("/auth/user/gettoken".equals(path)) {
+            return true;
+        }
 //        return true;
         //跨域请求会首先发一个option请求，直接返回正常状态并通过拦截器
         if(request.getMethod().equals("OPTIONS")){
@@ -43,7 +53,6 @@ public class TokenInterceptor implements HandlerInterceptor {
                 }
                 User curr_user = userService.getUserByUserId(curr_user_id);
                 if(curr_user != null){
-
                     TokenUtils.setAdmin(curr_user.isAdmin());
                     return true;
                 }
@@ -54,8 +63,8 @@ public class TokenInterceptor implements HandlerInterceptor {
         try {
             Map<String,Object> json=new HashMap<>();
             json.put("msg","token verify fail");
-            json.put("code","500");
-            response.getWriter().append(json.toString());
+            json.put("code",TOKEN_VERIFY_FAILED);
+            response.getWriter().append(buildJsonString(json));
             LoggerManager.logger().info(String.format(
                     "[com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@认证失败，未通过拦截器|token=%s",token));
         } catch (Exception e) {
@@ -66,6 +75,22 @@ public class TokenInterceptor implements HandlerInterceptor {
          */
         return false;
 
+    }
+    // 拼接JSON字符串方法
+    private static String buildJsonString(Map<String, Object> map) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("{");
+        for (Map.Entry<String, Object> entry : map.entrySet()) {
+            sb.append("\"").append(entry.getKey()).append("\":");
+            if (entry.getValue() instanceof String) {
+                sb.append("\"").append(entry.getValue()).append("\",");
+            } else {
+                sb.append(entry.getValue()).append(",");
+            }
+        }
+        sb.deleteCharAt(sb.length() - 1);
+        sb.append("}");
+        return sb.toString();
     }
 //    @Autowired
 //    private JwtTokenUtil jwtTokenUtil;

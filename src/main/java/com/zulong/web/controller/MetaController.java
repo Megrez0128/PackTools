@@ -5,6 +5,7 @@ import com.zulong.web.log.LoggerManager;
 import com.zulong.web.service.MetaService;
 import com.zulong.web.service.AuthenticationService;
 
+import com.zulong.web.utils.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,7 +18,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import static com.zulong.web.config.ConstantConfig.RETURN_PARAMS_WRONG;
+import static com.zulong.web.config.ConstantConfig.*;
 
 @RestController
 @RequestMapping(value = "/mymeta")
@@ -53,16 +54,14 @@ public class MetaController {
             return response;
         }
 
-
-
         Map<String, Object> response = new HashMap<>();
         try {
-            String user_id = authenticationService.getUserIdFromToken(httpServletRequest.getHeader("Authorization")); //从token中解析出user_id
+            String user_id = TokenUtils.getCurr_user_id();//从token中解析出user_id
             //验证user_id和group_id是否合法        
             boolean is_valid = authenticationService.isUserInGroup(user_id, group_id);
             if (!is_valid) {
-                response.put("code", "40300");
-                response.put("message","user or group not authorized");
+                response.put("code", RETURN_NO_AUTHORITY);
+                response.put("message","The user is not in this group");
                 return response;
             }
             //验证group_id和meta_id是否合法
@@ -72,19 +71,19 @@ public class MetaController {
 //                response.put("message","group or meta not authorized");
 //                return response;
 //            }
-            boolean is_success = metaService.createMeta(version_display,group_id,data);
-            if (is_success) {
-                response.put("code", "20000");
-                response.put("message","success");
+            Meta meta = metaService.createMeta(version_display,group_id,data);
+            if (meta != null) {
+                response.put("code", RETURN_SUCCESS);
+                response.put("data", meta);
             } else {
-                response.put("code", "30400");
+                response.put("code", RETURN_DATABASE_WRONG);
                 response.put("message","database internal error");
             }
         } catch (NumberFormatException e) {
-            response.put("code", "40000");
+            response.put("code", RETURN_PARAMS_WRONG);
             response.put("message","parameter error");
         } catch (Exception e) {
-            response.put("code", "50000");
+            response.put("code", RETURN_SERVER_WRONG);
             response.put("message","server error");
         }
         return response;
@@ -97,12 +96,43 @@ public class MetaController {
         try {
             List<Meta> metaList= metaService.getAllMeta();
             data.put("items",metaList);
-            response.put("code", "20000");
+            response.put("code", RETURN_SUCCESS);
             response.put("data",data);
             return response;
         } catch (Exception e) {
             LoggerManager.logger().warn(String.format("[com.zulong.web.controller]MetaController.getMetaList@operation failed|"), e);
-            return null;
+            response.put("code", RETURN_SERVER_WRONG);
+            response.put("message","server error");
+            return response;
+        }
+    }
+    @PostMapping(value = "/save")
+    public Map<String, Object> saveMeta(@RequestBody Map<String, String> request) {
+        Map<String, Object> response = new HashMap<>();
+        int group_id;
+        String version_display;
+        String request_data;
+        int meta_id;
+        try{
+            group_id = Integer.parseInt(request.get("group_id"));
+            meta_id = Integer.parseInt(request.get("meta_id"));
+            version_display = request.get("version_display");
+            request_data = request.get("data");
+        }catch (Exception e){
+            response.put("code", RETURN_PARAMS_WRONG);
+            response.put("message","parameter error");
+            return response;
+        }
+        try {
+            Meta meta= metaService.updateMeta(meta_id,group_id,request_data,version_display);
+            response.put("code", RETURN_SUCCESS);
+            response.put("data",meta);
+            return response;
+        } catch (Exception e) {
+            LoggerManager.logger().warn(String.format("[com.zulong.web.controller]MetaController.getMetaList@operation failed|"), e);
+            response.put("code", RETURN_SERVER_WRONG);
+            response.put("message","server error");
+            return response;
         }
     }
 

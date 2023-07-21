@@ -7,6 +7,7 @@ import com.zulong.web.entity.Group;
 import com.zulong.web.entity.Instance;
 import com.zulong.web.entity.User;
 import com.zulong.web.entity.relation.Administration;
+import com.zulong.web.log.LoggerManager;
 import com.zulong.web.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.data.redis.core.RedisTemplate;
@@ -35,11 +36,12 @@ public class UserServiceImpl implements UserService {
     }
 
     public List<Group> getAllGroups(String user_id) {
-        List<Integer> groupIdList = userDao.findAllGroups(user_id);
+        List<Integer> groupidList = userDao.findAllGroups(user_id);
         List<Group> groupList = new ArrayList<>();
-        for(int i = 0; i < groupIdList.size(); i++){
-            groupList.add(groupDao.getGroupDetails(groupIdList.get(i)));
+        for(int group_id : groupidList){
+            groupList.add(groupDao.getGroupDetails(group_id));
         }
+        //LoggerManager.logger().warn(String.format("[com.zulong.web.service.serviceimpl]UserServiceImpl.getAllGroups@operation failed|userID=%s", user_id));
         return groupList;
     }
 

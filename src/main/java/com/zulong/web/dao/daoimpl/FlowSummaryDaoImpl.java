@@ -62,7 +62,7 @@ public class FlowSummaryDaoImpl implements FlowSummaryDao {
     }
 
     @Override
-    public void updateFlowSummary(FlowSummary flowSummary) {
+    public void saveUpdateFlowSummary(FlowSummary flowSummary) {
         try {
             // 根据flow_id更新流程摘要
             String sql = "update flow_summary set name=?, des=?, last_build=?, last_commit=?, last_version=? where flow_id=?";
@@ -77,7 +77,7 @@ public class FlowSummaryDaoImpl implements FlowSummaryDao {
     }
 
     @Override
-    public boolean updateFlowSummary(int flow_id, String name, String des){
+    public boolean cloneUpdateFlowSummary(int flow_id, String name, String des){
         try {
             // 根据flow_id更新流程摘要
             String sql = "update flow_summary set name=?, des=? where flow_id=?";
@@ -89,6 +89,43 @@ public class FlowSummaryDaoImpl implements FlowSummaryDao {
             return flag;
         } catch (Exception e) {
             LoggerManager.logger().error(String.format("[com.zulong.web.dao.daoimpl]FlowSummaryDaoImpl.updateFlowSummary-variousParams@something wrong happened during update|"), e);
+            return false;
+        }
+    }
+    @Override
+    public boolean commitUpdateFlowSummary(int flow_id,String last_commit){
+        try {
+            // 根据flow_id更新流程摘要
+            String sql = "update flow_summary set last_commit=? where flow_id=?";
+            Object[] params = {last_commit, flow_id};
+            boolean flag = jdbcTemplate.update(sql, params) > 0;
+            if(!flag){
+                // 使用占位符{}来替代字符串拼接，并指定更新失败的原因和影响
+                LoggerManager.logger().warn("[com.zulong.web.dao.daoimpl]GroupDaoImpl.commitUpdateFlowSummary@update failed,cause=database error,impact=data inconsistency|flow_id={}|last_commit={}|", flow_id, last_commit);
+            }
+            return flag;
+        } catch (Exception e) {
+            // 使用占位符{}来替代字符串拼接，并指定抛出异常的原因、影响和解决方案
+            LoggerManager.logger().error("[com.zulong.web.dao.daoimpl]GroupDaoImpl.commitUpdateFlowSummary@throw exception,impact=data inconsistency,solution=check the exception stack trace and fix the bug|flow_id={}|last_commit={}|cause={}|", flow_id, last_commit, e.getMessage(), e);
+            return false;
+        }
+    }
+
+    @Override
+    public boolean buildUpdateFlowSummary(int flow_id,String last_build){
+        try {
+            // 根据flow_id更新流程摘要
+            String sql = "update flow_summary set last_build=? where flow_id=?";
+            Object[] params = {last_build, flow_id};
+            boolean flag = jdbcTemplate.update(sql, params) > 0;
+            if(!flag){
+                // 使用占位符{}来替代字符串拼接，并指定更新失败的原因和影响
+                LoggerManager.logger().warn("[com.zulong.web.dao.daoimpl]GroupDaoImpl.buildUpdateFlowSummary@update failed,cause=database error,impact=data inconsistency|flow_id={}|last_build={}|", flow_id, last_build);
+            }
+            return flag;
+        } catch (Exception e) {
+            // 使用占位符{}来替代字符串拼接，并指定抛出异常的原因、影响和解决方案
+            LoggerManager.logger().error("[com.zulong.web.dao.daoimpl]GroupDaoImpl.buildUpdateFlowSummary@throw exception,impact=data inconsistency,solution=check the exception stack trace and fix the bug|flow_id={}|last_build={}|cause={}|", flow_id, last_build, e.getMessage(), e);
             return false;
         }
     }

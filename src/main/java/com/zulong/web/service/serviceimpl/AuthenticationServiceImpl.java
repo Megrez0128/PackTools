@@ -88,7 +88,7 @@ public class AuthenticationServiceImpl implements AuthenticationService{
     }
 
     /**
-     * 表示用户能否使用对应的Flow，从该函数可以拓展到instance的使用
+     * 表示用户能否使用对应的Flow，从该函数可以拓展到instance的使用，暂时没写关于instance的接口
      * @param user_id
      * @param flow_id
      * @return
@@ -98,7 +98,46 @@ public class AuthenticationServiceImpl implements AuthenticationService{
         List<Group> grouplist = userService.getAllGroups(user_id);
         for(Group group : grouplist) {
             if(hasFlowPermission(group.getGroup_id(), flow_id)) return true;
-            else continue;
+        }
+        return false;
+    }
+
+    /**
+     * 获取用户有无更新flow的权限（增、写权限）
+     * @param user_id
+     * @param flow_id
+     * @return
+     */
+    @Override
+    public boolean canUserUpdateFlow(String user_id, Integer flow_id) {
+        if(!canUserUseFlow(user_id, flow_id)) return false;
+        List<Group> grouplist = userService.getAllGroups(user_id);
+        int group_id;
+        for(Group group : grouplist) {
+            group_id = group.getGroup_id();
+            if(hasFlowPermission(group_id, flow_id)) {
+                if(administrationDao.getUpdateAllowance(user_id, group_id)) return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 获取用户有无更新flow的权限（删除权限）
+     * @param user_id
+     * @param flow_id
+     * @return
+     */
+    @Override
+    public boolean canUserDeleteFlow(String user_id, Integer flow_id) {
+        if(!canUserUseFlow(user_id, flow_id)) return false;
+        List<Group> grouplist = userService.getAllGroups(user_id);
+        int group_id;
+        for(Group group : grouplist) {
+            group_id = group.getGroup_id();
+            if(hasFlowPermission(group_id, flow_id)) {
+                if(administrationDao.getDeleteAllowance(user_id, group_id)) return true;
+            }
         }
         return false;
     }
@@ -107,17 +146,5 @@ public class AuthenticationServiceImpl implements AuthenticationService{
     public boolean isAdmin(String user_id) {
         User user = userService.getUserByUserId(user_id);
         return user.isAdmin();
-    }
-
-    @Value("${jwt.secret}")
-    private String SECRET_KEY;
-
-    @Override
-    public String getUserIdFromToken(String header) {
-
-        //TODO: 从token中解析出user_id
-        //暂时先写死，有一些保留的user_id，就像有一些保留的group_id一样
-        String user_id = "admin";
-        return user_id;        
     }
 }

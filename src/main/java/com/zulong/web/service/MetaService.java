@@ -6,6 +6,7 @@ import com.zulong.web.entity.Meta;
 import java.util.List;
 
 public interface MetaService {
-    boolean createMeta(String version_display, int group_id, String data);
+    Meta createMeta(String version_display, int group_id, String data);
     List<Meta> getAllMeta();
+    Meta updateMeta(int meta_id,int group_id,String data,String version_display);
 }
