@@ -34,11 +34,11 @@ public class FlowController
 
     @PostMapping(value = "/create")
     public Map<String, Object> createFlow(@RequestBody Map<String, String> request) {
-        //todo:验证这个meta是否属于这个group
-        int meta_id;
+
+        int meta_id; //todo:验证这个meta是否属于这个group
         String graph_data;
         String blackboard;
-        int group_id;
+        int group_id; //todo:验证这个user是否属于这个group
         String name;
         String des;
         Map<String, Object> response = new HashMap<>();
