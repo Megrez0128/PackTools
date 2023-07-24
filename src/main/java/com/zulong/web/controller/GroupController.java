@@ -7,10 +7,7 @@ import com.zulong.web.service.AuthenticationService;
 import com.zulong.web.service.GroupService;
 import com.zulong.web.utils.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -30,9 +27,9 @@ public class GroupController {
     }
 
     @PostMapping(value = "/listuser")
-    public Map<String, Object> getAllUsers(@RequestBody Map<String, String> request){
+    public Map<String, Object> getAllUsers(@RequestBody Map<String, String> request, @RequestHeader("Authorization") String token){
         Map<String, Object> response = new HashMap<>();
-        if(authenticationService.isAdmin(TokenUtils.getCurr_user_id())){
+        if(authenticationService.isAdmin(TokenUtils.getCurrUserId(token))){
         }else {
             LoggerManager.logger().warn(String.format("[com.zulong.web.controller]GroupController.getAllUsers@this user is not admin|"));
             response.put("code", RETURN_SERVER_WRONG);

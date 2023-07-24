@@ -1,0 +1,31 @@
+<md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" entityID="[todo:SP的ID，一般使用SP服务的域名，建议直接配置成https
+]https://ssmp-test1.zulong.com/" validUntil="2025-03-09T07:42:24.178Z">
+    <md:SPSSODescriptor AuthnRequestsSigned="true" WantAssertionsSigned="true" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+        <md:KeyDescriptor use="signing">
+            <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+                <ds:X509Data>
+                    <ds:X509Certificate>[todo:SP证书信息，CERTIFICATE部分]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</ds:X509Certificate>
+                </ds:X509Data>
+            </ds:KeyInfo>
+        </md:KeyDescriptor>
+        <md:SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://ssmp-test1.zulong.com/api/saml/logout"/>
+        <md:SingleLogoutService Binding="[todo:登出接口，运维同学说目前无用，按格式写上即可]urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://ssmp-test1.zulong.com/api/saml/logout"/>
+        <md:NameIDFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress</md:NameIDFormat>
+        <md:NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:persistent</md:NameIDFormat>
+        <md:NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:transient</md:NameIDFormat>
+        <md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="[todo:IdP登录成功后的回调的地址，SP通过此接口拿到用户信息]https://ssmp-test1.zulong.com/api/saml/auth" index="1"/>
+    </md:SPSSODescriptor>
+    <md:Organization>
+        <md:OrganizationName xml:lang="zh">miniOrange</md:OrganizationName>
+        <md:OrganizationDisplayName xml:lang="zh">miniOrange</md:OrganizationDisplayName>
+        <md:OrganizationURL xml:lang="zh">https://www.miniorange.com/</md:OrganizationURL>
+    </md:Organization>
+    <md:ContactPerson contactType="technical">
+        <md:GivenName>Xecurify</md:GivenName>
+        <md:EmailAddress>info@xecurify.com</md:EmailAddress>
+    </md:ContactPerson>
+    <md:ContactPerson contactType="support">
+        <md:GivenName>Xecurify</md:GivenName>
+        <md:EmailAddress>info@xecurify.com</md:EmailAddress>
+    </md:ContactPerson>
+</md:EntityDescriptor>

@@ -8,13 +8,7 @@ import com.zulong.web.service.GroupService;
 import com.zulong.web.service.UserService;
 import com.zulong.web.utils.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,12 +30,12 @@ public class UserController {
     }
 
     @PostMapping(value = "/listgroup")
-    public Map<String, Object> getAllGroups(@RequestBody Map<String, String> request) {
+    public Map<String, Object> getAllGroups(@RequestBody Map<String, String> request, @RequestHeader("Authorization") String token) {
         String user_id;
         Map<String, Object> response = new HashMap<>();
         Map<String, Object> data = new HashMap<>();
         try{
-            user_id = TokenUtils.getCurr_user_id();
+            user_id = TokenUtils.getCurrUserId(token);
         }catch (Exception e){
             LoggerManager.logger().warn(String.format("[com.zulong.web.controller]UserController.getAllGroups@please login first|"), e);
             response.put("code", RETURN_PARAMS_WRONG);
@@ -64,15 +58,15 @@ public class UserController {
     }
 
     @PostMapping(value = "/create")
-    public ResponseEntity createUser(@RequestBody Map<String, String> request) {
+    public Map<String, Object> createUser(@RequestBody Map<String, String> request, @RequestHeader("Authorization") String token) {
         Map<String, Object> response = new HashMap<>();
-        if(authenticationService.isAdmin(TokenUtils.getCurr_user_id())){
+        if(authenticationService.isAdmin(TokenUtils.getCurrUserId(token))){
 
         }else {
             LoggerManager.logger().warn(String.format("[com.zulong.web.controller]GroupController.getAllUsers@this user is not admin|"));
             response.put("code", RETURN_SERVER_WRONG);
             response.put("message", "this user is not admin");
-            return ResponseEntity.status(HttpStatus.OK).body(response);
+            return response;
         }
         String user_id;
         boolean is_admin;
@@ -84,7 +78,7 @@ public class UserController {
             LoggerManager.logger().warn(String.format("[com.zulong.web.controller]UserController.createUser@params are wrong|"), e);
             response.put("code", RETURN_PARAMS_WRONG);
             response.put("message", e.getMessage());
-            return ResponseEntity.status(HttpStatus.OK).body(response);
+            return response;
         }
 
         try {
@@ -96,29 +90,47 @@ public class UserController {
             LoggerManager.logger().warn(String.format("[com.zulong.web.controller]UserController.createUser@operation failed|user_id=%s", user_id), e);
             response.put("code", RETURN_SERVER_WRONG);
             response.put("message", e.getMessage());
-            return ResponseEntity.status(HttpStatus.OK).body(response);
+            return response;
         }
         try {
             User user = new User();
             user.setAdmin(is_admin);
             user.setUser_id(user_id);
-            String token = TokenUtils.sign(user);
-            //将令牌放置在响应头中返回
-            HttpHeaders headers = new HttpHeaders();
-            headers.add("Authentication", "Bearer " + token);
-            return ResponseEntity.status(HttpStatus.OK)
-                    .header("Authentication", "Bearer " + token)
-                    .body(response);
+            String user_token = TokenUtils.sign(user);
+            //将令牌放置在响应体中返回
+            response.put("Authorization",String.format("Bearer %s",user_token));
+            return response;
         }catch (Exception e) {
             LoggerManager.logger().warn(String.format("[com.zulong.web.controller]UserController.createUser@operation failed|user_id=%s", user_id), e);
             response.put("code", RETURN_SERVER_WRONG);
             response.put("message", e.getMessage());
-            return ResponseEntity.status(HttpStatus.OK).body(response);
+            return response;
+        }
+    }
+
+    @PostMapping(value = "/logout")
+    public Map<String, Object> logoutUser(@RequestHeader("Authorization") String token){
+
+        Map<String, Object> response = new HashMap<>();
+        try{
+            if (token != null && token.startsWith("Bearer ")) {
+                token = token.substring(7);
+            }
+            TokenUtils.loginOut(token);
+            LoggerManager.logger().warn(String.format("[com.zulong.web.controller]UserController.logoutUser@login out success|"));
+            response.put("code", RETURN_SUCCESS);
+            response.put("message", "logout success, token is clear");
+            return response;
+        }catch (Exception e){
+            LoggerManager.logger().warn(String.format("[com.zulong.web.controller]UserController.logoutUser@please login first|"), e);
+            response.put("code", RETURN_PARAMS_WRONG);
+            response.put("message", e.getMessage());
+            return response;
         }
     }
 
     @PostMapping(value = "/login")
-    public ResponseEntity loginUser(@RequestBody Map<String, String> request) {
+    public Map<String, Object> loginUser(@RequestBody Map<String, String> request) {
         String user_id;
         Map<String, Object> response = new HashMap<>();
         try{
@@ -127,7 +139,7 @@ public class UserController {
             LoggerManager.logger().warn(String.format("[com.zulong.web.controller]UserController.loginUser@params are wrong|"), e);
             response.put("code", RETURN_PARAMS_WRONG);
             response.put("message", e.getMessage());
-            return ResponseEntity.status(HttpStatus.OK).body(response);
+            return response;
         }
         User user = null;
         try {
@@ -136,7 +148,7 @@ public class UserController {
                 LoggerManager.logger().warn(String.format("[com.zulong.web.controller]UserController.loginUser@User does not exist|user_id=%s", user_id));
                 response.put("code", RETURN_SERVER_WRONG);
                 response.put("message","User does not exist" );
-                return ResponseEntity.status(HttpStatus.OK).body(response);
+                return response;
             }
             response.put("code", RETURN_SUCCESS);
 
@@ -144,7 +156,7 @@ public class UserController {
             LoggerManager.logger().warn(String.format("[com.zulong.web.controller]UserController.loginUser@operation failed|user_id=%s", user_id), e);
             response.put("code", RETURN_SERVER_WRONG);
             response.put("message", e.getMessage());
-            return ResponseEntity.status(HttpStatus.OK).body(response);
+            return response;
         }
         try {
             String token = TokenUtils.sign(user);
@@ -152,20 +164,19 @@ public class UserController {
             Map<String, Object> data = new HashMap<>();
             data.put("token", token);
             response.put("data", data);
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(response);
+            return response;
         }catch (Exception e) {
             LoggerManager.logger().warn(String.format("[com.zulong.web.controller]UserController.loginUser@operation failed|user_id=%s", user_id), e);
             response.put("code", RETURN_SERVER_WRONG);
             response.put("message", e.getMessage());
-            return ResponseEntity.status(HttpStatus.OK).body(response);
+            return response;
         }
     }
 
     @PostMapping(value = "/addtogroup")
-    public Map<String, Object> addToGroup(@RequestBody Map<String, String> request) {
+    public Map<String, Object> addToGroup(@RequestBody Map<String, String> request, @RequestHeader("Authorization") String token) {
         Map<String, Object> response = new HashMap<>();
-        if(!authenticationService.isAdmin(TokenUtils.getCurr_user_id())){
+        if(!authenticationService.isAdmin(TokenUtils.getCurrUserId(token))){
             LoggerManager.logger().warn(String.format("[com.zulong.web.controller]GroupController.getAllUsers@this user is not admin|"));
             response.put("code", RETURN_SERVER_WRONG);
             response.put("message", "this user is not admin");
@@ -213,9 +224,9 @@ public class UserController {
     }
 
     @PostMapping(value = "/removefromgroup")
-    public Map<String, Object> removeFromGroup(@RequestBody Map<String, String> request) {
+    public Map<String, Object> removeFromGroup(@RequestBody Map<String, String> request, @RequestHeader("Authorization") String token) {
         Map<String, Object> response = new HashMap<>();
-        if(!authenticationService.isAdmin(TokenUtils.getCurr_user_id())){
+        if(!authenticationService.isAdmin(TokenUtils.getCurrUserId(token))){
             LoggerManager.logger().warn(String.format("[com.zulong.web.controller]GroupController.getAllUsers@this user is not admin|"));
             response.put("code", RETURN_SERVER_WRONG);
             response.put("message", "this user is not admin");
@@ -255,21 +266,26 @@ public class UserController {
 
     // 将要废弃，因为仅仅用于返回user_id为admin的用户的token
     @PostMapping(value = "/gettoken")
-    public ResponseEntity getToken(@RequestBody Map<String, String> request){
+    public Map<String, Object> getToken(@RequestBody Map<String, String> request){
         String user_id = request.get("user_id");
         User admin_user = new User();
         admin_user.setAdmin(true);
         admin_user.setUser_id(user_id);
-
+        Map<String, Object> response = new HashMap<>();
         if (user_id.equals("admin")) {
             //身份验证成功，生成JWT令牌
             String token = TokenUtils.sign(admin_user);
-            //将令牌放置在响应头中返回
-            HttpHeaders headers = new HttpHeaders();
-            headers.add("Authentication", "Bearer " + token);
-            return new ResponseEntity<>(headers, HttpStatus.OK);
+            //将令牌放置在响应体中返回
+            response.put("code",RETURN_SUCCESS);
+            response.put("Authentication", String.format("Bearer %s",token));
+            return response;
+        }else{
+            //身份验证失败
+            response.put("code",RETURN_NO_AUTHORITY);
+            response.put("message","User does not have permission");
+            return response;
         }
-        //身份验证失败，返回401状态码
-        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+
+
     }
 }

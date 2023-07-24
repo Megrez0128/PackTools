@@ -17,6 +17,7 @@ public interface FlowDao {
 	int findMaxVersion(int flow_id);
 	Flow findByFlowIDAndVersion(int flow_id, int version);
     List<Flow> getHistoryFlowList(int flow_id);
+    Flow getNewestFlow(int flow_id);
     Flow getNewVersionFlow(int flow_id);
     int getCurrRecordId();
     int getCurrFlowId();

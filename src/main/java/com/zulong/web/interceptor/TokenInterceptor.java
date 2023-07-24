@@ -30,6 +30,12 @@ public class TokenInterceptor implements HandlerInterceptor {
         if ("/auth/user/gettoken".equals(path)) {
             return true;
         }
+        if("/saml/login".equals(path)) {
+            return true;
+        }
+        if("/saml/auth".equals(path)) {
+            return true;
+        }
 //        return true;
         //跨域请求会首先发一个option请求，直接返回正常状态并通过拦截器
         if(request.getMethod().equals("OPTIONS")){

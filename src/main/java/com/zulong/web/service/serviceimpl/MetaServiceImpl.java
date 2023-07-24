@@ -5,6 +5,7 @@ import com.zulong.web.entity.Meta;
 import com.zulong.web.log.LoggerManager;
 import com.zulong.web.service.MetaService;
 
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +13,7 @@ import com.zulong.web.dao.CoreMetaDao;
 import com.zulong.web.dao.ExtraMetaDao;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class MetaServiceImpl implements MetaService {
@@ -31,8 +33,9 @@ public class MetaServiceImpl implements MetaService {
         return metaDao.getCurrMetaId() != -1 ? metaDao.getCurrMetaId() : START_META_ID;
     }
 
+    @SneakyThrows
     @Override
-    public Meta createMeta(String version_display, int group_id, String data){
+    public Meta createMeta(String version_display, int group_id, String data) {
         curr_meta_id = getCurrMetaId();
 
         Meta meta = new Meta();
@@ -53,12 +56,17 @@ public class MetaServiceImpl implements MetaService {
     }
 
     @Override
-    public List<Meta> getAllMeta(){
+    public Map<String, Object> getAllMeta(){
         return metaDao.getAllMeta();
     }
 
     @Override
     public Meta updateMeta(int meta_id,int group_id,String data,String version_display){
         return metaDao.updateMeta( meta_id, group_id, data, version_display);
+    }
+
+    @Override
+    public Meta getMetaDetails(int meta_id) {
+        return metaDao.findMetaByID(meta_id);
     }
 }

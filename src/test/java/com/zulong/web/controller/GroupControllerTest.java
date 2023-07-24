@@ -127,7 +127,7 @@ public class GroupControllerTest {
         Map<String, String> request = new HashMap<>();
         request.put("group_id", String.valueOf(1));
 
-        Map<String, Object> result = groupController.getAllUsers(request);
+        Map<String, Object> result = groupController.getAllUsers(request, );
         assertEquals(20000, result.get("code"));
         assertNotNull(result.get("data"));
 

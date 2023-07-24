@@ -240,7 +240,10 @@ public class FlowServiceImpl implements FlowService {
     }
 
     @Override
-    public Flow getNewVersionFlow(int flow_id){ return flowDao.getNewVersionFlow(flow_id); }
+    public Flow getNewestFlow(int flow_id){ return flowDao.getNewestFlow(flow_id); }
 
-
+    @Override
+    public Flow getNewVersionFlow(int flow_id){
+        return flowDao.getNewVersionFlow(flow_id);
+    }
 }

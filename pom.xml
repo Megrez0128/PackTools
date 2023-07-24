@@ -28,6 +28,11 @@
 			<version>2.1.4</version>
 		</dependency>
 		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-configuration2</artifactId>
+			<version>2.9.0</version>
+		</dependency>
+		<dependency>
 			<groupId>commons-codec</groupId>
 			<artifactId>commons-codec</artifactId>
 			<version>1.15</version>
@@ -54,28 +59,29 @@
 		<dependency>
 			<groupId>org.opensaml</groupId>
 			<artifactId>opensaml-saml-api</artifactId>
-			<version>4.0.1</version>
+			<version>3.2.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.opensaml</groupId>
 			<artifactId>opensaml-saml-impl</artifactId>
-			<version>4.0.1</version>
+			<version>3.2.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.opensaml</groupId>
 			<artifactId>opensaml-messaging-api</artifactId>
-			<version>4.0.1</version>
+			<version>3.2.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.opensaml</groupId>
 			<artifactId>opensaml-messaging-impl</artifactId>
-			<version>4.0.1</version>
+			<version>3.2.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.opensaml</groupId>
 			<artifactId>opensaml-soap-api</artifactId>
-			<version>4.0.1</version>
+			<version>3.2.0</version>
 		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
@@ -90,6 +96,18 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.json</groupId>
+			<artifactId>javax.json-api</artifactId>
+			<version>1.1.4</version>
+		</dependency>
+		<dependency>
+			<groupId>org.glassfish</groupId>
+			<artifactId>javax.json</artifactId>
+			<version>1.1.4</version>
+			<scope>runtime</scope>
 		</dependency>
 
 		<dependency>

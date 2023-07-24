@@ -7,8 +7,11 @@ import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.List;
+
 @Configuration
 public class HttpConfig {
+
 
     @Value("${server.http.port}")
     private int httpPort;
@@ -27,5 +30,7 @@ public class HttpConfig {
         connector.setPort(httpPort);
         return connector;
     }
+
+
 }
 

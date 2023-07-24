@@ -5,6 +5,8 @@ import com.zulong.web.entity.Instance;
 
 import com.zulong.web.log.LoggerManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -31,7 +33,7 @@ public class InstanceDaoImpl implements InstanceDao {
         return count > 0;
     }
 
-    @Cacheable(value="instanceCache", key="#uuid+'_'+#flow_record_id")
+    //@Cacheable(value="instanceCache", key="#uuid+'_'+#flow_record_id")
     public List<Instance> getInstanceByFlowRecordId(int record_id) {
         String sql = "select * from instance where flow_record_id = ?";
         Object[] params = {record_id};
@@ -39,7 +41,7 @@ public class InstanceDaoImpl implements InstanceDao {
         return instanceList;
     }
 
-    @Cacheable(value = "instanceCache", key = "#uuid")
+    //@Cacheable(value = "instanceCache", key = "#uuid")
     @Override
     public Instance findInstanceByUuid(String uuid) {
         try {
@@ -53,6 +55,8 @@ public class InstanceDaoImpl implements InstanceDao {
         }
     }
 
+//    @CacheEvict(value = "instanceCache", allEntries = true)
+//    @CachePut(value = "instanceCache", key = "#instance.uuid")
     @Override
     public boolean insertInstance(Instance instance) {
         String sql = "insert into instance (uuid, flow_record_id, build_time, complete, has_error) values (?, ?, ?, ?, ?)";

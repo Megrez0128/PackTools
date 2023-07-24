@@ -7,10 +7,7 @@ import com.zulong.web.service.AuthenticationService;
 
 import com.zulong.web.utils.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -38,7 +35,7 @@ public class MetaController {
      * @return 包含code和message两个参数的Map类型的响应体
      */
     @PostMapping(value = "/create")
-    public Map<String, Object> createMeta(@RequestBody Map<String, String> request, HttpServletRequest httpServletRequest) {
+    public Map<String, Object> createMeta(@RequestBody Map<String, String> request, @RequestHeader("Authorization") String token) {
         int group_id;
         String version_display;
         String data;
@@ -56,7 +53,7 @@ public class MetaController {
 
         Map<String, Object> response = new HashMap<>();
         try {
-            String user_id = TokenUtils.getCurr_user_id();//从token中解析出user_id
+            String user_id = TokenUtils.getCurrUserId(token);//从token中解析出user_id
             //验证user_id和group_id是否合法        
             boolean is_valid = authenticationService.isUserInGroup(user_id, group_id);
             if (!is_valid) {
@@ -71,7 +68,7 @@ public class MetaController {
 //                response.put("message","group or meta not authorized");
 //                return response;
 //            }
-            Meta meta = metaService.createMeta(version_display,group_id,data);
+            Meta meta = metaService.createMeta(version_display, group_id, data);
             if (meta != null) {
                 response.put("code", RETURN_SUCCESS);
                 response.put("data", meta);
@@ -94,7 +91,7 @@ public class MetaController {
         Map<String, Object> response = new HashMap<>();
         Map<String, Object> data = new HashMap<>();
         try {
-            List<Meta> metaList= metaService.getAllMeta();
+            Map<String, Object> metaList= metaService.getAllMeta();
             data.put("items",metaList);
             response.put("code", RETURN_SUCCESS);
             response.put("data",data);
@@ -106,6 +103,32 @@ public class MetaController {
             return response;
         }
     }
+
+    @PostMapping(value = "/detail")
+    public Map<String, Object> getMetaDetails(@RequestBody Map<String, Integer> request) {
+        Map<String, Object> response = new HashMap<>();
+        int meta_id;
+        try {
+            meta_id = request.get("meta_id");
+        } catch (Exception e) {
+            LoggerManager.logger().warn("[com.zulong.web.controller]MetaController.getMetaDetails@params are wrong|", e);
+            response.put("code", RETURN_PARAMS_WRONG);
+            response.put("message", e.getMessage());
+            return response;
+        }
+        try {
+            Meta meta = metaService.getMetaDetails(meta_id);
+            response.put("code", RETURN_SUCCESS);
+            response.put("data", meta);
+            return response;
+        } catch (Exception e) {
+            LoggerManager.logger().warn("[com.zulong.web.controller]MetaController.getMetaDetails@operation failed|", e);
+            response.put("code", RETURN_SERVER_WRONG);
+            response.put("message", e.getMessage());
+            return response;
+        }
+    }
+
     @PostMapping(value = "/save")
     public Map<String, Object> saveMeta(@RequestBody Map<String, String> request) {
         Map<String, Object> response = new HashMap<>();

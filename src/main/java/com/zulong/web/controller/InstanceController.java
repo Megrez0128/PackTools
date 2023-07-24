@@ -6,10 +6,15 @@ import com.zulong.web.log.LoggerManager;
 import com.zulong.web.service.FlowService;
 import com.zulong.web.service.InstanceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.json.JsonParser;
+import org.springframework.boot.json.JsonParserFactory;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.json.Json;
+import javax.json.JsonObject;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +42,7 @@ public class InstanceController {
         boolean complete = false;
         boolean has_error = false;
         String option = null;
+        JsonObject optionJson = null;
         try {
             uuid = (String) request.get("uuid");
             flow_record_id = (int)request.get("flow_record_id");
@@ -44,7 +50,12 @@ public class InstanceController {
             start_time = (String)request.get("start_time");
             complete = (boolean)request.get("complete");
             has_error = (boolean)request.get("has_error");
-            option = (String)request.get("option");
+
+            Map<String, Object> optionsMap = (Map<String, Object>) request.get("options");
+            option = optionsMap.toString();
+            //LoggerManager.logger().warn(request.get("option").getClass());
+            //option = optionJson.toString();
+
         } catch (Exception e) {
             LoggerManager.logger().warn(String.format("[com.zulong.web.controller]InstanceController.instanceStartNode@params are wrong|"), e);
             Map<String, Object> response = new HashMap<>();
@@ -71,14 +82,21 @@ public class InstanceController {
             return response;
         }
         try{
-            instanceService.instanceStartNode(uuid, flow_record_id, node_id,start_time,complete,has_error, option);
+            boolean flag = instanceService.instanceStartNode(uuid, flow_record_id, node_id, start_time, complete, has_error, option);
             Map<String, Object> response = new HashMap<>();
-            response.put("code", RETURN_SUCCESS);
-            response.put("message", "success");
+            if(flag) {
+                response.put("code", RETURN_SUCCESS);
+                response.put("message", "success");}
+            else {
+//                LoggerManager.logger().warn(String.format("[com.zulong.web.controller]InstanceController.instanceStartNode@create operation failed|flow_id=%d|node_id=%s", flow_record_id, node_id));
+//                LoggerManager.logger().warn(option);
+                response.put("code", RETURN_DATABASE_WRONG);
+                response.put("message", "failed");
+            }
             return response;
         } catch (Exception e) {
             Map<String, Object> response = new HashMap<>();
-            response.put("code", 40000);
+            response.put("code", RETURN_DATABASE_WRONG);
             response.put("message", e.getMessage());
             LoggerManager.logger().warn(String.format("[com.zulong.web.controller]InstanceController.instanceStartNode@create operation failed|flow_id=%d|node_id=%s", flow_record_id, node_id), e);
             return response;
@@ -102,7 +120,13 @@ public class InstanceController {
             end_time = (String)request.get("end_time");
             complete = (boolean)request.get("complete");
             has_error = (boolean)request.get("has_error");
-            option = (String)request.get("option");
+
+            Map<String, Object> optionsMap = (Map<String, Object>) request.get("options");
+            option = optionsMap.toString();
+            //String optionJson = (String) request.get("option");  // 获取JSON字符串
+            //JsonParser parser = JsonParserFactory.getJsonParser();
+            //Map<String, Object> json = parser.parseMap(optionJson);  // 将JSON字符串转换为Map对象
+            //option = (String) json.get("option");  // 从Map对象中提取option参数
         } catch (Exception e) {
             LoggerManager.logger().warn(String.format("[com.zulong.web.controller]InstanceController.instanceEndNode@params are wrong|"), e);;
             response.put("code", RETURN_PARAMS_WRONG);
