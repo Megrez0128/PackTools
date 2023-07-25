@@ -41,7 +41,7 @@ public class UserDaoImpl implements UserDao {
             return user;
         } catch (Exception e) {
             // 如果没有找到对应的记录，返回null；添加一条warn日志
-            LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]UserDaoImpl.findByUserID@user_id is invalid|user_id=%s", user_id), e);
+            LoggerManager.logger().error(String.format("[com.zulong.web.dao.daoimpl]UserDaoImpl.findByUserID@user_id is invalid|user_id=%s", user_id), e);
             return null;
         }
     }
@@ -62,7 +62,7 @@ public class UserDaoImpl implements UserDao {
         Object[] params = {user.getUser_id(), user.isAdmin()};
         boolean flag = jdbcTemplate.update(sql, params) > 0;
         if(!flag){
-            LoggerManager.logger().warn("[com.zulong.web.dao.daoimpl]UserDaoImpl.insertUser@insertion failed");
+            LoggerManager.logger().error(String.format("[com.zulong.web.dao.daoimpl]UserDaoImpl.insertUser@insertion failed|user_id=%s", user.getUser_id()));
         }
         return flag;
     }
@@ -74,7 +74,7 @@ public class UserDaoImpl implements UserDao {
         Object[] params = {user_id};
         boolean flag = jdbcTemplate.update(sql, params) > 0;
         if(!flag){
-            LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]UserDaoImpl.deleteByUserID@deletion failed|userID=%s", user_id));
+            LoggerManager.logger().error(String.format("[com.zulong.web.dao.daoimpl]UserDaoImpl.deleteByUserID@deletion failed|userID=%s", user_id));
         }
         return flag;
     }
@@ -84,11 +84,10 @@ public class UserDaoImpl implements UserDao {
         try{
             String sql = "select group_id from administration where user_id=?";
         Object[] params = {user_id};
-        LoggerManager.logger().info(String.format("[com.zulong.web.dao.daoimpl]UserDaoImpl.findAllGroups@searching|userID=%s", user_id));
         List<Integer> groupIDList = jdbcTemplate.queryForList(sql, params, Integer.class);
         return groupIDList;
         } catch (Exception e) {
-            LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]UserDaoImpl.findAllGroups@search failed|userID=%s", user_id), e);
+            LoggerManager.logger().error(String.format("[com.zulong.web.dao.daoimpl]UserDaoImpl.findAllGroups@search failed|userID=%s", user_id), e);
             return null;
         }
     }

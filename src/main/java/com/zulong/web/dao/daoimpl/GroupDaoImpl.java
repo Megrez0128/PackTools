@@ -16,7 +16,7 @@ import java.util.List;
 
 @Service("GroupDaoImpl")
 public class GroupDaoImpl implements GroupDao {
-
+//Group不常用，不存入redis缓存
     @Autowired
     private final JdbcTemplate jdbcTemplate;
 
@@ -24,15 +24,13 @@ public class GroupDaoImpl implements GroupDao {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-//    @CacheEvict(value = "groupCache", allEntries = true)
-//    @CachePut(value = "groupCache", key="#group_id")
     @Override
     public boolean insertGroup(Group group) {
         String sql = "insert into pack_group(group_id, group_name)values(?, ?)";
         Object[] params = {group.getGroup_id(), group.getGroup_name()};
         boolean flag = jdbcTemplate.update(sql, params) > 0;
         if(!flag){
-            LoggerManager.logger().warn("[com.zulong.web.dao.daoimpl]GroupDaoImpl.insertGroup@insertion failed");
+            LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]GroupDaoImpl.insertGroup@insertion failed|group_id=%d|group_name=%s", group.getGroup_id(), group.getGroup_name()));
         }
         return flag;
     }
@@ -44,7 +42,6 @@ public class GroupDaoImpl implements GroupDao {
         return userList;
     }
 
-//    @Cacheable(value = "groupCache", key="#group_id", condition="#group_id > 0")
     public Group getGroupDetails(int group_id){
         String choose = "select count(*) from pack_group where group_id=?";
         int count = jdbcTemplate.queryForObject(choose, new Object[]{group_id}, Integer.class);
@@ -57,7 +54,6 @@ public class GroupDaoImpl implements GroupDao {
         else return null;
     }
 
-//    @Cacheable(value = "groupCache", key="#group_id", condition="#group_id > 0")
     public boolean findGroup(int group_id) {
         String sql = "select count(*) from pack_group where group_id=?";
         int count = jdbcTemplate.queryForObject(sql, new Object[]{group_id}, Integer.class);
@@ -70,5 +66,4 @@ public class GroupDaoImpl implements GroupDao {
         Integer maxGroupId = jdbcTemplate.queryForObject(sql, Integer.class);
         return maxGroupId != null ? maxGroupId : -1;
     }
-    
 }

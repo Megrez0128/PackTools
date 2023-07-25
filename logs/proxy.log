@@ -1,245 +1,433 @@
-2023-07-24 18:38:23,781  INFO - [com.zulong.web]WebServerApplication.main@WebServer Application started
-2023-07-24 18:38:49,499  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDQiLCJleHAiOjE2OTAyMDUyNTd9._Vl667Mj7S4NaPV15PaeaREuIx498tvBYW4piytcfaI
-2023-07-24 18:38:49,528  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDQiLCJleHAiOjE2OTAyMDUyNTd9._Vl667Mj7S4NaPV15PaeaREuIx498tvBYW4piytcfaI
-2023-07-24 18:38:49,528  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test04
-2023-07-24 18:38:49,528  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
-2023-07-24 18:38:49,581  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.getCurrUserId@get token|user_id=test04
-2023-07-24 18:38:49,667  WARN - [com.zulong.web.controller]FlowController.createFlow@operation failed|
-org.springframework.jdbc.BadSqlGrammarException: StatementCallback; bad SQL grammar [SELECT MAX(record_id) FROM flow ]; nested exception is java.sql.SQLSyntaxErrorException: Table 'test_user.flow' doesn't exist
-	at org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator.doTranslate(SQLErrorCodeSQLExceptionTranslator.java:239) ~[spring-jdbc-5.3.14.jar:5.3.14]
-	at org.springframework.jdbc.support.AbstractFallbackSQLExceptionTranslator.translate(AbstractFallbackSQLExceptionTranslator.java:70) ~[spring-jdbc-5.3.14.jar:5.3.14]
-	at org.springframework.jdbc.core.JdbcTemplate.translateException(JdbcTemplate.java:1541) ~[spring-jdbc-5.3.14.jar:5.3.14]
-	at org.springframework.jdbc.core.JdbcTemplate.execute(JdbcTemplate.java:393) ~[spring-jdbc-5.3.14.jar:5.3.14]
-	at org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:465) ~[spring-jdbc-5.3.14.jar:5.3.14]
-	at org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:475) ~[spring-jdbc-5.3.14.jar:5.3.14]
-	at org.springframework.jdbc.core.JdbcTemplate.queryForObject(JdbcTemplate.java:508) ~[spring-jdbc-5.3.14.jar:5.3.14]
-	at org.springframework.jdbc.core.JdbcTemplate.queryForObject(JdbcTemplate.java:515) ~[spring-jdbc-5.3.14.jar:5.3.14]
-	at com.zulong.web.dao.daoimpl.FlowDaoImpl.getCurrRecordId(FlowDaoImpl.java:258) ~[classes/:?]
-	at com.zulong.web.dao.daoimpl.FlowDaoImpl$$FastClassBySpringCGLIB$$3de5a5c8.invoke(<generated>) ~[classes/:?]
-	at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:218) ~[spring-core-5.3.14.jar:5.3.14]
-	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:689) ~[spring-aop-5.3.14.jar:5.3.14]
-	at com.zulong.web.dao.daoimpl.FlowDaoImpl$$EnhancerBySpringCGLIB$$4b37c7d1.getCurrRecordId(<generated>) ~[classes/:?]
-	at com.zulong.web.service.serviceimpl.FlowServiceImpl.getStartRecordId(FlowServiceImpl.java:47) ~[classes/:?]
-	at com.zulong.web.service.serviceimpl.FlowServiceImpl.createFlow(FlowServiceImpl.java:57) ~[classes/:?]
-	at com.zulong.web.controller.FlowController.createFlow(FlowController.java:78) [classes/:?]
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_371]
-	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_371]
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_371]
-	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_371]
-	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:205) [spring-web-5.3.14.jar:5.3.14]
-	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:150) [spring-web-5.3.14.jar:5.3.14]
-	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:117) [spring-webmvc-5.3.14.jar:5.3.14]
-	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:895) [spring-webmvc-5.3.14.jar:5.3.14]
-	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:808) [spring-webmvc-5.3.14.jar:5.3.14]
-	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87) [spring-webmvc-5.3.14.jar:5.3.14]
-	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1067) [spring-webmvc-5.3.14.jar:5.3.14]
-	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:963) [spring-webmvc-5.3.14.jar:5.3.14]
-	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1006) [spring-webmvc-5.3.14.jar:5.3.14]
-	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:909) [spring-webmvc-5.3.14.jar:5.3.14]
-	at javax.servlet.http.HttpServlet.service(HttpServlet.java:681) [tomcat-embed-core-9.0.56.jar:4.0.FR]
-	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:883) [spring-webmvc-5.3.14.jar:5.3.14]
-	at javax.servlet.http.HttpServlet.service(HttpServlet.java:764) [tomcat-embed-core-9.0.56.jar:4.0.FR]
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:227) [tomcat-embed-core-9.0.56.jar:9.0.56]
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162) [tomcat-embed-core-9.0.56.jar:9.0.56]
-	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53) [tomcat-embed-websocket-9.0.56.jar:9.0.56]
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189) [tomcat-embed-core-9.0.56.jar:9.0.56]
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162) [tomcat-embed-core-9.0.56.jar:9.0.56]
-	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100) [spring-web-5.3.14.jar:5.3.14]
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117) [spring-web-5.3.14.jar:5.3.14]
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189) [tomcat-embed-core-9.0.56.jar:9.0.56]
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162) [tomcat-embed-core-9.0.56.jar:9.0.56]
-	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93) [spring-web-5.3.14.jar:5.3.14]
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117) [spring-web-5.3.14.jar:5.3.14]
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189) [tomcat-embed-core-9.0.56.jar:9.0.56]
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162) [tomcat-embed-core-9.0.56.jar:9.0.56]
-	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201) [spring-web-5.3.14.jar:5.3.14]
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117) [spring-web-5.3.14.jar:5.3.14]
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189) [tomcat-embed-core-9.0.56.jar:9.0.56]
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162) [tomcat-embed-core-9.0.56.jar:9.0.56]
-	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:197) [tomcat-embed-core-9.0.56.jar:9.0.56]
-	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:97) [tomcat-embed-core-9.0.56.jar:9.0.56]
-	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:540) [tomcat-embed-core-9.0.56.jar:9.0.56]
-	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:135) [tomcat-embed-core-9.0.56.jar:9.0.56]
-	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92) [tomcat-embed-core-9.0.56.jar:9.0.56]
-	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:78) [tomcat-embed-core-9.0.56.jar:9.0.56]
-	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:357) [tomcat-embed-core-9.0.56.jar:9.0.56]
-	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:382) [tomcat-embed-core-9.0.56.jar:9.0.56]
-	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:65) [tomcat-embed-core-9.0.56.jar:9.0.56]
-	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:895) [tomcat-embed-core-9.0.56.jar:9.0.56]
-	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1732) [tomcat-embed-core-9.0.56.jar:9.0.56]
-	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49) [tomcat-embed-core-9.0.56.jar:9.0.56]
-	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191) [tomcat-embed-core-9.0.56.jar:9.0.56]
-	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659) [tomcat-embed-core-9.0.56.jar:9.0.56]
-	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61) [tomcat-embed-core-9.0.56.jar:9.0.56]
-	at java.lang.Thread.run(Thread.java:750) [?:1.8.0_371]
-Caused by: java.sql.SQLSyntaxErrorException: Table 'test_user.flow' doesn't exist
-	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:120) ~[mysql-connector-java-8.0.28.jar:8.0.28]
-	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122) ~[mysql-connector-java-8.0.28.jar:8.0.28]
-	at com.mysql.cj.jdbc.StatementImpl.executeQuery(StatementImpl.java:1201) ~[mysql-connector-java-8.0.28.jar:8.0.28]
-	at com.alibaba.druid.pool.DruidPooledStatement.executeQuery(DruidPooledStatement.java:308) ~[druid-1.2.8.jar:1.2.8]
-	at org.springframework.jdbc.core.JdbcTemplate$1QueryStatementCallback.doInStatement(JdbcTemplate.java:452) ~[spring-jdbc-5.3.14.jar:5.3.14]
-	at org.springframework.jdbc.core.JdbcTemplate.execute(JdbcTemplate.java:381) ~[spring-jdbc-5.3.14.jar:5.3.14]
-	... 62 more
-2023-07-24 18:39:42,504  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDQiLCJleHAiOjE2OTAyMDUyNTd9._Vl667Mj7S4NaPV15PaeaREuIx498tvBYW4piytcfaI
-2023-07-24 18:39:42,505  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDQiLCJleHAiOjE2OTAyMDUyNTd9._Vl667Mj7S4NaPV15PaeaREuIx498tvBYW4piytcfaI
-2023-07-24 18:39:42,505  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test04
-2023-07-24 18:39:42,505  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
-2023-07-24 18:39:42,506  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.getCurrUserId@get token|user_id=test04
-2023-07-24 18:39:42,509  INFO - [com.zulong.web.service.serviceimpl]FlowServiceImpl.createFlow@create flow|id=1000|version=0|current_time=2023-07-24 18:39:42
-2023-07-24 18:39:52,237  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDQiLCJleHAiOjE2OTAyMDUyNTd9._Vl667Mj7S4NaPV15PaeaREuIx498tvBYW4piytcfaI
-2023-07-24 18:39:52,238  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDQiLCJleHAiOjE2OTAyMDUyNTd9._Vl667Mj7S4NaPV15PaeaREuIx498tvBYW4piytcfaI
-2023-07-24 18:39:52,238  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test04
-2023-07-24 18:39:52,239  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
-2023-07-24 18:39:52,242  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.getCurrUserId@get token|user_id=test04
-2023-07-24 18:39:52,247  WARN - [com.zulong.web.controller]FlowController.createFLow@this user may not in the group|
-2023-07-24 18:40:09,942  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDQiLCJleHAiOjE2OTAyMDUyNTd9._Vl667Mj7S4NaPV15PaeaREuIx498tvBYW4piytcfaI
-2023-07-24 18:40:09,943  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDQiLCJleHAiOjE2OTAyMDUyNTd9._Vl667Mj7S4NaPV15PaeaREuIx498tvBYW4piytcfaI
-2023-07-24 18:40:09,943  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test04
-2023-07-24 18:40:09,943  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
-2023-07-24 18:40:09,945  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.getCurrUserId@get token|user_id=test04
-2023-07-24 18:40:09,947  WARN - [com.zulong.web.controller]FlowController.createFLow@this user may not in the group|
-2023-07-24 18:40:39,152  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDQiLCJleHAiOjE2OTAyMDUyNTd9._Vl667Mj7S4NaPV15PaeaREuIx498tvBYW4piytcfaI
-2023-07-24 18:40:39,152  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDQiLCJleHAiOjE2OTAyMDUyNTd9._Vl667Mj7S4NaPV15PaeaREuIx498tvBYW4piytcfaI
-2023-07-24 18:40:39,152  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test04
-2023-07-24 18:40:39,152  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
-2023-07-24 18:40:39,156  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.getCurrUserId@get token|user_id=test04
-2023-07-24 18:40:39,157  INFO - [com.zulong.web.service.serviceimpl]FlowServiceImpl.createFlow@create flow|id=1001|version=0|current_time=2023-07-24 18:40:39
-2023-07-24 18:40:47,501  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDQiLCJleHAiOjE2OTAyMDUyNTd9._Vl667Mj7S4NaPV15PaeaREuIx498tvBYW4piytcfaI
-2023-07-24 18:40:47,501  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDQiLCJleHAiOjE2OTAyMDUyNTd9._Vl667Mj7S4NaPV15PaeaREuIx498tvBYW4piytcfaI
-2023-07-24 18:40:47,501  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test04
-2023-07-24 18:40:47,501  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
-2023-07-24 18:40:53,154  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDQiLCJleHAiOjE2OTAyMDUyNTd9._Vl667Mj7S4NaPV15PaeaREuIx498tvBYW4piytcfaI
-2023-07-24 18:40:53,154  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDQiLCJleHAiOjE2OTAyMDUyNTd9._Vl667Mj7S4NaPV15PaeaREuIx498tvBYW4piytcfaI
-2023-07-24 18:40:53,154  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test04
-2023-07-24 18:40:53,154  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
-2023-07-24 18:41:02,030  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDQiLCJleHAiOjE2OTAyMDUyNTd9._Vl667Mj7S4NaPV15PaeaREuIx498tvBYW4piytcfaI
-2023-07-24 18:41:02,030  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDQiLCJleHAiOjE2OTAyMDUyNTd9._Vl667Mj7S4NaPV15PaeaREuIx498tvBYW4piytcfaI
-2023-07-24 18:41:02,030  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test04
-2023-07-24 18:41:02,030  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
-2023-07-24 18:41:02,037  INFO - [com.zulong.web.service.serviceimpl]FlowServiceImpl.commitFlow@commit flow success|record_id=1001
-2023-07-24 18:41:09,971  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDQiLCJleHAiOjE2OTAyMDUyNTd9._Vl667Mj7S4NaPV15PaeaREuIx498tvBYW4piytcfaI
-2023-07-24 18:41:09,972  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDQiLCJleHAiOjE2OTAyMDUyNTd9._Vl667Mj7S4NaPV15PaeaREuIx498tvBYW4piytcfaI
-2023-07-24 18:41:09,972  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test04
-2023-07-24 18:41:09,972  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
-2023-07-24 18:41:09,984  WARN - [com.zulong.web.dao.daoimpl]FlowDaoImpl.getFlowDetails@record_id is invalid|flow_id=1000|version=1
-org.springframework.dao.EmptyResultDataAccessException: Incorrect result size: expected 1, actual 0
-	at org.springframework.dao.support.DataAccessUtils.nullableSingleResult(DataAccessUtils.java:97) ~[spring-tx-5.3.14.jar:5.3.14]
-	at org.springframework.jdbc.core.JdbcTemplate.queryForObject(JdbcTemplate.java:880) ~[spring-jdbc-5.3.14.jar:5.3.14]
-	at com.zulong.web.dao.daoimpl.FlowDaoImpl.getFlowDetails(FlowDaoImpl.java:61) ~[classes/:?]
-	at com.zulong.web.dao.daoimpl.FlowDaoImpl$$FastClassBySpringCGLIB$$3de5a5c8.invoke(<generated>) ~[classes/:?]
-	at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:218) ~[spring-core-5.3.14.jar:5.3.14]
-	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.invokeJoinpoint(CglibAopProxy.java:783) ~[spring-aop-5.3.14.jar:5.3.14]
-	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163) ~[spring-aop-5.3.14.jar:5.3.14]
-	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:753) ~[spring-aop-5.3.14.jar:5.3.14]
-	at org.springframework.cache.interceptor.CacheInterceptor.lambda$invoke$0(CacheInterceptor.java:54) ~[spring-context-5.3.14.jar:5.3.14]
-	at org.springframework.cache.interceptor.CacheAspectSupport.invokeOperation(CacheAspectSupport.java:366) [spring-context-5.3.14.jar:5.3.14]
-	at org.springframework.cache.interceptor.CacheAspectSupport.execute(CacheAspectSupport.java:421) [spring-context-5.3.14.jar:5.3.14]
-	at org.springframework.cache.interceptor.CacheAspectSupport.execute(CacheAspectSupport.java:345) [spring-context-5.3.14.jar:5.3.14]
-	at org.springframework.cache.interceptor.CacheInterceptor.invoke(CacheInterceptor.java:64) [spring-context-5.3.14.jar:5.3.14]
-	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186) [spring-aop-5.3.14.jar:5.3.14]
-	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:753) [spring-aop-5.3.14.jar:5.3.14]
-	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:698) [spring-aop-5.3.14.jar:5.3.14]
-	at com.zulong.web.dao.daoimpl.FlowDaoImpl$$EnhancerBySpringCGLIB$$4b37c7d1.getFlowDetails(<generated>) [classes/:?]
-	at com.zulong.web.service.serviceimpl.FlowServiceImpl.getFlowDetails(FlowServiceImpl.java:232) [classes/:?]
-	at com.zulong.web.controller.FlowController.getFlowDetails(FlowController.java:304) [classes/:?]
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_371]
-	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_371]
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_371]
-	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_371]
-	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:205) [spring-web-5.3.14.jar:5.3.14]
-	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:150) [spring-web-5.3.14.jar:5.3.14]
-	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:117) [spring-webmvc-5.3.14.jar:5.3.14]
-	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:895) [spring-webmvc-5.3.14.jar:5.3.14]
-	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:808) [spring-webmvc-5.3.14.jar:5.3.14]
-	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87) [spring-webmvc-5.3.14.jar:5.3.14]
-	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1067) [spring-webmvc-5.3.14.jar:5.3.14]
-	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:963) [spring-webmvc-5.3.14.jar:5.3.14]
-	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1006) [spring-webmvc-5.3.14.jar:5.3.14]
-	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:909) [spring-webmvc-5.3.14.jar:5.3.14]
-	at javax.servlet.http.HttpServlet.service(HttpServlet.java:681) [tomcat-embed-core-9.0.56.jar:4.0.FR]
-	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:883) [spring-webmvc-5.3.14.jar:5.3.14]
-	at javax.servlet.http.HttpServlet.service(HttpServlet.java:764) [tomcat-embed-core-9.0.56.jar:4.0.FR]
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:227) [tomcat-embed-core-9.0.56.jar:9.0.56]
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162) [tomcat-embed-core-9.0.56.jar:9.0.56]
-	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53) [tomcat-embed-websocket-9.0.56.jar:9.0.56]
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189) [tomcat-embed-core-9.0.56.jar:9.0.56]
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162) [tomcat-embed-core-9.0.56.jar:9.0.56]
-	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100) [spring-web-5.3.14.jar:5.3.14]
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117) [spring-web-5.3.14.jar:5.3.14]
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189) [tomcat-embed-core-9.0.56.jar:9.0.56]
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162) [tomcat-embed-core-9.0.56.jar:9.0.56]
-	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93) [spring-web-5.3.14.jar:5.3.14]
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117) [spring-web-5.3.14.jar:5.3.14]
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189) [tomcat-embed-core-9.0.56.jar:9.0.56]
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162) [tomcat-embed-core-9.0.56.jar:9.0.56]
-	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201) [spring-web-5.3.14.jar:5.3.14]
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117) [spring-web-5.3.14.jar:5.3.14]
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189) [tomcat-embed-core-9.0.56.jar:9.0.56]
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162) [tomcat-embed-core-9.0.56.jar:9.0.56]
-	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:197) [tomcat-embed-core-9.0.56.jar:9.0.56]
-	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:97) [tomcat-embed-core-9.0.56.jar:9.0.56]
-	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:540) [tomcat-embed-core-9.0.56.jar:9.0.56]
-	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:135) [tomcat-embed-core-9.0.56.jar:9.0.56]
-	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92) [tomcat-embed-core-9.0.56.jar:9.0.56]
-	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:78) [tomcat-embed-core-9.0.56.jar:9.0.56]
-	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:357) [tomcat-embed-core-9.0.56.jar:9.0.56]
-	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:382) [tomcat-embed-core-9.0.56.jar:9.0.56]
-	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:65) [tomcat-embed-core-9.0.56.jar:9.0.56]
-	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:895) [tomcat-embed-core-9.0.56.jar:9.0.56]
-	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1732) [tomcat-embed-core-9.0.56.jar:9.0.56]
-	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49) [tomcat-embed-core-9.0.56.jar:9.0.56]
-	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191) [tomcat-embed-core-9.0.56.jar:9.0.56]
-	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659) [tomcat-embed-core-9.0.56.jar:9.0.56]
-	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61) [tomcat-embed-core-9.0.56.jar:9.0.56]
-	at java.lang.Thread.run(Thread.java:750) [?:1.8.0_371]
-2023-07-24 18:41:51,660  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDQiLCJleHAiOjE2OTAyMDUyNTd9._Vl667Mj7S4NaPV15PaeaREuIx498tvBYW4piytcfaI
-2023-07-24 18:41:51,661  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDQiLCJleHAiOjE2OTAyMDUyNTd9._Vl667Mj7S4NaPV15PaeaREuIx498tvBYW4piytcfaI
-2023-07-24 18:41:51,661  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test04
-2023-07-24 18:41:51,661  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
-2023-07-24 18:42:00,803  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDQiLCJleHAiOjE2OTAyMTM2NjF9.YBvJuR0247r8r5p-ct7MkqE_lQ4aZiYmq4FuXr5LBnA
-2023-07-24 18:42:00,803  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDQiLCJleHAiOjE2OTAyMTM2NjF9.YBvJuR0247r8r5p-ct7MkqE_lQ4aZiYmq4FuXr5LBnA
-2023-07-24 18:42:00,803  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test04
-2023-07-24 18:42:00,803  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
-2023-07-24 18:42:00,808  WARN - [com.zulong.web.service.serviceimpl]InstanceServiceImpl.instanceStartNode@nodeDao insert failed
-2023-07-24 18:42:24,707  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDQiLCJleHAiOjE2OTAyMTM2NjF9.YBvJuR0247r8r5p-ct7MkqE_lQ4aZiYmq4FuXr5LBnA
-2023-07-24 18:42:24,708  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDQiLCJleHAiOjE2OTAyMTM2NjF9.YBvJuR0247r8r5p-ct7MkqE_lQ4aZiYmq4FuXr5LBnA
-2023-07-24 18:42:24,708  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test04
-2023-07-24 18:42:24,708  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
-2023-07-24 18:42:24,712  WARN - [com.zulong.web.service.serviceimpl]InstanceServiceImpl.instanceStartNode@nodeDao insert failed
-2023-07-24 18:46:14,951  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDQiLCJleHAiOjE2OTAyMTM2NjF9.YBvJuR0247r8r5p-ct7MkqE_lQ4aZiYmq4FuXr5LBnA
-2023-07-24 18:46:14,951  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDQiLCJleHAiOjE2OTAyMTM2NjF9.YBvJuR0247r8r5p-ct7MkqE_lQ4aZiYmq4FuXr5LBnA
-2023-07-24 18:46:14,951  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test04
-2023-07-24 18:46:14,951  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
-2023-07-24 18:46:22,336  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDQiLCJleHAiOjE2OTAyMTM2NjF9.YBvJuR0247r8r5p-ct7MkqE_lQ4aZiYmq4FuXr5LBnA
-2023-07-24 18:46:22,336  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDQiLCJleHAiOjE2OTAyMTM2NjF9.YBvJuR0247r8r5p-ct7MkqE_lQ4aZiYmq4FuXr5LBnA
-2023-07-24 18:46:22,336  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test04
-2023-07-24 18:46:22,336  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
-2023-07-24 18:46:22,339  WARN - [com.zulong.web.service.serviceimpl]InstanceServiceImpl.instanceStartNode@nodeDao insert failed
-2023-07-24 18:48:06,172  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDQiLCJleHAiOjE2OTAyMTM2NjF9.YBvJuR0247r8r5p-ct7MkqE_lQ4aZiYmq4FuXr5LBnA
-2023-07-24 18:48:06,173  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDQiLCJleHAiOjE2OTAyMTM2NjF9.YBvJuR0247r8r5p-ct7MkqE_lQ4aZiYmq4FuXr5LBnA
-2023-07-24 18:48:06,173  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test04
-2023-07-24 18:48:06,173  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
-2023-07-24 18:48:06,182  WARN - [com.zulong.web.service.serviceimpl]InstanceServiceImpl.instanceStartNode@nodeDao insert failed
-2023-07-24 18:48:54,213  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDQiLCJleHAiOjE2OTAyMTM2NjF9.YBvJuR0247r8r5p-ct7MkqE_lQ4aZiYmq4FuXr5LBnA
-2023-07-24 18:48:54,214  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDQiLCJleHAiOjE2OTAyMTM2NjF9.YBvJuR0247r8r5p-ct7MkqE_lQ4aZiYmq4FuXr5LBnA
-2023-07-24 18:48:54,214  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test04
-2023-07-24 18:48:54,214  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
-2023-07-24 18:48:54,217  WARN - [com.zulong.web.service.serviceimpl]InstanceServiceImpl.instanceStartNode@nodeDao insert failed
-2023-07-24 18:50:36,801  INFO - [com.zulong.web]WebServerApplication.main@WebServer Application started
-2023-07-24 18:50:39,468  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDQiLCJleHAiOjE2OTAyMTM2NjF9.YBvJuR0247r8r5p-ct7MkqE_lQ4aZiYmq4FuXr5LBnA
-2023-07-24 18:50:39,493  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDQiLCJleHAiOjE2OTAyMTM2NjF9.YBvJuR0247r8r5p-ct7MkqE_lQ4aZiYmq4FuXr5LBnA
-2023-07-24 18:50:39,494  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test04
-2023-07-24 18:50:39,494  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
-2023-07-24 18:50:39,636  WARN - [com.zulong.web.service.serviceimpl]InstanceServiceImpl.instanceStartNode@nodeDao insert failed
-2023-07-24 18:51:23,628  INFO - [com.zulong.web]WebServerApplication.main@WebServer Application started
-2023-07-24 18:51:25,096  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDQiLCJleHAiOjE2OTAyMTM2NjF9.YBvJuR0247r8r5p-ct7MkqE_lQ4aZiYmq4FuXr5LBnA
-2023-07-24 18:51:25,120  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDQiLCJleHAiOjE2OTAyMTM2NjF9.YBvJuR0247r8r5p-ct7MkqE_lQ4aZiYmq4FuXr5LBnA
-2023-07-24 18:51:25,120  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test04
-2023-07-24 18:51:25,120  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
-2023-07-24 18:51:25,234  WARN - [com.zulong.web.service.serviceimpl]InstanceServiceImpl.instanceStartNode@nodeDao insert failed
-2023-07-24 18:51:25,235  WARN - [com.zulong.web.controller]InstanceController.instanceStartNode@create operation failed|flow_id=1001|node_id=ceshi
-2023-07-24 18:51:25,235  WARN - {AssetsRootDir=E:\MyWork\PackDemo\dst_trunk_android_mini}
-2023-07-24 18:53:21,426  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDQiLCJleHAiOjE2OTAyMTM2NjF9.YBvJuR0247r8r5p-ct7MkqE_lQ4aZiYmq4FuXr5LBnA
-2023-07-24 18:53:21,426  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDQiLCJleHAiOjE2OTAyMTM2NjF9.YBvJuR0247r8r5p-ct7MkqE_lQ4aZiYmq4FuXr5LBnA
-2023-07-24 18:53:21,426  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test04
-2023-07-24 18:53:21,426  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:03:07,140  INFO - [com.zulong.web]WebServerApplication.main@WebServer Application started
+2023-07-25 16:18:25,943  INFO - [com.zulong.web]WebServerApplication.main@WebServer Application started
+2023-07-25 16:19:09,195  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:19:09,225  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:19:09,225  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:19:09,225  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:19:11,374  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:19:11,374  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:19:11,374  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:19:11,374  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:19:11,381  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.getCurrUserId@get token|user_id=test03
+2023-07-25 16:19:13,851  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:19:13,852  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:19:13,852  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:19:13,852  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:19:14,160  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:19:14,160  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:19:14,160  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:19:14,160  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:19:37,878  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:19:37,878  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:19:37,878  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:19:37,878  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:19:38,770  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:19:38,770  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:19:38,770  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:19:38,770  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:19:38,772  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.getCurrUserId@get token|user_id=test03
+2023-07-25 16:19:48,834  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:19:48,834  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:19:48,834  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:19:48,834  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:20:17,165  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.sign@create token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDkyMTd9.1o16TDtVTnGWNvNwFhamNxp6ruNXd-X5W6sxKznfez0|user_id = test03
+2023-07-25 16:20:17,174  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDkyMTd9.1o16TDtVTnGWNvNwFhamNxp6ruNXd-X5W6sxKznfez0
+2023-07-25 16:20:17,174  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDkyMTd9.1o16TDtVTnGWNvNwFhamNxp6ruNXd-X5W6sxKznfez0
+2023-07-25 16:20:17,174  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:20:17,174  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:20:17,190  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDkyMTd9.1o16TDtVTnGWNvNwFhamNxp6ruNXd-X5W6sxKznfez0
+2023-07-25 16:20:17,190  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDkyMTd9.1o16TDtVTnGWNvNwFhamNxp6ruNXd-X5W6sxKznfez0
+2023-07-25 16:20:17,190  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:20:17,190  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:20:17,196  WARN - [com.zulong.web.service.serviceimpl]InstanceServiceImpl.instanceEndNode@nodeDao update flag is false|node_id = start|uuid = 0212288fb54344fb832a30297542f719|end_time = 2023-07-25-16-20-18|option = [{"name":"flowchartid","value":"1003"},{"name":"packconfig","value":"src_trunk\\Tools\\JenkinsPackConfig\\PackConfig.xml"},{"name":"branch","value":"trunk"},{"name":"platform","value":"android"},{"name":"workspace","value":"E:\\MyWork\\PackDemo"},{"name":"markasimportant","value":"false"},{"name":"issynclua","value":"true"},{"name":"issyncdata","value":"true"},{"name":"issyncmovie","value":"true"},{"name":"issyncsound","value":"true"},{"name":"unrealenginedir","value":"E:\\MyWork\\PackDemo\\src_trunk\\UE4Engine"},{"name":"sourcerootdir","value":"E:\\MyWork\\PackDemo\\src_trunk"},{"name":"assetsrootdir","value":"E:\\MyWork\\PackDemo\\dst_trunk_android_mini"},{"name":"assetssvn","value":"svn://10.236.101.11:13690/berry_pack_demo_bin/trunk/android_mini"},{"name":"clientsvn","value":"svn://10.236.101.13:3690/acoral/BerryPackDemo/trunk"},{"name":"androidetc2","value":"False"},{"name":"azuredir","value":"E:\\MyWork\\PackDemo\\src_trunk\\Azure"},{"name":"dstoutputpath","value":"E:\\MyWork\\PackDemo\\dst_trunk_android_mini\\Output"},{"name":"dstassetspath","value":"E:\\MyWork\\PackDemo\\dst_trunk_android_mini\\Output\\assets"}]|
+2023-07-25 16:20:17,198  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDkyMTd9.1o16TDtVTnGWNvNwFhamNxp6ruNXd-X5W6sxKznfez0
+2023-07-25 16:20:17,199  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDkyMTd9.1o16TDtVTnGWNvNwFhamNxp6ruNXd-X5W6sxKznfez0
+2023-07-25 16:20:17,199  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:20:17,199  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:20:17,205 ERROR - [com.zulong.web.dao.daoimpl]InstanceDaoImpl.findInstanceByUuid@select failed|uuid=0212288fb54344fb832a30297542f719
+2023-07-25 16:20:17,892  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDkyMTd9.1o16TDtVTnGWNvNwFhamNxp6ruNXd-X5W6sxKznfez0
+2023-07-25 16:20:17,893  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDkyMTd9.1o16TDtVTnGWNvNwFhamNxp6ruNXd-X5W6sxKznfez0
+2023-07-25 16:20:17,893  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:20:17,893  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:20:17,899  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDkyMTd9.1o16TDtVTnGWNvNwFhamNxp6ruNXd-X5W6sxKznfez0
+2023-07-25 16:20:17,899  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDkyMTd9.1o16TDtVTnGWNvNwFhamNxp6ruNXd-X5W6sxKznfez0
+2023-07-25 16:20:17,899  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:20:17,899  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:20:17,905  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDkyMTd9.1o16TDtVTnGWNvNwFhamNxp6ruNXd-X5W6sxKznfez0
+2023-07-25 16:20:17,905  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDkyMTd9.1o16TDtVTnGWNvNwFhamNxp6ruNXd-X5W6sxKznfez0
+2023-07-25 16:20:17,906  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:20:17,906  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:20:17,910  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDkyMTd9.1o16TDtVTnGWNvNwFhamNxp6ruNXd-X5W6sxKznfez0
+2023-07-25 16:20:17,911  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDkyMTd9.1o16TDtVTnGWNvNwFhamNxp6ruNXd-X5W6sxKznfez0
+2023-07-25 16:20:17,911  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:20:17,911  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:20:19,849  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDkyMTd9.1o16TDtVTnGWNvNwFhamNxp6ruNXd-X5W6sxKznfez0
+2023-07-25 16:20:19,850  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDkyMTd9.1o16TDtVTnGWNvNwFhamNxp6ruNXd-X5W6sxKznfez0
+2023-07-25 16:20:19,850  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:20:19,850  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:20:19,856  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDkyMTd9.1o16TDtVTnGWNvNwFhamNxp6ruNXd-X5W6sxKznfez0
+2023-07-25 16:20:19,856  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDkyMTd9.1o16TDtVTnGWNvNwFhamNxp6ruNXd-X5W6sxKznfez0
+2023-07-25 16:20:19,856  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:20:19,856  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:20:20,751  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDkyMTd9.1o16TDtVTnGWNvNwFhamNxp6ruNXd-X5W6sxKznfez0
+2023-07-25 16:20:20,752  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDkyMTd9.1o16TDtVTnGWNvNwFhamNxp6ruNXd-X5W6sxKznfez0
+2023-07-25 16:20:20,752  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:20:20,752  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:20:20,758  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDkyMTd9.1o16TDtVTnGWNvNwFhamNxp6ruNXd-X5W6sxKznfez0
+2023-07-25 16:20:20,758  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDkyMTd9.1o16TDtVTnGWNvNwFhamNxp6ruNXd-X5W6sxKznfez0
+2023-07-25 16:20:20,758  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:20:20,758  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:20:20,763  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDkyMTd9.1o16TDtVTnGWNvNwFhamNxp6ruNXd-X5W6sxKznfez0
+2023-07-25 16:20:20,763  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDkyMTd9.1o16TDtVTnGWNvNwFhamNxp6ruNXd-X5W6sxKznfez0
+2023-07-25 16:20:20,763  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:20:20,763  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:20:20,768  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDkyMTd9.1o16TDtVTnGWNvNwFhamNxp6ruNXd-X5W6sxKznfez0
+2023-07-25 16:20:20,769  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDkyMTd9.1o16TDtVTnGWNvNwFhamNxp6ruNXd-X5W6sxKznfez0
+2023-07-25 16:20:20,769  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:20:20,769  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:20:21,147  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDkyMTd9.1o16TDtVTnGWNvNwFhamNxp6ruNXd-X5W6sxKznfez0
+2023-07-25 16:20:21,148  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDkyMTd9.1o16TDtVTnGWNvNwFhamNxp6ruNXd-X5W6sxKznfez0
+2023-07-25 16:20:21,148  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:20:21,148  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:20:21,153  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDkyMTd9.1o16TDtVTnGWNvNwFhamNxp6ruNXd-X5W6sxKznfez0
+2023-07-25 16:20:21,153  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDkyMTd9.1o16TDtVTnGWNvNwFhamNxp6ruNXd-X5W6sxKznfez0
+2023-07-25 16:20:21,153  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:20:21,153  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:20:21,424  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDkyMTd9.1o16TDtVTnGWNvNwFhamNxp6ruNXd-X5W6sxKznfez0
+2023-07-25 16:20:21,424  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDkyMTd9.1o16TDtVTnGWNvNwFhamNxp6ruNXd-X5W6sxKznfez0
+2023-07-25 16:20:21,424  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:20:21,425  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:20:21,430  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDkyMTd9.1o16TDtVTnGWNvNwFhamNxp6ruNXd-X5W6sxKznfez0
+2023-07-25 16:20:21,431  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDkyMTd9.1o16TDtVTnGWNvNwFhamNxp6ruNXd-X5W6sxKznfez0
+2023-07-25 16:20:21,431  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:20:21,431  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:20:23,286  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDkyMTd9.1o16TDtVTnGWNvNwFhamNxp6ruNXd-X5W6sxKznfez0
+2023-07-25 16:20:23,286  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDkyMTd9.1o16TDtVTnGWNvNwFhamNxp6ruNXd-X5W6sxKznfez0
+2023-07-25 16:20:23,286  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:20:23,286  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:20:23,293  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDkyMTd9.1o16TDtVTnGWNvNwFhamNxp6ruNXd-X5W6sxKznfez0
+2023-07-25 16:20:23,293  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDkyMTd9.1o16TDtVTnGWNvNwFhamNxp6ruNXd-X5W6sxKznfez0
+2023-07-25 16:20:23,293  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:20:23,293  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:20:24,676  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDkyMTd9.1o16TDtVTnGWNvNwFhamNxp6ruNXd-X5W6sxKznfez0
+2023-07-25 16:20:24,677  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDkyMTd9.1o16TDtVTnGWNvNwFhamNxp6ruNXd-X5W6sxKznfez0
+2023-07-25 16:20:24,677  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:20:24,677  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:20:24,683  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDkyMTd9.1o16TDtVTnGWNvNwFhamNxp6ruNXd-X5W6sxKznfez0
+2023-07-25 16:20:24,683  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDkyMTd9.1o16TDtVTnGWNvNwFhamNxp6ruNXd-X5W6sxKznfez0
+2023-07-25 16:20:24,683  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:20:24,683  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:20:24,692  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDkyMTd9.1o16TDtVTnGWNvNwFhamNxp6ruNXd-X5W6sxKznfez0
+2023-07-25 16:20:24,692  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDkyMTd9.1o16TDtVTnGWNvNwFhamNxp6ruNXd-X5W6sxKznfez0
+2023-07-25 16:20:24,692  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:20:24,692  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:21:00,243  INFO - [com.zulong.web]WebServerApplication.main@WebServer Application started
+2023-07-25 16:22:18,208  INFO - [com.zulong.web]WebServerApplication.main@WebServer Application started
+2023-07-25 16:24:31,555  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4MDh9.xLftUplWdKmdpi9psK_8IXepw23yjZWmGHFh_fhUr1o
+2023-07-25 16:24:31,580  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4MDh9.xLftUplWdKmdpi9psK_8IXepw23yjZWmGHFh_fhUr1o
+2023-07-25 16:24:31,580  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:24:31,580  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:24:31,710 ERROR - [com.zulong.web.service.serviceimpl]InstanceServiceImpl.instanceStartNode@nodeDao insert failed|node_id=start|uuid=0212288fb54344fb832a30297542f719
+2023-07-25 16:26:30,070  INFO - [com.zulong.web]WebServerApplication.main@WebServer Application started
+2023-07-25 16:27:25,394  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:27:25,425  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:27:25,426  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:27:25,426  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:27:28,644  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:27:28,644  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:27:28,644  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:27:28,644  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:27:28,773  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:27:28,773  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:27:28,773  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:27:28,773  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:27:28,955  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:27:28,956  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:27:28,956  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:27:28,956  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:27:39,055  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:27:39,056  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:27:39,056  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:27:39,056  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:27:39,263  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:27:39,264  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:27:39,264  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:27:39,264  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:27:39,573  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:27:39,573  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:27:39,574  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:27:39,574  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:27:58,246  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:27:58,246  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:27:58,246  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:27:58,247  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:28:01,680  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:28:01,680  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:28:01,680  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:28:01,680  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:28:01,778  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:28:01,778  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:28:01,779  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:28:01,779  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:28:01,779  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:28:01,779  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:28:01,779  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:28:01,779  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:28:09,431  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:28:09,431  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:28:09,431  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:28:09,431  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:28:09,554  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:28:09,554  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:28:09,554  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:28:09,554  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:28:09,555  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:28:09,555  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:28:09,555  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:28:09,555  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:31:35,270  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:31:35,271  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:31:35,271  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:31:35,271  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:31:35,369  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:31:35,369  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:31:35,369  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:31:35,369  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:31:35,423  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:31:35,423  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:31:35,423  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:31:35,423  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:31:35,494  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:31:35,495  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:31:35,495  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:31:35,495  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:31:35,724  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:31:35,725  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:31:35,725  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:31:35,725  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:31:35,832  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:31:35,832  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:31:35,832  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:31:35,832  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:31:43,129  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:31:43,129  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:31:43,130  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:31:43,130  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:31:43,431  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:31:43,431  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:31:43,431  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:31:43,431  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:31:43,444  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:31:43,445  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:31:43,445  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:31:43,445  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:31:43,525  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:31:43,525  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:31:43,525  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:31:43,525  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:31:43,525  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:31:43,525  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:31:43,526  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:31:43,526  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:31:43,802  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:31:43,803  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:31:43,803  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:31:43,803  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:32:08,673  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:32:08,674  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:32:08,674  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:32:08,674  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:32:08,958  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:32:08,958  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:32:08,958  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:32:08,958  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:32:08,958  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:32:08,958  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:32:08,958  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:32:08,958  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:32:08,958  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:32:08,958  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:32:08,958  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:32:08,959  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:32:09,037  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:32:09,038  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:32:09,038  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:32:09,038  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:32:09,078  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:32:09,078  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:32:09,078  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:32:09,078  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:32:15,959  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:32:15,959  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:32:15,959  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:32:15,959  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:32:15,967  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:32:15,967  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:32:15,967  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:32:15,967  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:32:16,348  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:32:16,348  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:32:16,348  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:32:16,348  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:32:16,348  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:32:16,349  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:32:16,349  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:32:16,349  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:32:16,396  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:32:16,396  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:32:16,396  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:32:16,396  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:32:16,396  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:32:16,396  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:32:16,396  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:32:16,396  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:32:24,104  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:32:24,104  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:32:24,104  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:32:24,104  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:32:24,394  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:32:24,394  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:32:24,394  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:32:24,394  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:32:24,427  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:32:24,427  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:32:24,427  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:32:24,427  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:32:24,488  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:32:24,488  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:32:24,488  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:32:24,488  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:32:24,488  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:32:24,488  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:32:24,488  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:32:24,488  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:32:24,765  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:32:24,765  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:32:24,765  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:32:24,765  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:32:27,102  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:32:27,102  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:32:27,102  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:32:27,102  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:32:27,407  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:32:27,407  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:32:27,407  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:32:27,407  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:32:27,414  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:32:27,415  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:32:27,415  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:32:27,415  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:32:27,484  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:32:27,484  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:32:27,485  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:32:27,485  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:32:27,485  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:32:27,485  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:32:27,485  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:32:27,485  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:32:27,775  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:32:27,776  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:32:27,776  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:32:27,776  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:32:49,390  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:32:49,390  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:32:49,390  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:32:49,390  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:32:49,623  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:32:49,623  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:32:49,623  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:32:49,623  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:32:49,673  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:32:49,674  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:32:49,674  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:32:49,674  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:32:49,674  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:32:49,674  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:32:49,674  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:32:49,674  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:32:49,687  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:32:49,687  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:32:49,687  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:32:49,687  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:32:49,698  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:32:49,698  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4OTR9.rUlMdWcespbm5lioDkpL2_TviYUvqpwHwvP5LkswQgc
+2023-07-25 16:32:49,698  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:32:49,698  INFO - [com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=true
+2023-07-25 16:34:42,572  INFO - [com.zulong.web]WebServerApplication.main@WebServer Application started
+2023-07-25 16:34:47,448  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMDA4MDh9.xLftUplWdKmdpi9psK_8IXepw23yjZWmGHFh_fhUr1o
+2023-07-25 16:34:47,448  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:36:28,659  INFO - [com.zulong.web]WebServerApplication.main@WebServer Application started
+2023-07-25 16:36:45,076  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.sign@create token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMTAyMDV9.Ew8t37hyDenENOjZKxiuk7AO3GAuatTVIN1TSvzQCbI|user_id = test03
+2023-07-25 16:36:45,112  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:36:45,150  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:36:45,186  WARN - [com.zulong.web.service.serviceimpl]InstanceServiceImpl.instanceEndNode@nodeDao update flag is false|node_id = start|uuid = c4f657966b294918adf73b3294d9e1cf|end_time = 2023-07-25-16-36-46|option = [{"name":"flowchartid","value":"1003"},{"name":"packconfig","value":"src_trunk\\Tools\\JenkinsPackConfig\\PackConfig.xml"},{"name":"branch","value":"trunk"},{"name":"platform","value":"android"},{"name":"workspace","value":"E:\\MyWork\\PackDemo"},{"name":"markasimportant","value":"false"},{"name":"issynclua","value":"true"},{"name":"issyncdata","value":"true"},{"name":"issyncmovie","value":"true"},{"name":"issyncsound","value":"true"},{"name":"unrealenginedir","value":"E:\\MyWork\\PackDemo\\src_trunk\\UE4Engine"},{"name":"sourcerootdir","value":"E:\\MyWork\\PackDemo\\src_trunk"},{"name":"assetsrootdir","value":"E:\\MyWork\\PackDemo\\dst_trunk_android_mini"},{"name":"assetssvn","value":"svn://10.236.101.11:13690/berry_pack_demo_bin/trunk/android_mini"},{"name":"clientsvn","value":"svn://10.236.101.13:3690/acoral/BerryPackDemo/trunk"},{"name":"androidetc2","value":"False"},{"name":"azuredir","value":"E:\\MyWork\\PackDemo\\src_trunk\\Azure"},{"name":"dstoutputpath","value":"E:\\MyWork\\PackDemo\\dst_trunk_android_mini\\Output"},{"name":"dstassetspath","value":"E:\\MyWork\\PackDemo\\dst_trunk_android_mini\\Output\\assets"}]|
+2023-07-25 16:36:45,186 ERROR - [com.zulong.web.controller]InstanceController.instanceEndNode@create operation failed|flow_id=1009|node_id=start
+2023-07-25 16:36:45,189  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:36:45,198 ERROR - [com.zulong.web.dao.daoimpl]InstanceDaoImpl.findInstanceByUuid@select failed|uuid=c4f657966b294918adf73b3294d9e1cf
+2023-07-25 16:36:46,178  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:36:46,186  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:36:46,213  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:36:46,221  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:36:47,731  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:36:47,738  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:36:48,424  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:36:48,430  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:36:48,435  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:36:48,442  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:36:51,581  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:36:51,587  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:36:51,872  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:36:51,879  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:36:54,252  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:36:54,259  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:36:55,936  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:36:55,942  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:36:55,950  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:38:45,454  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:38:45,470  WARN - [com.zulong.web.service.serviceimpl]InstanceServiceImpl.instanceEndNode@nodeDao update flag is false|node_id = start|uuid = c4f657966b294918adf73b3294d9e1cf|end_time = 2023-07-25-16-36-46|option = [{"name":"flowchartid","value":"1003"},{"name":"packconfig","value":"src_trunk\\Tools\\JenkinsPackConfig\\PackConfig.xml"},{"name":"branch","value":"trunk"},{"name":"platform","value":"android"},{"name":"workspace","value":"E:\\MyWork\\PackDemo"},{"name":"markasimportant","value":"false"},{"name":"issynclua","value":"true"},{"name":"issyncdata","value":"true"},{"name":"issyncmovie","value":"true"},{"name":"issyncsound","value":"true"},{"name":"unrealenginedir","value":"E:\\MyWork\\PackDemo\\src_trunk\\UE4Engine"},{"name":"sourcerootdir","value":"E:\\MyWork\\PackDemo\\src_trunk"},{"name":"assetsrootdir","value":"E:\\MyWork\\PackDemo\\dst_trunk_android_mini"},{"name":"assetssvn","value":"svn://10.236.101.11:13690/berry_pack_demo_bin/trunk/android_mini"},{"name":"clientsvn","value":"svn://10.236.101.13:3690/acoral/BerryPackDemo/trunk"},{"name":"androidetc2","value":"False"},{"name":"azuredir","value":"E:\\MyWork\\PackDemo\\src_trunk\\Azure"},{"name":"dstoutputpath","value":"E:\\MyWork\\PackDemo\\dst_trunk_android_mini\\Output"},{"name":"dstassetspath","value":"E:\\MyWork\\PackDemo\\dst_trunk_android_mini\\Output\\assets"}]|
+2023-07-25 16:38:45,470 ERROR - [com.zulong.web.controller]InstanceController.instanceEndNode@create operation failed|flow_id=1009|node_id=start
+2023-07-25 16:39:40,786  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:40:16,998  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:44:25,900  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.sign@create token|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoMCIsInVzZXJfaWQiOiJ0ZXN0MDMiLCJleHAiOjE2OTAzMTA2NjV9.trFipiq6CfL5YmXYJkxMbut178vYjtQpzB8OqgtEqt0|user_id = test03
+2023-07-25 16:44:25,908  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:44:25,922  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:44:25,927 ERROR - [com.zulong.web.dao.daoimpl]InstanceDaoImpl.findInstanceByUuid@select failed|uuid=cac851a503cc48959627ba022269042e
+2023-07-25 16:44:25,934  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:44:25,941  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:44:26,711  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:44:26,716  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:44:26,722  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:44:26,727  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:44:27,704  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:44:27,709  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:44:28,617  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:44:28,623  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:44:28,628  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:44:28,632  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:44:33,015  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:44:33,021  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:44:33,283  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:44:33,289  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:44:35,202  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:44:35,207  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:44:36,448  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:44:36,456  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:44:36,462  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:44:50,675  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:45:02,974  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:45:08,837  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:45:40,858  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:45:47,172  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:45:47,285  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:45:47,285  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:46:07,499  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:46:07,623  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:46:07,850  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:47:43,986  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:47:44,120  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:47:44,119  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:49:30,881  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:49:31,126  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:49:31,297  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:57:43,009  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03
+2023-07-25 16:58:36,738  INFO - [com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=test03

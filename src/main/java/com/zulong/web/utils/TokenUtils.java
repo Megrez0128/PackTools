@@ -126,8 +126,8 @@ public class TokenUtils {//token到期时间10小时
             JWTVerifier jwtVerifier=JWT.require(Algorithm.HMAC256(TOKEN_SECRET)).withIssuer("auth0").build();
             DecodedJWT decodedJWT=jwtVerifier.verify(token);
             String user_id = decodedJWT.getClaim("user_id").asString();
-            LoggerManager.logger().info(String.format(
-                    "[com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=%s", token));
+//            LoggerManager.logger().info(String.format(
+//                    "[com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=%s", token));
             LoggerManager.logger().info(String.format(
                     "[com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=%s", user_id));
             return user_id;

@@ -14,10 +14,12 @@ public class ConstantConfig {
     public static final int RETURN_SUCCESS = 20000;
     public static final int RETURN_EXIST_INSTANCE = 30300;  // 在删除Flow时使用
     public static final int RETURN_DATABASE_WRONG = 30400;
+    public static final int RETURN_DUPLICATE_NODE = 30500;
     public static final int RETURN_PARAMS_WRONG = 40000;
     public static final int RETURN_NO_AUTHORITY = 40100;
     public static final int RETURN_NO_OBJECT = 40600;  // 修改用户/组时被修改的对象不存在
     public static final int RETURN_SERVER_WRONG = 50000;
+    public static final int RETURN_USER_NOT_EXISTS = 40400;
     //用户不在组中
 
     //该组没有该meta的权限

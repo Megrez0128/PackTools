@@ -37,9 +37,9 @@
 //    }
 //    private void redirectToURL(SAMLBaseFunction.UserInfo userInfo, String goToURL, HttpServletRequest request, HttpServletResponse response) throws IOException, IllegalAccessException {
 //        String ip = CommonTools.getRemoteIp(request);
-//        //根据TdP信息获取 SP系统的登录情况
+//        //根据IdP信息获取SP系统的登录情况
 //        String token = TokenUtils.getToken(userInfo.getUserName(), ip);
-//        //Tokenindex
+//        //带着Token回调到index
 //        if(goToURL == null){
 //            StringBuffer url = request.getRequestURL();
 //            goToURL = url.delete(url.length() - request.getRequestURI().length(), url.length()).
@@ -54,7 +54,7 @@
 //    public void samlAuth(HttpServletRequest request, HttpServletResponse response) {
 //        String ip = CommonTools.getRemoteIp(request);
 //        try {
-//            //SAML ResponserequestIDIdP
+//            //从SAML Response中获取requestID和IdP
 //            Pair<String, SAMLBaseFunction.UserInfo> res = Config.samlFunction.
 //                    getAndSetUserInfoByIDPResponse(request);
 //            if(res == null){
@@ -62,7 +62,7 @@
 //                return;
 //            }
 //            String requestID = res.first;
-//            //IdPSP
+//            //根据IdP登录信息获取SP的登录信息，并回调至指定资源页
 //            redirectToURL(res.second, Config.samlFunction.getGoToURLFromSessionByRequestID
 //                    (request, requestID), request, response);
 //        } catch (Exception e) {

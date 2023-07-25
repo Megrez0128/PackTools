@@ -115,9 +115,7 @@ public class AuthenticationServiceImpl implements AuthenticationService{
         int group_id;
         for(Group group : grouplist) {
             group_id = group.getGroup_id();
-            if(hasFlowPermission(group_id, flow_id)) {
-                if(administrationDao.getUpdateAllowance(user_id, group_id)) return true;
-            }
+            if(hasFlowPermission(group_id, flow_id) && administrationDao.getUpdateAllowance(user_id, group_id)) return true;
         }
         return false;
     }
@@ -135,9 +133,7 @@ public class AuthenticationServiceImpl implements AuthenticationService{
         int group_id;
         for(Group group : grouplist) {
             group_id = group.getGroup_id();
-            if(hasFlowPermission(group_id, flow_id)) {
-                if(administrationDao.getDeleteAllowance(user_id, group_id)) return true;
-            }
+            if(hasFlowPermission(group_id, flow_id) && administrationDao.getDeleteAllowance(user_id, group_id)) return true;
         }
         return false;
     }

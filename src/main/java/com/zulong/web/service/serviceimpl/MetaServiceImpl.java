@@ -56,7 +56,7 @@ public class MetaServiceImpl implements MetaService {
     }
 
     @Override
-    public Map<String, Object> getAllMeta(){
+    public List<Object> getAllMeta(){
         return metaDao.getAllMeta();
     }
 

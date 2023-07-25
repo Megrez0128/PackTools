@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.zulong.web.utils.ParamsUtil;
 import com.zulong.web.utils.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -31,59 +32,87 @@ public class FlowController
         this.authenticationService = authenticationService;
     }
 
+    public static Map<String, Object> errorResponse(final Map<String, Object> response, int errorCode, final String message) {
+        response.put("code", errorCode);
+        response.put("message", message);
+        return response;
+    }
+
+    public static Map<String, Object> successResponse(final Map<String, Object> response, final Object data) {
+        response.put("code", RETURN_SUCCESS);
+        response.put("data", data);
+        return response;
+    }
+
+    public static Object getParam(Map<String, Object> request, String varName, String functionName){
+        return ParamsUtil.getParam(request,varName,"FlowController", functionName);
+    }
+
     @PostMapping(value = "/create")
-    public Map<String, Object> createFlow(@RequestBody Map<String, String> request, @RequestHeader("Authorization") String token) {
+    public Map<String, Object> createFlow(@RequestBody Map<String, Object> request, @RequestHeader("Authorization") String token) {
 
         int meta_id; //todo:验证这个meta是否属于这个group
         String graph_data;
         String blackboard;
-        int group_id; //have done:验证这个user是否属于这个group
+        int group_id;
         String name;
         String des;
         Map<String, Object> response = new HashMap<>();
         try {
-            meta_id = Integer.parseInt(request.get("meta_id"));
-            graph_data = request.get("graph_data");
-            blackboard = request.get("blackboard");
-            group_id = Integer.parseInt(request.get("group_id"));
-            name =  request.get("name");
-            des =  request.get("des");
-            LoggerManager.logger().debug(String.format("[com.zulong.web.controller]FlowController.createFLow@ success receive post|"));
+            //meta_id = Integer.parseInt(request.get("meta_id"));
+            Object tmp = getParam(request,"meta_id","createFlow");
+            if(tmp == null) {
+                  return errorResponse(response, RETURN_PARAMS_WRONG, "meta_id is null");
+            }
+            meta_id =(int) tmp;
+            graph_data =(String) getParam(request,"graph_data","createFlow");
+            if(graph_data == null) {
+                return errorResponse(response, RETURN_PARAMS_WRONG, "graph_data is null");
+            }
+            blackboard  = (String) getParam(request,"blackboard","createFlow");
+            if(blackboard == null) {
+                return errorResponse(response, RETURN_PARAMS_WRONG, "blackboard is null");
+            }
+            tmp = getParam(request,"group_id","createFlow");
+            if(tmp == null) {
+                return errorResponse(response, RETURN_PARAMS_WRONG, "group_id is null");
+            }
+            group_id  =(int) tmp;
+            name = (String) getParam(request,"name","createFlow");
+            if(name == null) {
+                return errorResponse(response, RETURN_PARAMS_WRONG, "name is null");
+            }
+            des = (String) getParam(request,"des","createFlow");
+            if(des == null) {
+                return errorResponse(response, RETURN_PARAMS_WRONG, "des is null");
+            }
         } catch(Exception e) {
-            LoggerManager.logger().warn("[com.zulong.web.controller]FlowController.createFlow@params are wrong|", e);
-            response.put("code", RETURN_PARAMS_WRONG);
-            response.put("message", e.getMessage());
-            return response;
+            LoggerManager.logger().error("[com.zulong.web.controller]FlowController.createFlow@params are wrong|", e);
+            return errorResponse(response, RETURN_PARAMS_WRONG, e.getMessage());
         }
 
         //have done:判断这个curr_user_id是否属于这个group
         try{
-            boolean flag = authenticationService.isUserInGroup(TokenUtils.getCurrUserId(token),group_id);
+            boolean flag = authenticationService.isUserInGroup(TokenUtils.getCurrUserId(token), group_id);
             if(!flag){
-                LoggerManager.logger().warn("[com.zulong.web.controller]FlowController.createFLow@this user may not in the group|");
+                LoggerManager.logger().error("[com.zulong.web.controller]FlowController.createFLow@this user may not in the group|");
                 response = new HashMap<>();
                 response.put("code", RETURN_PARAMS_WRONG);
                 response.put("message", "this user may not in the group");
                 return response;
             }
         }catch (Exception e){
-            LoggerManager.logger().warn("[com.zulong.web.controller]FlowController.getFlowList@this user may not in the group|", e);
+            LoggerManager.logger().error("[com.zulong.web.controller]FlowController.getFlowList@this user may not in the group|", e);
             response = new HashMap<>();
-            response.put("code", RETURN_SERVER_WRONG);
-            response.put("message", e.getMessage());
-            return response;
+            return errorResponse(response, RETURN_SERVER_WRONG, e.getMessage());
         }
 
         try {
             Flow flow = flowService.createFlow(graph_data, blackboard, meta_id, group_id, name, des);
-            response.put("code", RETURN_SUCCESS);
-            response.put("data", flow);
-            return response;
+            return successResponse(response, flow);
         } catch (Exception e) {
-            LoggerManager.logger().warn("[com.zulong.web.controller]FlowController.createFlow@operation failed|", e);
-            response.put("code", RETURN_SERVER_WRONG);
-            response.put("message", e.getMessage());
-            return response;
+            LoggerManager.logger().error("[com.zulong.web.controller]FlowController.createFlow@operation failed|", e);
+            return errorResponse(response, RETURN_SERVER_WRONG, e.getMessage());
         }
     }
 
@@ -98,25 +127,31 @@ public class FlowController
         String des;
         Map<String, Object> response = new HashMap<>();
         try {
-            record_id = (int) request.get("record_id");
-            name = (String) request.get("name");
-            des = (String) request.get("des");
+            Object tmp = getParam(request,"record_id","cloneFlow");
+            if(tmp == null) {
+                return errorResponse(response, RETURN_PARAMS_WRONG, "record_id is null");
+            }
+            record_id = (int) tmp;
+
+            name = (String) getParam(request,"name","cloneFlow");
+            if(name == null) {
+                return errorResponse(response, RETURN_PARAMS_WRONG, "name is null");
+            }
+
+            des = (String) getParam(request,"des","cloneFlow");
+            if(des == null) {
+                return errorResponse(response, RETURN_PARAMS_WRONG, "des is null");
+            }
         } catch (Exception e) {
-            LoggerManager.logger().warn(String.format("[com.zulong.web.controller]FlowController.cloneFlow@params are wrong|"), e);
-            response.put("code", RETURN_PARAMS_WRONG);
-            response.put("message", e.getMessage());
-            return response;
+            LoggerManager.logger().error(String.format("[com.zulong.web.controller]FlowController.cloneFlow@params are wrong|"), e);
+            return errorResponse(response, RETURN_PARAMS_WRONG, e.getMessage());
         }
         try {
             Flow flow = flowService.cloneFlow(record_id, name, des);
-            response.put("code", RETURN_SUCCESS);
-            response.put("data", flow);
-            return response;
+            return successResponse(response, flow);
         } catch (Exception e) {
-            LoggerManager.logger().warn(String.format("[com.zulong.web.controller]FlowController.cloneFlow@operation failed|record_id=%d", record_id), e);
-            response.put("code", RETURN_SERVER_WRONG);
-            response.put("message", e.getMessage());
-            return response;
+            LoggerManager.logger().error(String.format("[com.zulong.web.controller]FlowController.cloneFlow@operation failed|record_id=%d", record_id), e);
+            return errorResponse(response, RETURN_SERVER_WRONG, e.getMessage());
         }
     }
 
@@ -125,28 +160,27 @@ public class FlowController
         //todo:验证curr_user_id是否有commit这个flow的权限
         int record_id;
         String commit_message;
+        Map<String, Object> response = new HashMap<>();
         try {
-            record_id = (int) request.get("record_id");
-            commit_message = (String) request.get("commit_message");
+            Object tmp = getParam(request,"record_id","commitFlow");
+            if(tmp == null) {
+                return errorResponse(response, RETURN_PARAMS_WRONG, "record_id is null");
+            }
+            record_id = (int) tmp;
+            commit_message = (String)  getParam(request,"commit_message","commitFlow");
+            if(commit_message == null) {
+                return errorResponse(response, RETURN_PARAMS_WRONG, "commit_message is null");
+            }
         } catch (Exception e){
-            LoggerManager.logger().warn("[com.zulong.web.controller]FlowController.commitFlow@params are wrong|", e);
-            Map<String, Object> response = new HashMap<>();
-            response.put("code", RETURN_PARAMS_WRONG);
-            response.put("message", e.getMessage());
-            return response;
+            LoggerManager.logger().error("[com.zulong.web.controller]FlowController.commitFlow@params are wrong|", e);
+            return errorResponse(response, RETURN_PARAMS_WRONG, e.getMessage());
         }
         try {
             Flow flow = flowService.commitFlow(record_id, commit_message);
-            Map<String, Object> response = new HashMap<>();
-            response.put("code", RETURN_SUCCESS);
-            response.put("data", flow);
-            return response;
+            return successResponse(response, flow);
         } catch (Exception e) {
-            LoggerManager.logger().warn("[com.zulong.web.controller]FlowController.commitFlow@operation failed|", e);
-            Map<String, Object> response = new HashMap<>();
-            response.put("code", RETURN_SERVER_WRONG);
-            response.put("message", e.getMessage());
-            return response;
+            LoggerManager.logger().error("[com.zulong.web.controller]FlowController.commitFlow@operation failed|", e);
+            return errorResponse(response, RETURN_SERVER_WRONG, e.getMessage());
         }
     }
     
@@ -163,12 +197,14 @@ public class FlowController
         int record_id;
         Map<String, Object> response = new HashMap<>();
         try {
-            record_id = (int) request.get("record_id");
+            Object tmp = getParam(request,"record_id","deleteFlow");
+            if(tmp == null) {
+                return errorResponse(response, RETURN_PARAMS_WRONG, "record_id is null");
+            }
+            record_id = (int) tmp;
         } catch (Exception e) {
-            LoggerManager.logger().warn("[com.zulong.web.controller]FlowController.deleteFlow@params are wrong|", e);
-            response.put("code", RETURN_PARAMS_WRONG);
-            response.put("message", e.getMessage());
-            return response;
+            LoggerManager.logger().error("[com.zulong.web.controller]FlowController.deleteFlow@params record_id is wrong|", e);
+            return errorResponse(response, RETURN_PARAMS_WRONG, e.getMessage());
         }
         try {
             int result = flowService.deleteFlow(record_id);
@@ -186,16 +222,13 @@ public class FlowController
             }
             return response;
         } catch (Exception e) {
-            LoggerManager.logger().warn(String.format("[com.zulong.web.controller]FlowController.deleteFlow@deletion operation failed|record_id=%d", record_id), e);
-            response.put("code", RETURN_SERVER_WRONG);
-            response.put("message", e.getMessage());
-            return response;
+            LoggerManager.logger().error(String.format("[com.zulong.web.controller]FlowController.deleteFlow@deletion operation failed|record_id=%d", record_id), e);
+            return errorResponse(response, RETURN_SERVER_WRONG, e.getMessage());
         }
     }
 
     /**
      * 对应flow-更新流程-save/update接口
-     *
      * @param request
      * @param token
      * @return
@@ -214,27 +247,38 @@ public class FlowController
         String blackboard;
         Map<String, Object> response = new HashMap<>();
         try {
-            flow_id = (int) request.get("flow_id");
-            commit_message = (String) request.get("commit_message");
-            meta_id = (Integer) request.get("meta_id");
-            graph_data = (String) request.get("graph_data");
-            blackboard = (String) request.get("blackboard");
+            Object tmp = getParam(request,"flow_id","saveFlow");
+            if(tmp == null) {
+                return errorResponse(response, RETURN_PARAMS_WRONG, "flow_id is null");
+            }
+            flow_id = (int) tmp;
+            tmp = getParam(request,"meta_id","saveFlow");
+            if(tmp == null) {
+                return errorResponse(response, RETURN_PARAMS_WRONG, "meta_id is null");
+            }
+            meta_id = (int) tmp;
+            commit_message = (String) getParam(request,"commit_message","saveFlow");
+            if(commit_message == null) {
+                return errorResponse(response, RETURN_PARAMS_WRONG, "commit_message is null");
+            }
+            graph_data = (String) getParam(request,"graph_data","saveFlow");
+            if(graph_data == null) {
+                return errorResponse(response, RETURN_PARAMS_WRONG, "graph_data is null");
+            }
+            blackboard = (String) getParam(request,"blackboard","saveFlow");
+            if(blackboard == null) {
+                return errorResponse(response, RETURN_PARAMS_WRONG, "blackboard is null");
+            }
         } catch (Exception e) {
-            LoggerManager.logger().warn("[com.zulong.web.controller]FlowController.saveFlow@params are wrong|", e);
-            response.put("code", RETURN_PARAMS_WRONG);
-            response.put("message", e.getMessage());
-            return response;
+            LoggerManager.logger().error("[com.zulong.web.controller]FlowController.saveFlow@params are wrong|", e);
+            return errorResponse(response, RETURN_PARAMS_WRONG, e.getMessage());
         }
         try {
             Flow result = flowService.saveFlow(flow_id, commit_message, meta_id, graph_data, blackboard);
-            response.put("code", RETURN_SUCCESS);
-            response.put("data", result);
-            return response;
+            return successResponse(response, result);
         } catch (Exception e) {
-            LoggerManager.logger().warn(String.format("[com.zulong.web.controller]FlowController.saveFlow@saving operation failed|flow_id=%d", flow_id), e);
-            response.put("code", RETURN_SERVER_WRONG);
-            response.put("message", e.getMessage());
-            return response;
+            LoggerManager.logger().error(String.format("[com.zulong.web.controller]FlowController.saveFlow@saving operation failed|flow_id=%d", flow_id), e);
+            return errorResponse(response, RETURN_SERVER_WRONG, e.getMessage());
         }
     }
 
@@ -244,19 +288,20 @@ public class FlowController
      * @return 所有中的最大
      */
     @PostMapping(value = "/maxrecord")
-    public Map<String ,Object> getMaxRecordIdDetails(@RequestBody Map<String, Integer> request){
+    public Map<String ,Object> getMaxRecordIdDetails(@RequestBody Map<String, Object> request){
         Map<String, Object> response = new HashMap<>();
+        int flow_id;
         try {
-            int flow_id = request.get("flow_id");
+            Object tmp = getParam(request,"flow_id","saveFlow");
+            if(tmp == null) {
+                return errorResponse(response, RETURN_PARAMS_WRONG, "flow_id is null");
+            }
+            flow_id = (int) tmp;
             Flow flow = flowService.getNewestFlow(flow_id);
-            response.put("code", RETURN_SUCCESS);
-            response.put("data", flow);
-            return response;
+            return successResponse(response, flow);
         } catch (Exception e) {
-            LoggerManager.logger().warn("[com.zulong.web.controller]FlowController.getNewVersionFlow@cannot get the flow|", e);
-            response.put("code", RETURN_SERVER_WRONG);
-            response.put("message", e.getMessage());
-            return response;
+            LoggerManager.logger().error("[com.zulong.web.controller]FlowController.getNewVersionFlow@cannot get the flow|", e);
+            return errorResponse(response, RETURN_SERVER_WRONG, e.getMessage());
         }
     }
 
@@ -269,78 +314,74 @@ public class FlowController
      * 返回一个Flow实例
      */
     @PostMapping(value="/detail")
-    public Map<String, Object> getFlowDetails(@RequestBody Map<String, Integer> request) {
+    public Map<String, Object> getFlowDetails(@RequestBody Map<String, Object> request) {
         //todo:验证curr_user_id是否有访问这个flow历史的权限，或许看的权限是所有人都有的，不需要验证
         int record_id;
         Map<String, Object> response = new HashMap<>();
-        record_id = request.getOrDefault("record_id",-1);
+        record_id = (int) request.getOrDefault("record_id", -1);
+//        record_id = Integer.parseInt(recordIdStr);
         if(record_id != -1){
             try {
                 Flow flow = flowService.getFlowDetailsByID(record_id);
-                response.put("code", RETURN_SUCCESS);
-                response.put("data", flow);
-                return response;
+                return successResponse(response, flow);
             } catch (Exception e) {
-                LoggerManager.logger().warn("[com.zulong.web.controller]FlowController.getFlowDetails@operation failed|", e);
-                response.put("code", RETURN_SERVER_WRONG);
-                response.put("message", e.getMessage());
-                return response;
+                LoggerManager.logger().error(String.format("[com.zulong.web.controller]FlowController.getFlowDetails@operation failed|record_id=%d", record_id), e);
+                return errorResponse(response, RETURN_SERVER_WRONG, e.getMessage());
             }
         }
 
         int flow_id;
         int version;
         try {
-            flow_id = request.get("flow_id");
-            version = request.get("version");
+            Object tmp = getParam(request,"flow_id","getFlowDetails");
+            if(tmp == null) {
+                return errorResponse(response, RETURN_PARAMS_WRONG, "flow_id is null");
+            }
+            flow_id = (int) tmp;
+            tmp = getParam(request,"version","getFlowDetails");
+            if(tmp == null) {
+                return errorResponse(response, RETURN_PARAMS_WRONG, "version is null");
+            }
+            version = (int) tmp;
         } catch (Exception e) {
-            LoggerManager.logger().warn("[com.zulong.web.controller]FlowController.getFlowDetails@params are wrong|", e);
-
-            response.put("code", RETURN_PARAMS_WRONG);
-            response.put("message", e.getMessage());
-            return response;
+            LoggerManager.logger().error("[com.zulong.web.controller]FlowController.getFlowDetails@params are wrong|", e);
+            return errorResponse(response, RETURN_PARAMS_WRONG, e.getMessage());
         }
         try {
             Flow flow = flowService.getFlowDetails(flow_id, version);
-            response.put("code", RETURN_SUCCESS);
-            response.put("data", flow);
-            return response;
+            if(flow == null) {
+                return errorResponse(response, RETURN_NO_OBJECT, "the flow doesn't exist");
+            }
+            return successResponse(response, flow);
         } catch (Exception e) {
-            LoggerManager.logger().warn("[com.zulong.web.controller]FlowController.getFlowDetails@operation failed|", e);
-            response.put("code", RETURN_SERVER_WRONG);
-            response.put("message", e.getMessage());
-            return response;
+            LoggerManager.logger().error("[com.zulong.web.controller]FlowController.getFlowDetails@operation failed|", e);
+            return errorResponse(response, RETURN_SERVER_WRONG, e.getMessage());
         }
     }
 
     @PostMapping(value="/list")
-    public Map<String, Object> getFlowSummaryList(@RequestBody Map<String, Integer> request, @RequestHeader("Authorization") String token) {
+    public Map<String, Object> getFlowSummaryList(@RequestBody Map<String, Object> request, @RequestHeader("Authorization") String token) {
         int group_id;
-        try{
-            group_id = request.get("group_id");
-        }catch (Exception e){
-            LoggerManager.logger().warn("[com.zulong.web.controller]FlowController.getFlowList@params are wrong|", e);
-            Map<String, Object> response = new HashMap<>();
-            response.put("code", RETURN_PARAMS_WRONG);
-            response.put("message", e.getMessage());
-            return response;
+        Map<String, Object> response = new HashMap<>();
+        try {
+            Object tmp = getParam(request,"group_id","getFlowSummaryList");
+            if(tmp == null) {
+                return errorResponse(response, RETURN_PARAMS_WRONG, "group_id is null");
+            }
+            group_id = (int) tmp;
+        }catch (Exception e) {
+            return errorResponse(response, RETURN_PARAMS_WRONG, e.getMessage());
         }
         //判断这个curr_user_id是否属于这个group
-        try{
-            boolean flag = authenticationService.isUserInGroup(TokenUtils.getCurrUserId(token),group_id);
+        try {
+            boolean flag = authenticationService.isUserInGroup(TokenUtils.getCurrUserId(token), group_id);
             if(!flag){
-                LoggerManager.logger().warn("[com.zulong.web.controller]FlowController.getFlowList@this user may not in the group|");
-                Map<String, Object> response = new HashMap<>();
-                response.put("code", RETURN_PARAMS_WRONG);
-                response.put("message", "this user may not in the group");
-                return response;
+                LoggerManager.logger().error(String.format("[com.zulong.web.controller]FlowController.getFlowSummaryList@this user may not in the group|group_id=%d|user_id=%s",group_id, TokenUtils.getCurrUserId(token)));
+                return errorResponse(response, RETURN_PARAMS_WRONG, "this user may not in the group");
             }
-        }catch (Exception e){
-            LoggerManager.logger().warn("[com.zulong.web.controller]FlowController.getFlowList@this user may not in the group|", e);
-            Map<String, Object> response = new HashMap<>();
-            response.put("code", RETURN_SERVER_WRONG);
-            response.put("message", e.getMessage());
-            return response;
+        }catch (Exception e) {
+            LoggerManager.logger().error(String.format("[com.zulong.web.controller]FlowController.getFlowList@this user may not in the group|group_id=%d", group_id), e);
+            return errorResponse(response, RETURN_SERVER_WRONG, e.getMessage());
         }
 
         try {
@@ -348,38 +389,39 @@ public class FlowController
             Map<String, Object> data = new HashMap<>();
             data.put("items", flowSummarylist);
             data.put("group_id", group_id);
-            Map<String, Object> response = new HashMap<>();
-            response.put("code", RETURN_SUCCESS);
-            response.put("data", data);
-            LoggerManager.logger().info("[com.zulong.web.controller]FlowController.getFlowList@operation success|");
-            return response;
+            return successResponse(response, data);
         } catch (Exception e) {
-            LoggerManager.logger().warn("[com.zulong.web.controller]FlowController.getFlowList@operation failed|", e);
-            Map<String, Object> response = new HashMap<>();
-            response.put("code", RETURN_SERVER_WRONG);
-            response.put("message", e.getMessage());
-            return response;
+            LoggerManager.logger().error(String.format("[com.zulong.web.controller]FlowController.getFlowSummaryList@operation failed|group_id=%d", group_id), e);
+            return errorResponse(response, RETURN_SERVER_WRONG, e.getMessage());
         }
     }
 
     @PostMapping(value="/history")
-    public Map<String, Object> getFlowHistoryList(@RequestBody Map<String, Integer> request) {
+    public Map<String, Object> getFlowHistoryList(@RequestBody Map<String, Object> request) {
         //todo:验证curr_user_id是否有访问这个flow历史的权限，或许看的权限是所有人都有的，不需要验证
+        Map<String, Object> response = new HashMap<>();
+        int flow_id;
+
+
         try {
-            int flow_id = request.get("flow_id");
+            Object tmp = getParam(request,"flow_id","getFlowDetails");
+            if(tmp == null) {
+                return errorResponse(response, RETURN_PARAMS_WRONG, "flow_id is null");
+            }
+            flow_id = (int) tmp;
+        }catch (Exception e){
+            return errorResponse(response, RETURN_PARAMS_WRONG, e.getMessage());
+        }
+
+        try {
             List<Flow> flowlist = flowService.getHistoryFlowList(flow_id);
             Map<String, Object> data = new HashMap<>();
             data.put("items", flowlist);
-            Map<String, Object> response = new HashMap<>();
-            response.put("code", RETURN_SUCCESS);
-            response.put("data", data);
-            return response;
+
+            return successResponse(response, data);
         } catch (Exception e) {
-            LoggerManager.logger().warn("[com.zulong.web.controller]FlowController.getFlowHistoryList@cannot get history list|", e);
-            Map<String, Object> response = new HashMap<>();
-            response.put("code", RETURN_SERVER_WRONG);
-            response.put("message", e.getMessage());
-            return response;
+            LoggerManager.logger().error(String.format("[com.zulong.web.controller]FlowController.getFlowHistoryList@cannot get history list|flow_id=%d", flow_id), e);
+            return errorResponse(response, RETURN_SERVER_WRONG, e.getMessage());
         }
     }
 
@@ -389,20 +431,26 @@ public class FlowController
      * @return 已发布中的最大
      */
     @PostMapping(value = "/newversion")
-    public Map<String, Object> getNewVersionFlow(@RequestBody Map<String, Integer> request) {
+    public Map<String, Object> getNewVersionFlow(@RequestBody Map<String, Object> request) {
         //todo:验证curr_user_id是否有访问这个flow最新版本的权限，或许看的权限是所有人都有的，不需要验证
         Map<String, Object> response = new HashMap<>();
+        int flow_id;
         try {
-            int flow_id = request.get("flow_id");
+            Object tmp = getParam(request,"flow_id","getFlowDetails");
+            if(tmp == null) {
+                return errorResponse(response, RETURN_PARAMS_WRONG, "flow_id is null");
+            }
+            flow_id = (int) tmp;
+        }catch (Exception e){
+            return errorResponse(response, RETURN_PARAMS_WRONG, e.getMessage());
+        }
+
+        try {
             Flow flow = flowService.getNewVersionFlow(flow_id);
-            response.put("code", RETURN_SUCCESS);
-            response.put("data", flow);
-            return response;
+            return successResponse(response, flow);
         } catch (Exception e) {
-            LoggerManager.logger().warn("[com.zulong.web.controller]FlowController.getNewVersionFlow@cannot get the flow|", e);
-            response.put("code", RETURN_SERVER_WRONG);
-            response.put("message", e.getMessage());
-            return response;
+            LoggerManager.logger().error(String.format("[com.zulong.web.controller]FlowController.getNewVersionFlow@cannot get the flow|flow_id = %d",flow_id), e);
+            return errorResponse(response, RETURN_SERVER_WRONG, e.getMessage());
         }
     }
 }

@@ -48,12 +48,12 @@ public class TokenInterceptor implements HandlerInterceptor {
             token = token.substring(7);
         }
         if (token!=null){
-            LoggerManager.logger().info(String.format(
-                    "[com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=%s",token));
+//            LoggerManager.logger().info(String.format(
+//                    "[com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@token!=null|token=%s",token));
             String curr_user_id= TokenUtils.verify(token);
             if (curr_user_id != null){
-                LoggerManager.logger().info(String.format(
-                        "[com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=%s", true));
+//                LoggerManager.logger().info(String.format(
+//                        "[com.zulong.web.interceptor.TokenInterceptor]TokenInterceptor.preHandle@通过拦截器|result=%s", true));
                 if(curr_user_id.equals("admin")){
                     return true;
                 }

@@ -38,8 +38,6 @@ public class FlowServiceImpl implements FlowService {
     private GroupFlowDao groupFlowDao;
 
 
-
-
     int curr_record_id = START_RECORD_ID;
     int curr_flow_id = START_FLOW_ID;
 
@@ -58,10 +56,8 @@ public class FlowServiceImpl implements FlowService {
 
         curr_flow_id = getStartFlowId();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
-        String current_time = df.format(new Date());// new Date()为获取当前系统时间
-        LoggerManager.logger().info(String.format(
-                "[com.zulong.web.service.serviceimpl]FlowServiceImpl.createFlow@create flow|id=%s|version=%s|current_time=%s", curr_record_id, 0, current_time));
-       // 找到最大的flow_id
+        String current_time = df.format(new Date());
+        // 找到最大的flow_id
         Flow flow = new Flow();
         flow.setRecord_id(curr_record_id + 1);
         flow.setFlow_id(curr_flow_id + 1);
@@ -86,7 +82,7 @@ public class FlowServiceImpl implements FlowService {
         }
         curr_flow_id++;
         //创建对应的flow_group
-        groupFlowDao.insertGroupFlow(group_id,curr_flow_id);
+        groupFlowDao.insertGroupFlow(group_id, curr_flow_id);
         //todo:还要把这个加入管理员所在的组
         return flow;
     }
@@ -101,7 +97,6 @@ public class FlowServiceImpl implements FlowService {
 
         //找到record_id为record_id的flow
         Flow flow = flowDao.findFlowByRecordId(record_id);
-
         //更新record_id,version
         flow.setRecord_id(curr_record_id + 1);
         curr_record_id++;
@@ -138,13 +133,12 @@ public class FlowServiceImpl implements FlowService {
             flow.setCommitted(true);
             flow.setLast_build(current_time);
             boolean flag = flowDao.updateFlow(flow) && flowSummaryDao.commitUpdateFlowSummary(curr_flow_id,current_time);
-            if (flag) {
-                LoggerManager.logger().info(String.format("[com.zulong.web.service.serviceimpl]FlowServiceImpl.commitFlow@commit flow success|record_id=%d", record_id));
-                return flow;
-            } else {
+            if(!flag) {
                 LoggerManager.logger().error(String.format("[com.zulong.web.service.serviceimpl]FlowServiceImpl.commitFlow@commit flow failed|record_id=%d", record_id));
                 return null;
             }
+            return flow;
+
         } catch (Exception e) {
             LoggerManager.logger().error(String.format("[com.zulong.web.service.serviceimpl]FlowServiceImpl.commitFlow@commit flow failed|record_id=%d|error=%s", record_id, e.getMessage()));
             return null;
@@ -161,10 +155,12 @@ public class FlowServiceImpl implements FlowService {
             Flow flow = flowDao.findByFlowIDAndVersion(flow_id, version);
             //更新flow的commit_message，core_meta_id，extra_meta_id，graph_data，blackboard
             flow.setRecord_id(curr_record_id + 1);
+            flow.setCommitted(false);
             flow.setCommit_message(commit_message);
             flow.setMeta_id(meta_id);
             flow.setGraph_data(graphData);
             flow.setBlackboard(blackboard);
+            flow.setLast_build(START_LAST_BUILD);
             flow.setVersion(version + 1);
             flowDao.insertFlow(flow);
 
@@ -199,7 +195,7 @@ public class FlowServiceImpl implements FlowService {
         for (GroupFlow groupFlow : groupFlowList) {
             flowIdSet.add(groupFlow.getFlow_id());
         }
-        //这里改成返回flowSummaryList就可以了
+        // 也可以改成返回flowSummaryList
         List<Flow> filteredFlowList = new ArrayList<>();
         for (Flow flow : flowList) {
             if (flowIdSet.contains(flow.getFlow_id())) {
@@ -228,22 +224,22 @@ public class FlowServiceImpl implements FlowService {
     }
 
     @Override
-    public Flow getFlowDetails(int flow_id, int version) {
+    final public Flow getFlowDetails(int flow_id, int version) {
         return flowDao.getFlowDetails(flow_id, version);
     }
 
     @Override
-    public Flow getFlowDetailsByID(int record_id) { return flowDao.getFlowDetailsByID(record_id); }
+    final public Flow getFlowDetailsByID(int record_id) { return flowDao.getFlowDetailsByID(record_id); }
     @Override
-    public List<Flow> getHistoryFlowList(int flow_id) {
+    final public List<Flow> getHistoryFlowList(int flow_id) {
         return flowDao.getHistoryFlowList(flow_id);
     }
 
     @Override
-    public Flow getNewestFlow(int flow_id){ return flowDao.getNewestFlow(flow_id); }
+    final public Flow getNewestFlow(int flow_id){ return flowDao.getNewestFlow(flow_id); }
 
     @Override
-    public Flow getNewVersionFlow(int flow_id){
+    final public Flow getNewVersionFlow(int flow_id){
         return flowDao.getNewVersionFlow(flow_id);
     }
 }

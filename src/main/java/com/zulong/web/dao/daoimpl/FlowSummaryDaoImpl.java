@@ -27,12 +27,11 @@ public class FlowSummaryDaoImpl implements FlowSummaryDao {
         String sql = "select * from flow_summary where flow_id=?";
         Object[] params = {flow_id};
         try {
-            //return jdbcTemplate.queryForObject(sql, params, new BeanPropertyRowMapper<>(FlowSummary.class));
             FlowSummary flowSummary = jdbcTemplate.queryForObject(sql, params, new BeanPropertyRowMapper<>(FlowSummary.class));
             return flowSummary;
         } catch (Exception e) {
             // 如果没有找到对应的记录，返回null；添加一条warn日志
-            LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]FlowSummaryDaoImpl.findFlowSummaryByID@flow_id is invalid|flow_id=%d", flow_id), e);
+            LoggerManager.logger().error(String.format("[com.zulong.web.dao.daoimpl]FlowSummaryDaoImpl.findFlowSummaryByID@flow_id is invalid|flow_id=%d", flow_id), e);
             return null;
         }
     }
@@ -44,7 +43,7 @@ public class FlowSummaryDaoImpl implements FlowSummaryDao {
         Object[] params = {flowSummary.getFlow_id(), flowSummary.getName(), flowSummary.getDes(), flowSummary.getLast_build(), flowSummary.getLast_commit(), flowSummary.getLast_version()};
         boolean flag = jdbcTemplate.update(sql, params) > 0;
         if(!flag){
-            LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]FlowSummaryDaoImpl.insertFlowSummary@something wrong happened during insertion|"));
+            LoggerManager.logger().error(String.format("[com.zulong.web.dao.daoimpl]FlowSummaryDaoImpl.insertFlowSummary@something wrong happened during insertion|"));
         }
         return flag;
     }
@@ -56,7 +55,7 @@ public class FlowSummaryDaoImpl implements FlowSummaryDao {
             List<FlowSummary> flowSummaryList = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(FlowSummary.class));
             return flowSummaryList;
         } catch (Exception e) {
-            LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]FlowSummaryDaoImpl.getFlowSummaryList@cannot find flow summary list|"), e);
+            LoggerManager.logger().error(String.format("[com.zulong.web.dao.daoimpl]FlowSummaryDaoImpl.getFlowSummaryList@cannot find flow summary list|"), e);
             return null;
         }
     }
@@ -69,10 +68,10 @@ public class FlowSummaryDaoImpl implements FlowSummaryDao {
             Object[] params = {flowSummary.getName(), flowSummary.getDes(), flowSummary.getLast_build(), flowSummary.getLast_commit(), flowSummary.getLast_version(), flowSummary.getFlow_id()};
             boolean flag = jdbcTemplate.update(sql, params) > 0;
             if(!flag){
-                LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]FlowSummaryDaoImpl.updateFlowSummary-FlowSummary@something wrong happened during update|"));
+                LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]FlowSummaryDaoImpl.saveUpdateFlowSummary@something wrong happened during update|"));
             }
         } catch (Exception e) {
-            LoggerManager.logger().error(String.format("[com.zulong.web.dao.daoimpl]FlowSummaryDaoImpl.updateFlowSummary-FlowSummary@something wrong happened during update|"), e);
+            LoggerManager.logger().error(String.format("[com.zulong.web.dao.daoimpl]FlowSummaryDaoImpl.saveUpdateFlowSummary@something wrong happened during update|"), e);
         }
     }
 
@@ -84,11 +83,11 @@ public class FlowSummaryDaoImpl implements FlowSummaryDao {
             Object[] params = {name, des, flow_id};
             boolean flag = jdbcTemplate.update(sql, params) > 0;
             if(!flag){
-                LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]FlowSummaryDaoImpl.updateFlowSummary-variousParams@something wrong happened during update|"));
+                LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]FlowSummaryDaoImpl.cloneUpdateFlowSummary@something wrong happened during update|"));
             }
             return flag;
         } catch (Exception e) {
-            LoggerManager.logger().error(String.format("[com.zulong.web.dao.daoimpl]FlowSummaryDaoImpl.updateFlowSummary-variousParams@something wrong happened during update|"), e);
+            LoggerManager.logger().error(String.format("[com.zulong.web.dao.daoimpl]FlowSummaryDaoImpl.cloneUpdateFlowSummary@something wrong happened during update|"), e);
             return false;
         }
     }
@@ -101,12 +100,12 @@ public class FlowSummaryDaoImpl implements FlowSummaryDao {
             boolean flag = jdbcTemplate.update(sql, params) > 0;
             if(!flag){
                 // 使用占位符{}来替代字符串拼接，并指定更新失败的原因和影响
-                LoggerManager.logger().warn("[com.zulong.web.dao.daoimpl]GroupDaoImpl.commitUpdateFlowSummary@update failed,cause=database error,impact=data inconsistency|flow_id={}|last_commit={}|", flow_id, last_commit);
+                LoggerManager.logger().warn("[com.zulong.web.dao.daoimpl]GroupDaoImpl.commitUpdateFlowSummary@update failed,cause=database error,impact=data inconsistency|flow_id={}|last_commit={}", flow_id, last_commit);
             }
             return flag;
         } catch (Exception e) {
             // 使用占位符{}来替代字符串拼接，并指定抛出异常的原因、影响和解决方案
-            LoggerManager.logger().error("[com.zulong.web.dao.daoimpl]GroupDaoImpl.commitUpdateFlowSummary@throw exception,impact=data inconsistency,solution=check the exception stack trace and fix the bug|flow_id={}|last_commit={}|cause={}|", flow_id, last_commit, e.getMessage(), e);
+            LoggerManager.logger().error("[com.zulong.web.dao.daoimpl]GroupDaoImpl.commitUpdateFlowSummary@throw exception,impact=data inconsistency,solution=check the exception stack trace and fix the bug|flow_id={}|last_commit={}|cause={}", flow_id, last_commit, e.getMessage(), e);
             return false;
         }
     }

@@ -6,6 +6,7 @@ import com.zulong.web.log.LoggerManager;
 import com.zulong.web.service.AuthenticationService;
 import com.zulong.web.service.GroupService;
 import com.zulong.web.service.UserService;
+import com.zulong.web.utils.ParamsUtil;
 import com.zulong.web.utils.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +29,21 @@ public class UserController {
         this.groupService = groupService;
         this.authenticationService = authenticationService;
     }
+    public static Map<String, Object> errorResponse(final Map<String, Object> response, int errorCode, final String message) {
+        response.put("code", errorCode);
+        response.put("message", message);
+        return response;
+    }
 
+    public static Map<String, Object> successResponse(final Map<String, Object> response, final Object data) {
+        response.put("code", RETURN_SUCCESS);
+        response.put("data", data);
+        return response;
+    }
+
+    public static Object getParam(Map<String, Object> request, String varName, String functionName){
+        return ParamsUtil.getParam(request,varName,"UserController",functionName);
+    }
     @PostMapping(value = "/listgroup")
     public Map<String, Object> getAllGroups(@RequestBody Map<String, String> request, @RequestHeader("Authorization") String token) {
         String user_id;
@@ -38,59 +53,43 @@ public class UserController {
             user_id = TokenUtils.getCurrUserId(token);
         }catch (Exception e){
             LoggerManager.logger().warn(String.format("[com.zulong.web.controller]UserController.getAllGroups@please login first|"), e);
-            response.put("code", RETURN_PARAMS_WRONG);
-            response.put("message", e.getMessage());
-            return response;
+            return errorResponse(response,RETURN_PARAMS_WRONG,e.getMessage());
         }
         try {
             List<Group> groupList = userService.getAllGroups(user_id);
             data.put("items", groupList);
             data.put("user_id", user_id);
-            response.put("code", RETURN_SUCCESS);
-            response.put("data", data);
-            return response;
+            return successResponse(response,data);
         } catch (Exception e) {
             LoggerManager.logger().warn(String.format("[com.zulong.web.controller]UserController.getAllGroups@operation failed|user_id=%s", user_id), e);
-            response.put("code", RETURN_SERVER_WRONG);
-            response.put("message", e.getMessage());
-            return response;
+            return errorResponse(response,RETURN_SERVER_WRONG,e.getMessage());
         }
     }
 
     @PostMapping(value = "/create")
     public Map<String, Object> createUser(@RequestBody Map<String, String> request, @RequestHeader("Authorization") String token) {
         Map<String, Object> response = new HashMap<>();
-        if(authenticationService.isAdmin(TokenUtils.getCurrUserId(token))){
-
-        }else {
+        if(!authenticationService.isAdmin(TokenUtils.getCurrUserId(token))){
             LoggerManager.logger().warn(String.format("[com.zulong.web.controller]GroupController.getAllUsers@this user is not admin|"));
-            response.put("code", RETURN_SERVER_WRONG);
-            response.put("message", "this user is not admin");
-            return response;
+            return errorResponse(response,RETURN_NO_AUTHORITY,"this user is not admin, no authority");
         }
         String user_id;
         boolean is_admin;
-
         try{
             user_id = request.get("user_id");
             is_admin = Boolean.parseBoolean(request.get("is_admin"));
         }catch (Exception e){
             LoggerManager.logger().warn(String.format("[com.zulong.web.controller]UserController.createUser@params are wrong|"), e);
-            response.put("code", RETURN_PARAMS_WRONG);
-            response.put("message", e.getMessage());
-            return response;
+            return errorResponse(response,RETURN_PARAMS_WRONG,e.getMessage());
         }
 
         try {
             userService.createUser(user_id, is_admin);
             response.put("code", RETURN_SUCCESS);
             response.put("message", "success");
-
         } catch (Exception e) {
             LoggerManager.logger().warn(String.format("[com.zulong.web.controller]UserController.createUser@operation failed|user_id=%s", user_id), e);
-            response.put("code", RETURN_SERVER_WRONG);
-            response.put("message", e.getMessage());
-            return response;
+            return errorResponse(response,RETURN_SERVER_WRONG,e.getMessage());
         }
         try {
             User user = new User();
@@ -102,9 +101,7 @@ public class UserController {
             return response;
         }catch (Exception e) {
             LoggerManager.logger().warn(String.format("[com.zulong.web.controller]UserController.createUser@operation failed|user_id=%s", user_id), e);
-            response.put("code", RETURN_SERVER_WRONG);
-            response.put("message", e.getMessage());
-            return response;
+            return errorResponse(response,RETURN_SERVER_WRONG,e.getMessage());
         }
     }
 
@@ -123,30 +120,30 @@ public class UserController {
             return response;
         }catch (Exception e){
             LoggerManager.logger().warn(String.format("[com.zulong.web.controller]UserController.logoutUser@please login first|"), e);
-            response.put("code", RETURN_PARAMS_WRONG);
-            response.put("message", e.getMessage());
-            return response;
+            return errorResponse(response,RETURN_PARAMS_WRONG,e.getMessage());
         }
     }
 
     @PostMapping(value = "/login")
-    public Map<String, Object> loginUser(@RequestBody Map<String, String> request) {
+    public Map<String, Object> loginUser(@RequestBody Map<String, Object> request) {
         String user_id;
         Map<String, Object> response = new HashMap<>();
         try{
-            user_id = request.get("user_id");
+            user_id = (String) getParam(request,"user_id","loginUser");
+            if(user_id == null) {
+                return errorResponse(response, RETURN_PARAMS_WRONG, "user_id is null");
+            }
         }catch (Exception e){
             LoggerManager.logger().warn(String.format("[com.zulong.web.controller]UserController.loginUser@params are wrong|"), e);
-            response.put("code", RETURN_PARAMS_WRONG);
-            response.put("message", e.getMessage());
-            return response;
+            return errorResponse(response,RETURN_PARAMS_WRONG,e.getMessage());
+
         }
         User user = null;
         try {
             user = userService.getUserByUserId(user_id);
             if(user == null){
                 LoggerManager.logger().warn(String.format("[com.zulong.web.controller]UserController.loginUser@User does not exist|user_id=%s", user_id));
-                response.put("code", RETURN_SERVER_WRONG);
+                response.put("code", RETURN_USER_NOT_EXISTS);
                 response.put("message","User does not exist" );
                 return response;
             }
@@ -154,9 +151,7 @@ public class UserController {
 
         } catch (Exception e) {
             LoggerManager.logger().warn(String.format("[com.zulong.web.controller]UserController.loginUser@operation failed|user_id=%s", user_id), e);
-            response.put("code", RETURN_SERVER_WRONG);
-            response.put("message", e.getMessage());
-            return response;
+            return errorResponse(response,RETURN_SERVER_WRONG,e.getMessage());
         }
         try {
             String token = TokenUtils.sign(user);
@@ -167,87 +162,94 @@ public class UserController {
             return response;
         }catch (Exception e) {
             LoggerManager.logger().warn(String.format("[com.zulong.web.controller]UserController.loginUser@operation failed|user_id=%s", user_id), e);
-            response.put("code", RETURN_SERVER_WRONG);
-            response.put("message", e.getMessage());
-            return response;
+            return errorResponse(response,RETURN_SERVER_WRONG,e.getMessage());
         }
     }
 
     @PostMapping(value = "/addtogroup")
-    public Map<String, Object> addToGroup(@RequestBody Map<String, String> request, @RequestHeader("Authorization") String token) {
+    public Map<String, Object> addToGroup(@RequestBody Map<String, Object> request, @RequestHeader("Authorization") String token) {
         Map<String, Object> response = new HashMap<>();
         if(!authenticationService.isAdmin(TokenUtils.getCurrUserId(token))){
-            LoggerManager.logger().warn(String.format("[com.zulong.web.controller]GroupController.getAllUsers@this user is not admin|"));
-            response.put("code", RETURN_SERVER_WRONG);
-            response.put("message", "this user is not admin");
-            return response;
+            LoggerManager.logger().warn(String.format("[com.zulong.web.controller]GroupController.getAllUsers@this user is not admin|user_id=%s", TokenUtils.getCurrUserId(token)));
+            return errorResponse(response,RETURN_NO_AUTHORITY,"this user is not admin, no authority");
         }
         String user_id;
         int group_id;
         int code;
         String message;
         try{
-            user_id = request.get("user_id");
-            group_id = Integer.parseInt(request.get("group_id"));
+            user_id = (String) getParam(request,"user_id","addtogroup");
+            if(user_id == null) {
+                return errorResponse(response, RETURN_PARAMS_WRONG, "user_id is null");
+            }
+            Object tmp = getParam(request,"group_id","addtogroup");
+            if(tmp == null) {
+                return errorResponse(response, RETURN_PARAMS_WRONG, "group_id is null");
+            }
+            group_id = (int) tmp;
         }catch (Exception e){
             LoggerManager.logger().warn(String.format("[com.zulong.web.controller]UserController.addToGroup@params are wrong|"), e);
-            response.put("code", RETURN_PARAMS_WRONG);
-            response.put("message", e.getMessage());
-            return response;
+            return errorResponse(response,RETURN_PARAMS_WRONG,e.getMessage());
         }
         try {
             if(!userService.findByUserID(user_id)) {
                 // 用户不存在
                 LoggerManager.logger().warn(String.format("[com.zulong.web.controller]UserController.addToGroup@user doesn't exist|user_id=%s|group_id=%d", user_id, group_id));
-                response.put("code", RETURN_NO_OBJECT);
-                response.put("message", "failed");
-                return response;
+                return errorResponse(response, RETURN_USER_NOT_EXISTS, "user doesn't exist");
             }
             if(!groupService.findGroup(group_id)) {
                 LoggerManager.logger().warn(String.format("[com.zulong.web.controller]UserController.addToGroup@group doesn't exist|user_id=%s|group_id=%d", user_id, group_id));
-                response.put("code", RETURN_NO_OBJECT);
-                response.put("message", "failed");
-                return response;
+                return errorResponse(response, RETURN_NO_OBJECT, "group doesn't exist");
             }
             boolean flag = userService.addToGroup(user_id, group_id);
-            if(flag) { code = RETURN_SUCCESS; message = "success";}
-            else { code = RETURN_DATABASE_WRONG; message = "failed";}
+            if(flag) {
+                code = RETURN_SUCCESS;
+                message = "success";
+            }
+            else {
+                code = RETURN_DATABASE_WRONG;
+                message = "database wrong";
+            }
             response.put("code", code);
             response.put("message", message);
             return response;
         } catch (Exception e) {
             LoggerManager.logger().warn(String.format("[com.zulong.web.controller]UserController.addToGroup@operation failed|user_id=%s|group_id=%d", user_id, group_id), e);
-            response.put("code", RETURN_SERVER_WRONG);
-            response.put("message", e.getMessage());
-            return response;
+            return errorResponse(response,RETURN_SERVER_WRONG,e.getMessage());
         }
     }
 
     @PostMapping(value = "/removefromgroup")
-    public Map<String, Object> removeFromGroup(@RequestBody Map<String, String> request, @RequestHeader("Authorization") String token) {
+    public Map<String, Object> removeFromGroup(@RequestBody Map<String, Object> request, @RequestHeader("Authorization") String token) {
         Map<String, Object> response = new HashMap<>();
         if(!authenticationService.isAdmin(TokenUtils.getCurrUserId(token))){
             LoggerManager.logger().warn(String.format("[com.zulong.web.controller]GroupController.getAllUsers@this user is not admin|"));
-            response.put("code", RETURN_SERVER_WRONG);
-            response.put("message", "this user is not admin");
-            return response;
+            return errorResponse(response,RETURN_NO_AUTHORITY,"this user is not admin, no authority");
         }
         String user_id;
         int group_id;
         try{
-            user_id = request.get("user_id");
-            group_id = Integer.parseInt(request.get("group_id"));
+            user_id = (String) getParam(request,"user_id","addtogroup");
+            if(user_id == null) {
+                return errorResponse(response, RETURN_PARAMS_WRONG, "user_id is null");
+            }
+            Object tmp = getParam(request,"group_id","addtogroup");
+            if(tmp == null) {
+                return errorResponse(response, RETURN_PARAMS_WRONG, "group_id is null");
+            }
+            group_id = (int) tmp;
         }catch (Exception e){
             LoggerManager.logger().warn(String.format("[com.zulong.web.controller]UserController.removeFromGroup@params are wrong|"), e);
-            response.put("code", RETURN_PARAMS_WRONG);
-            response.put("message", e.getMessage());
-            return response;
+            return errorResponse(response,RETURN_PARAMS_WRONG,e.getMessage());
         }
         try {
             boolean flag = userService.removeFromGroup(user_id, group_id);
             int code;
             String message;
-            if(flag) { code = RETURN_SUCCESS; message = "success";}
+            if(flag) {
+                code = RETURN_SUCCESS;
+                message = "success";
+            }
             else {
                 LoggerManager.logger().warn(String.format("[com.zulong.web.controller]UserController.removeFromGroup@operation failed|user_id=%s|group_id=%d", user_id, group_id));
                 code = RETURN_DATABASE_WRONG;
@@ -258,9 +260,7 @@ public class UserController {
             return response;
         } catch (Exception e) {
             LoggerManager.logger().warn(String.format("[com.zulong.web.controller]UserController.removeFromGroup@operation failed|user_id=%s|group_id=%d", user_id, group_id), e);
-            response.put("code", RETURN_SERVER_WRONG);
-            response.put("message", e.getMessage());
-            return response;
+            return errorResponse(response,RETURN_SERVER_WRONG,e.getMessage());
         }
     }
 
@@ -281,11 +281,7 @@ public class UserController {
             return response;
         }else{
             //身份验证失败
-            response.put("code",RETURN_NO_AUTHORITY);
-            response.put("message","User does not have permission");
-            return response;
+            return errorResponse(response,RETURN_NO_AUTHORITY,"this user is not admin, no authority");
         }
-
-
     }
 }

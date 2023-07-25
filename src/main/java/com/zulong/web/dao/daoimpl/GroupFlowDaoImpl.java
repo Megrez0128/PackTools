@@ -27,7 +27,7 @@ public class GroupFlowDaoImpl implements GroupFlowDao {
             boolean flag = jdbcTemplate.update(sql,params,Integer.class) > 0;
             return flag;
         }catch (Exception e){
-            LoggerManager.logger().warn("[com.zulong.web.dao.daoimpl]GroupFlowDaoImpl.hasFlowPermission@Permission verify failed|group_id=%d|flow_id=%d|",group_id,flow_id);
+            LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]GroupFlowDaoImpl.hasFlowPermission@Permission verify failed|group_id=%d|flow_id=%d",group_id, flow_id));
             return false;
         }
     }
@@ -37,7 +37,7 @@ public class GroupFlowDaoImpl implements GroupFlowDao {
         Object[] params = {group_id, flow_id};
         boolean flag = jdbcTemplate.update(sql,params) > 0;
         if(!flag){
-            LoggerManager.logger().warn("[com.zulong.web.dao.daoimpl]GroupFlowDaoImpl.insertGroupFlow@insert failed|group_id=%d|flow_id=%d|",group_id,flow_id);
+            LoggerManager.logger().warn("[com.zulong.web.dao.daoimpl]GroupFlowDaoImpl.insertGroupFlow@insert failed|group_id=%d|flow_id=%d", group_id, flow_id);
         }
         return flag;
     }
@@ -50,7 +50,7 @@ public class GroupFlowDaoImpl implements GroupFlowDao {
             List<GroupFlow> groupFlowList = jdbcTemplate.query(sql,params,new BeanPropertyRowMapper<>(GroupFlow.class));
             return groupFlowList;
         }catch (Exception e){
-            LoggerManager.logger().warn("[com.zulong.web.dao.daoimpl]GroupFlowDaoImpl.getFlowListByGroupId@getFlowListByGroupId failed|group_id=%d|",group_id);
+            LoggerManager.logger().error("[com.zulong.web.dao.daoimpl]GroupFlowDaoImpl.getFlowListByGroupId@getFlowListByGroupId failed|group_id=%d", group_id);
             return null;
         }
     }
@@ -63,7 +63,7 @@ public class GroupFlowDaoImpl implements GroupFlowDao {
             List<Integer> groupFlowList = jdbcTemplate.query(sql,params,new BeanPropertyRowMapper<>(Integer.class));
             return groupFlowList;
         }catch (Exception e){
-            LoggerManager.logger().warn("[com.zulong.web.dao.daoimpl]GroupFlowDaoImpl.getFlowListByGroupId@getFlowIdByGroupId failed|group_id=%d|",group_id);
+            LoggerManager.logger().error("[com.zulong.web.dao.daoimpl]GroupFlowDaoImpl.getFlowListByGroupId@getFlowIdByGroupId failed|group_id=%d", group_id);
             return null;
         }
     }

@@ -47,14 +47,14 @@ public class FlowDaoImpl implements FlowDao {
             });
             return flowList;
         } catch (Exception e){
-            LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]FlowDaoImpl.getFlowList@cannot find flow list|"), e);
+            LoggerManager.logger().error(String.format("[com.zulong.web.dao.daoimpl]FlowDaoImpl.getFlowList@cannot find flow list|"), e);
             return null;
         }
     }
 
     @Cacheable(value="flowCache", key="#flow_id+'_'+#version")
     @Override
-    public Flow getFlowDetails(int flow_id, int version){
+    public Flow getFlowDetails(final int flow_id, final int version){
         String sql = "select * from flow where flow_id = ? and version = ?";
         Object[] params = new Object[]{flow_id, version};
         try{
@@ -66,7 +66,7 @@ public class FlowDaoImpl implements FlowDao {
             });
             return flow;
         } catch (Exception e) {
-            LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]FlowDaoImpl.getFlowDetails@record_id is invalid|flow_id=%d|version=%d", flow_id, version), e);
+            LoggerManager.logger().error(String.format("[com.zulong.web.dao.daoimpl]FlowDaoImpl.getFlowDetails@record_id is invalid|flow_id=%d|version=%d", flow_id, version), e);
             return null;
         }
     }
@@ -102,7 +102,7 @@ public class FlowDaoImpl implements FlowDao {
         Object[] params = {record_id};
         boolean flag1 = jdbcTemplate.update(sql, params) > 0;
         if(!flag1){
-            LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]FlowDaoImpl.deleteFlow@something wrong happened during deletion|"));
+            LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]FlowDaoImpl.deleteFlow@something wrong happened during deletion|record_id=%d", record_id));
             return DELETE_DATABASE_WRONG;
         }
         return DELETE_SUCCESS;
@@ -111,7 +111,7 @@ public class FlowDaoImpl implements FlowDao {
 
     @Cacheable(value = "flowCache", key = "#record_id")
     @Override
-    public Flow findFlowByRecordId(int record_id) {
+    public Flow findFlowByRecordId(final int record_id) {
         String sql = "select * from flow where record_id=?";
         Object[] params = new Object[]{record_id};
         try {
@@ -124,7 +124,7 @@ public class FlowDaoImpl implements FlowDao {
             return flow;
         } catch (Exception e) {
             // 如果没有找到对应的记录，返回null；添加一条warn日志
-            LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]FlowDaoImpl.findFlowByRecordId@record_id is invalid|record_id=%d", record_id), e);
+            LoggerManager.logger().error(String.format("[com.zulong.web.dao.daoimpl]FlowDaoImpl.findFlowByRecordId@record_id is invalid|record_id=%d", record_id), e);
             return null;
         }
     }
@@ -139,7 +139,7 @@ public class FlowDaoImpl implements FlowDao {
             flow.getLast_build(), flow.getMeta_id(), new SerialBlob(flow.getGraph_data().getBytes()), new SerialBlob(flow.getBlackboard().getBytes())};
         boolean flag = jdbcTemplate.update(sql, params) > 0;
         if(!flag){
-            LoggerManager.logger().warn("[com.zulong.web.dao.daoimpl]FlowDaoImpl.insertFlow@insertion failed");
+            LoggerManager.logger().error(String.format("[com.zulong.web.dao.daoimpl]FlowDaoImpl.insertFlow@insertion failed|record_id=%d", flow.getRecord_id()));
         }
         return flag;
     }
@@ -152,7 +152,7 @@ public class FlowDaoImpl implements FlowDao {
         Object[] params = {flow.isCommitted(), flow.getCommit_message(), flow.getLast_build(),  flow.getMeta_id(), flow.getGraph_data(), flow.getBlackboard(), flow.getRecord_id()};
         boolean flag = jdbcTemplate.update(sql, params) > 0;
         if(!flag){
-            LoggerManager.logger().warn("[com.zulong.web.dao.daoimpl]FlowDaoImpl.updateFlow@update failed");
+            LoggerManager.logger().error(String.format("[com.zulong.web.dao.daoimpl]FlowDaoImpl.updateFlow@update failed|record_id=%d", flow.getRecord_id()));
         }
         return flag;
     }
@@ -163,20 +163,20 @@ public class FlowDaoImpl implements FlowDao {
         Object[] params = {last_build, record_id};
         boolean flag = jdbcTemplate.update(sql, params) > 0;
         if(!flag){
-            LoggerManager.logger().warn("[com.zulong.web.dao.daoimpl]FlowDaoImpl.updateLastBuild@update failed");
+            LoggerManager.logger().error(String.format("[com.zulong.web.dao.daoimpl]FlowDaoImpl.updateLastBuild@update failed|record_id=%d|last_build=%s", record_id, last_build));
         }
         return flag;
     }
 
     @Override
-    public int findMaxVersion(int flow_id) {
+    public int findMaxVersion(final int flow_id) {
         //找到当前flow_id对应的最大version
         String sql = "select max(version) from flow where flow_id=?";
         Object[] params = {flow_id};
         try {            
             return jdbcTemplate.queryForObject(sql, params, Integer.class);
         } catch (Exception e) {
-            LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]FlowDaoImpl.findMaxVersion@cannot find max version|flow_id=%d", flow_id), e);
+            LoggerManager.logger().error(String.format("[com.zulong.web.dao.daoimpl]FlowDaoImpl.findMaxVersion@cannot find max version|flow_id=%d", flow_id), e);
             return -1;
         }
     }
@@ -196,12 +196,12 @@ public class FlowDaoImpl implements FlowDao {
             });
             return flow;
         } catch (Exception e) {
-            LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]FlowDaoImpl.findByFlowIDAndVersion@cannot find flow|flow_id=%d|version=%d", flow_id, version), e);
+            LoggerManager.logger().error(String.format("[com.zulong.web.dao.daoimpl]FlowDaoImpl.findByFlowIDAndVersion@cannot find flow|flow_id=%d|version=%d", flow_id, version), e);
             return null;
         }
     }
     @Override
-     public List<Flow> getHistoryFlowList(int flow_id) {
+    public List<Flow> getHistoryFlowList(final int flow_id) {
         try {
             String sql = "select * from flow where flow_id=? order by version desc";
             Object[] params = {flow_id};
@@ -213,12 +213,12 @@ public class FlowDaoImpl implements FlowDao {
             });
             return flowList;
         } catch (Exception e){
-            LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]FlowDaoImpl.getHistoryFlowList@cannot find flow list|"), e);
+            LoggerManager.logger().error(String.format("[com.zulong.web.dao.daoimpl]FlowDaoImpl.getHistoryFlowList@cannot find flow list|flow_id=%d", flow_id), e);
             return null;
         }
     }
     @Override
-    public Flow getNewestFlow(int flow_id) {
+    public Flow getNewestFlow(final int flow_id) {
         try {
             String sql = "SELECT * FROM flow WHERE flow_id =? ORDER BY version DESC LIMIT 1";
             Object[] params = {flow_id};
@@ -230,13 +230,13 @@ public class FlowDaoImpl implements FlowDao {
             });
             return flow;
         } catch (Exception e) {
-            LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]FlowDaoImpl.getNewVersionFlow@cannot find the flow|flow_id=%d", flow_id), e);
+            LoggerManager.logger().error(String.format("[com.zulong.web.dao.daoimpl]FlowDaoImpl.getNewVersionFlow@cannot find the flow|flow_id=%d", flow_id), e);
             return null;
         }
     }
 
     @Override
-    public Flow getNewVersionFlow(int flow_id){
+    public Flow getNewVersionFlow(final int flow_id){
         try {
             String sql = "SELECT * FROM flow WHERE flow_id =? and committed = true ORDER BY version DESC LIMIT 1";
             Object[] params = {flow_id};
@@ -248,7 +248,7 @@ public class FlowDaoImpl implements FlowDao {
             });
             return flow;
         } catch (Exception e) {
-            LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]FlowDaoImpl.getNewVersionFlow@cannot find the flow|flow_id=%d", flow_id), e);
+            LoggerManager.logger().error(String.format("[com.zulong.web.dao.daoimpl]FlowDaoImpl.getNewVersionFlow@cannot find the flow|flow_id=%d", flow_id), e);
             return null;
         }
     }
@@ -266,7 +266,7 @@ public class FlowDaoImpl implements FlowDao {
     }
 
     @Override
-    public int getFlowIdByRecordId(int record_id){
+    public int getFlowIdByRecordId(final int record_id){
         String sql = "SELECT flow_id from flow where record_id=?";
         Object[] params = {record_id};
         return jdbcTemplate.queryForObject(sql, params, Integer.class);

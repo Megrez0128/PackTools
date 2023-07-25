@@ -27,14 +27,14 @@ public class InstanceDaoImpl implements InstanceDao {
      * @param record_id
      * @return
      */
-    public boolean findInstanceByFlowID(int record_id){
+    final public boolean findInstanceByFlowID(int record_id){
         String sql = "select count(*) from instance where flow_record_id = ?";
         int count = jdbcTemplate.queryForObject(sql, new Object[]{record_id}, Integer.class);
         return count > 0;
     }
 
     //@Cacheable(value="instanceCache", key="#uuid+'_'+#flow_record_id")
-    public List<Instance> getInstanceByFlowRecordId(int record_id) {
+    final public List<Instance> getInstanceByFlowRecordId(int record_id) {
         String sql = "select * from instance where flow_record_id = ?";
         Object[] params = {record_id};
         List<Instance> instanceList = jdbcTemplate.query(sql, params, new BeanPropertyRowMapper<>(Instance.class));
@@ -43,14 +43,14 @@ public class InstanceDaoImpl implements InstanceDao {
 
     //@Cacheable(value = "instanceCache", key = "#uuid")
     @Override
-    public Instance findInstanceByUuid(String uuid) {
+    final public Instance findInstanceByUuid(String uuid) {
         try {
             String sql = "select * from instance where uuid = ?";
             Object[] params = {uuid};
             Instance instance = jdbcTemplate.queryForObject(sql, params, new BeanPropertyRowMapper<>(Instance.class));
             return instance;
         } catch (Exception e) {
-            LoggerManager.logger().debug("[com.zulong.web.dao.daoimpl]InstanceDaoImpl.findInstanceByUuid@insert failed|%s");
+            LoggerManager.logger().error(String.format("[com.zulong.web.dao.daoimpl]InstanceDaoImpl.findInstanceByUuid@select failed|uuid=%s", uuid));
             return null;
         }
     }
@@ -58,23 +58,23 @@ public class InstanceDaoImpl implements InstanceDao {
 //    @CacheEvict(value = "instanceCache", allEntries = true)
 //    @CachePut(value = "instanceCache", key = "#instance.uuid")
     @Override
-    public boolean insertInstance(Instance instance) {
+    final public boolean insertInstance(Instance instance) {
         String sql = "insert into instance (uuid, flow_record_id, build_time, complete, has_error) values (?, ?, ?, ?, ?)";
         Object[] params = {instance.getUuid(), instance.getFlow_record_id(), instance.getBuild_time(), instance.getComplete(), instance.getHas_error()};
         boolean flag = jdbcTemplate.update(sql, params) > 0;
         if(!flag){
-            LoggerManager.logger().warn("[com.zulong.web.dao.daoimpl]InstanceDaoImpl.insertInstance@insert failed");
+            LoggerManager.logger().error(String.format("[com.zulong.web.dao.daoimpl]InstanceDaoImpl.insertInstance@insert failed|uuid=%s", instance.getUuid()));
         }
         return flag;
     }
 
     @Override
-    public boolean updateInstance(int flow_record_id, boolean complete, boolean has_error, String uuid) {
+    final public boolean updateInstance(int flow_record_id, boolean complete, boolean has_error, String uuid) {
         String sql = "update instance set flow_record_id=?, complete=?, has_error=? where uuid=?";
         Object[] params = {flow_record_id, complete, has_error, uuid};
         boolean flag = jdbcTemplate.update(sql, params) > 0;
         if(!flag){
-            LoggerManager.logger().warn("[com.zulong.web.dao.daoimpl]InstanceDaoImpl.updateInstance@update failed");
+            LoggerManager.logger().error(String.format("[com.zulong.web.dao.daoimpl]InstanceDaoImpl.updateInstance@update failed|flow_record_id=%d|uuid=%s", flow_record_id, uuid));
         }
         return flag;
     }

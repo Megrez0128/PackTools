@@ -18,29 +18,29 @@ public class AdministrationDaoImpl implements AdministrationDao {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public boolean updateAdministration(String user_id, Integer group_id, boolean update_allowed,boolean delete_allowed) {
+    public boolean updateAdministration(String user_id, Integer group_id, boolean update_allowed, boolean delete_allowed) {
         if(!isUserInGroup(user_id, group_id)) {
             LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]AdministrationDaoImpl.updateAdministration@the user isn't in the group|user_id=%s|group_id=%d", user_id, group_id));
             return false;
         }
+        String sql = "update administration set updated_allowed=?, delete_allowed=? where user_id=? and group_id=?";
+        Object[] params = {update_allowed, delete_allowed, user_id, group_id};
         try {
-            String sql = "update administration set updated_allowed=?, delete_allowed=? where user_id=? and group_id=?";
-            Object[] params = {update_allowed, delete_allowed, user_id, group_id};
             boolean flag = jdbcTemplate.update(sql, params) > 0;
             if(!flag){
-                LoggerManager.logger().warn("[com.zulong.web.dao.daoimpl]administrationDaoImpl.updateAdministration@update failed|user_id=%s|group_id=%d", user_id, group_id);
+                LoggerManager.logger().error("[com.zulong.web.dao.daoimpl]administrationDaoImpl.updateAdministration@update failed|user_id=%s|group_id=%d", user_id, group_id);
             }
             return flag;
         } catch (Exception e) {
-            LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]AdministrationDaoImpl.updateAdministration@update operation failed"), e);
+            LoggerManager.logger().error(String.format("[com.zulong.web.dao.daoimpl]AdministrationDaoImpl.updateAdministration@update operation failed|user_id=%s|group_id=%d", user_id, group_id), e);
             return false;
         }
     }
 
     public boolean insertAdministration(Administration administration) {
+        String sql = "insert into administration(user_id, group_id, update_allowed, delete_allowed)values(?, ?, ?, ?)";
+        Object[] params = {administration.getUser_id(), administration.getGroup_id(), administration.isUpdate_allowed(), administration.isDelete_allowed()};
         try {
-            String sql = "insert into administration(user_id, group_id, update_allowed, delete_allowed)values(?, ?, ?, ?)";
-            Object[] params = {administration.getUser_id(), administration.getGroup_id(), administration.isUpdate_allowed(), administration.isDelete_allowed()};
             boolean flag = jdbcTemplate.update(sql, params) > 0;
             if(!flag){
                 LoggerManager.logger().warn("[com.zulong.web.dao.daoimpl]AdministrationDaoImpl.insertAdministration@insertion failed");
@@ -61,11 +61,11 @@ public class AdministrationDaoImpl implements AdministrationDao {
             Object[] params = {user_id, group_id};
             boolean flag1 = jdbcTemplate.update(sql, params) > 0;
             if(!flag1) {
-                LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]AdministrationDaoImpl.deleteAdministration@deletion failed|user_id=%s|group_id=%d", user_id, group_id));
+                LoggerManager.logger().error(String.format("[com.zulong.web.dao.daoimpl]AdministrationDaoImpl.deleteAdministration@deletion failed|user_id=%s|group_id=%d", user_id, group_id));
             }
             return flag1;
         } catch (Exception e) {
-            LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]AdministrationDaoImpl.deleteAdministration@deletion failed"), e);
+            LoggerManager.logger().error(String.format("[com.zulong.web.dao.daoimpl]AdministrationDaoImpl.deleteAdministration@deletion failed"), e);
             return false;
         }
     }
@@ -78,7 +78,7 @@ public class AdministrationDaoImpl implements AdministrationDao {
             int count = jdbcTemplate.queryForObject(sql, params, Integer.class);
             return count > 0;
         } catch (Exception e) {
-            LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]AdministrationDaoImpl.isUserInGroup@cannot find connected administration|user_id=%s|group_id=%d", user_id, group_id), e);
+            LoggerManager.logger().error(String.format("[com.zulong.web.dao.daoimpl]AdministrationDaoImpl.isUserInGroup@cannot find connected administration|user_id=%s|group_id=%d", user_id, group_id), e);
             return false;
         }
     }
@@ -95,7 +95,7 @@ public class AdministrationDaoImpl implements AdministrationDao {
             int count = jdbcTemplate.queryForObject(sql, params, Integer.class);
             return count > 0;
         } catch (Exception e) {
-            LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]AdministrationDaoImpl.getUpdateAllowance@something wrong happens when searching|user_id=%s|group_id=%d", user_id, group_id));
+            LoggerManager.logger().error(String.format("[com.zulong.web.dao.daoimpl]AdministrationDaoImpl.getUpdateAllowance@something wrong happens when searching|user_id=%s|group_id=%d", user_id, group_id));
             return false;
         }
     }
@@ -112,7 +112,7 @@ public class AdministrationDaoImpl implements AdministrationDao {
             int count = jdbcTemplate.queryForObject(sql, params, Integer.class);
             return count > 0;
         } catch (Exception e) {
-            LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]AdministrationDaoImpl.getDeleteAllowance@something wrong happens when searching|user_id=%s|group_id=%d", user_id, group_id));
+            LoggerManager.logger().error(String.format("[com.zulong.web.dao.daoimpl]AdministrationDaoImpl.getDeleteAllowance@something wrong happens when searching|user_id=%s|group_id=%d", user_id, group_id));
             return false;
         }
     }

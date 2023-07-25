@@ -1,13 +1,11 @@
 package com.zulong.web.dao.daoimpl;
 
 import com.zulong.web.dao.MetaDao;
-import com.zulong.web.entity.CoreMeta;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
@@ -17,9 +15,12 @@ import javax.sql.rowset.serial.SerialBlob;
 import java.sql.Blob;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static com.zulong.web.entity.Meta.getMetaFromResultSet;
 
 @Service("MetaImpl")
 public class MetaDaoImpl implements MetaDao {
@@ -31,22 +32,11 @@ public class MetaDaoImpl implements MetaDao {
     @Cacheable(value = "metaCache", key = "#metaId")
     @Override
     public Meta findMetaByID(int metaId){
-//        String sql = "SELECT * FROM pack_meta WHERE meta_id = ?";
-//        List<Meta> metaList = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Meta.class), metaId);
-//        return metaList.isEmpty() ? null : metaList.get(0);
         String sql = "SELECT * FROM pack_meta WHERE meta_id = ?";
         List<Meta> metaList = jdbcTemplate.query(sql, new Object[]{metaId}, new RowMapper<Meta>() {
             @Override
             public Meta mapRow(ResultSet resultSet, int i) throws SQLException {
-                Meta meta = new Meta();
-                meta.setMeta_id(resultSet.getInt("meta_id"));
-                meta.setGroup_id(resultSet.getInt("group_id"));
-                meta.setVersion(resultSet.getInt("version"));
-                meta.setVersion_display(resultSet.getString("version_display"));
-                Blob dataBlob = resultSet.getBlob("data");
-                String dataString = new String(dataBlob.getBytes(1, (int) dataBlob.length()));
-                meta.setData(dataString);
-                return meta;
+                return getMetaFromResultSet(resultSet);
             }
         });
         return metaList.isEmpty() ? null : metaList.get(0);
@@ -70,34 +60,24 @@ public class MetaDaoImpl implements MetaDao {
         return result > 0;
     }
     @Override
-    public Map<String, Object> getAllMeta(){
-//        String sql = "SELECT * FROM pack_meta ";
-//        List<Meta> metaList = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Meta.class));
-//        return metaList;
+    public List<Object> getAllMeta(){
+
         String sql = "SELECT * FROM pack_meta ";
         List<Meta> metaList = jdbcTemplate.query(sql, new RowMapper<Meta>() {
             @Override
             public Meta mapRow(ResultSet resultSet, int i) throws SQLException {
-                Meta meta = new Meta();
-                meta.setMeta_id(resultSet.getInt("meta_id"));
-                meta.setGroup_id(resultSet.getInt("group_id"));
-                meta.setVersion(resultSet.getInt("version"));
-                meta.setVersion_display(resultSet.getString("version_display"));
-                Blob dataBlob = resultSet.getBlob("data");
-                String dataString = new String(dataBlob.getBytes(1, (int) dataBlob.length()));
-                meta.setData(dataString);
-                return meta;
+                return getMetaFromResultSet(resultSet);
             }
         });
         Map<String, Object> map = new HashMap<>();
-        Map<String, Object> response = new HashMap<>();
+        List<Object> response = new ArrayList<>();
         for (Meta meta : metaList) {
             map = new HashMap<>();
             map.put("meta_id", meta.getMeta_id());
             map.put("group_id", meta.getGroup_id());
             map.put("version", meta.getVersion());
             map.put("version_display", meta.getVersion_display());
-            response.putAll(map);
+            response.add(map);
         }
         return response;
     }
@@ -109,7 +89,7 @@ public class MetaDaoImpl implements MetaDao {
     }
 
     @Override
-    public int getMaxVersion(int meta_id) {
+    public int getMaxVersion(final int meta_id) {
         String sql = "SELECT MAX(version) FROM pack_meta WHERE meta_id = ?";
         Integer maxVersion = jdbcTemplate.queryForObject(sql, Integer.class, meta_id);
         return maxVersion != null ? maxVersion : 0;
