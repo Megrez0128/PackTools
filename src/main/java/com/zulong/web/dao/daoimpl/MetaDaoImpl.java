@@ -82,7 +82,6 @@ public class MetaDaoImpl implements MetaDao {
         return response;
     }
 
-    // TODO: 为什么updateMeta是return null也没有其他操作？是不是对接了无效接口，可以删除？
     @Override
     public Meta updateMeta(int meta_id,int group_id,String data,String version_display){
         return null;

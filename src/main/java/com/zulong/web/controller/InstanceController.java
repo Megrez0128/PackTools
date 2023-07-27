@@ -48,6 +48,146 @@ public class InstanceController {
     }
 
     @PostMapping(value = "/report/start")
+    public Map<String, Object> instanceStart(@RequestBody Map<String, Object> request) {
+        String uuid;
+        int flow_record_id;
+        String start_time;
+        boolean complete;
+        boolean has_error;
+        Map<String, Object> response = new HashMap<>();
+        try {
+            uuid = (String) getParam(request,"uuid","instanceStartNode");
+            if(uuid == null) {
+                return errorResponse(response, RETURN_PARAMS_NULL, "uuid is null");
+            }
+            start_time = (String) getParam(request,"start_time","instanceStartNode");
+            if(start_time == null) {
+                return errorResponse(response, RETURN_PARAMS_NULL, "start_time is null");
+            }
+            if( ParamsUtil.isInValidDateFormat(start_time)){
+                return errorResponse(response, RETURN_PARAMS_WRONG, "start_time is invalid");
+            }
+            Object tmp = getParam(request,"flow_record_id","instanceStartNode");
+            if(tmp == null) {
+                return errorResponse(response, RETURN_PARAMS_NULL, "flow_record_id is null");
+            }
+            flow_record_id = (int) tmp;
+            if( ParamsUtil.isInValidInt(flow_record_id)){
+                return errorResponse(response, RETURN_PARAMS_WRONG, "flow_record_id is invalid");
+            }
+//            tmp = getParam(request,"complete","instanceStartNode");
+//            if(tmp == null) {
+//                return errorResponse(response, RETURN_PARAMS_WRONG, "complete is null");
+//            }
+//            complete = (boolean) tmp;
+            complete = false;
+            tmp = getParam(request,"has_error","instanceStartNode");
+            if(tmp == null) {
+                return errorResponse(response, RETURN_PARAMS_NULL, "has_error is null");
+            }
+            has_error = (boolean) tmp;
+
+        } catch (Exception e) {
+            LoggerManager.logger().error(String.format("[com.zulong.web.controller]InstanceController.instanceStart@params are wrong|"), e);
+            return errorResponse(response, RETURN_PARAMS_NULL, e.getMessage());
+        }
+
+        //全局查询flow_id是否存在，并返回对应的flow
+        try {
+            Flow tmpFlow = flowService.findFlowByRecordId(flow_record_id);
+            if(tmpFlow == null) {
+                LoggerManager.logger().error(String.format("[com.zulong.web.controller]InstanceController.instanceStart@flow doesn't exist|flow_record_id=%d", flow_record_id));
+                return errorResponse(response, RETURN_PARAMS_NULL, String.format("flow doesn't exist|flow_record_id = %d",flow_record_id));
+            }
+        } catch (Exception e) {
+            LoggerManager.logger().error(String.format("[com.zulong.web.controller]InstanceController.instanceStart@operation failed|flow_record_id=%d|uuid=%s", flow_record_id, uuid), e);
+            return errorResponse(response, RETURN_DATABASE_WRONG, e.getMessage());
+        }
+        try{
+            boolean flag = instanceService.instanceStart(uuid, flow_record_id, start_time, complete, has_error);
+            if(flag) {
+                return successResponse(response,"success");
+            }
+            else {
+                return errorResponse(response, RETURN_DATABASE_WRONG, "RETURN_DATABASE_WRONG");
+            }
+        } catch (Exception e) {
+            LoggerManager.logger().error(String.format("[com.zulong.web.controller]InstanceController.instanceStartNode@create operation failed|flow_record_id=%d|uuid=%s", flow_record_id, uuid), e);
+            return errorResponse(response, RETURN_DATABASE_WRONG, e.getMessage());
+        }
+    }
+
+    @PostMapping(value = "/report/end")
+    public Map<String, Object> instanceEnd(@RequestBody Map<String, Object> request) {
+        Map<String, Object> response = new HashMap<>();
+        String uuid;
+        int flow_record_id;
+        String end_time;
+        boolean complete;
+        boolean has_error;
+        try {
+            uuid = (String) getParam(request,"uuid","instanceEndNode");
+            if(uuid == null) {
+                return errorResponse(response, RETURN_PARAMS_NULL, "uuid is null");
+            }
+            Object tmp = getParam(request,"flow_record_id","instanceEndNode");
+            if(tmp == null) {
+                return errorResponse(response, RETURN_PARAMS_NULL, "flow_record_id is null");
+            }
+            flow_record_id = (int) tmp;
+            if( ParamsUtil.isInValidInt(flow_record_id)){
+                return errorResponse(response, RETURN_PARAMS_WRONG, "flow_record_id is invalid");
+            }
+            end_time = (String) getParam(request,"end_time","instanceStartNode");
+            if(end_time == null) {
+                return errorResponse(response, RETURN_PARAMS_NULL, "start_time is null");
+            }
+            if( ParamsUtil.isInValidDateFormat(end_time)){
+                return errorResponse(response, RETURN_PARAMS_WRONG, "end_time is invalid");
+            }
+//            tmp = getParam(request,"complete","instanceEndNode");
+//            if(tmp == null) {
+//                return errorResponse(response, RETURN_PARAMS_WRONG, "complete is null");
+//            }
+            complete = true;
+            tmp = getParam(request,"has_error","instanceEndNode");
+            if(tmp == null) {
+                return errorResponse(response, RETURN_PARAMS_NULL, "has_error is null");
+            }
+            has_error = (boolean) tmp;
+
+        } catch (Exception e) {
+            LoggerManager.logger().error(String.format("[com.zulong.web.controller]InstanceController.instanceEnd@params are wrong|"), e);
+            return errorResponse(response, RETURN_PARAMS_NULL, e.getMessage());
+        }
+        //全局查询flow_id是否存在，并返回对应的flow
+        try {
+            Flow tmpFlow = flowService.findFlowByRecordId(flow_record_id);
+            if(tmpFlow == null) {
+                LoggerManager.logger().error(String.format("[com.zulong.web.controller]InstanceController.instanceEnd@flow doesn't exist|flow_record_id=%d", flow_record_id));
+                return errorResponse(response, RETURN_PARAMS_NULL, String.format("Unable to find corresponding flow_record_id flow_id|flow_record_id=%d", flow_record_id));
+            }
+        } catch (Exception e) {
+            LoggerManager.logger().error(String.format("[com.zulong.web.controller]InstanceController.instanceEnd@create operation failed|flow_record_id=%d|uuid=%s", flow_record_id, uuid), e);
+            return errorResponse(response, RETURN_PARAMS_NULL, e.getMessage());
+        }
+
+        try{
+            boolean flag = instanceService.instanceEnd(uuid, flow_record_id, end_time, complete, has_error);
+            if(flag) {
+                return successResponse(response,"success");
+            }
+            else {
+                LoggerManager.logger().error(String.format("[com.zulong.web.controller]InstanceController.instanceEnd@create operation failed|flow_record_id=%d|uuid=%s", flow_record_id, uuid));
+                return errorResponse(response, RETURN_DATABASE_WRONG, String.format("@database wrong,create operation failed|flow_record_id=%d|uuid=%s", flow_record_id, uuid));
+            }
+        } catch (Exception e) {
+            LoggerManager.logger().error(String.format("[com.zulong.web.controller]InstanceController.instanceEnd@create operation failed|flow_record_id=%d|uuid=%s", flow_record_id, uuid), e);
+            return errorResponse(response, RETURN_PARAMS_NULL, e.getMessage());
+        }
+    }
+
+    @PostMapping(value = "/report/nodestart")
     public Map<String, Object> instanceStartNode(@RequestBody Map<String, Object> request){
         String uuid;
         int flow_record_id;
@@ -61,46 +201,46 @@ public class InstanceController {
         try {
             uuid = (String) getParam(request,"uuid","instanceStartNode");
             if(uuid == null) {
-                return errorResponse(response, RETURN_PARAMS_WRONG, "uuid is null");
+                return errorResponse(response, RETURN_PARAMS_NULL, "uuid is null");
             }
             node_id = (String) getParam(request,"node_id","instanceStartNode");
             if(node_id == null) {
-                return errorResponse(response, RETURN_PARAMS_WRONG, "node_id is null");
+                return errorResponse(response, RETURN_PARAMS_NULL, "node_id is null");
             }
             start_time = (String) getParam(request,"start_time","instanceStartNode");
             if(start_time == null) {
-                return errorResponse(response, RETURN_PARAMS_WRONG, "start_time is null");
+                return errorResponse(response, RETURN_PARAMS_NULL, "start_time is null");
             }
-
+            if( ParamsUtil.isInValidDateFormat(start_time)){
+                return errorResponse(response, RETURN_PARAMS_WRONG, "start_time is invalid");
+            }
             Object tmp = getParam(request,"flow_record_id","instanceStartNode");
             if(tmp == null) {
-                return errorResponse(response, RETURN_PARAMS_WRONG, "flow_record_id is null");
+                return errorResponse(response, RETURN_PARAMS_NULL, "flow_record_id is null");
             }
             flow_record_id = (int) tmp;
+            if( ParamsUtil.isInValidInt(flow_record_id)){
+                return errorResponse(response, RETURN_PARAMS_WRONG, "flow_record_id is invalid");
+            }
             tmp = getParam(request,"complete","instanceStartNode");
             if(tmp == null) {
-                return errorResponse(response, RETURN_PARAMS_WRONG, "complete is null");
+                return errorResponse(response, RETURN_PARAMS_NULL, "complete is null");
             }
             complete = (boolean) tmp;
             tmp = getParam(request,"has_error","instanceStartNode");
             if(tmp == null) {
-                return errorResponse(response, RETURN_PARAMS_WRONG, "has_error is null");
+                return errorResponse(response, RETURN_PARAMS_NULL, "has_error is null");
             }
             has_error = (boolean) tmp;
-
-            //Map<String, Object> optionsMap = (Map<String, Object>) getParam(request,"options","instanceStartNode");
             tmp = getParam(request, "options", "instanceStartNode");
             if(tmp == null) {
-                return errorResponse(response, RETURN_PARAMS_WRONG, "options is null");
+                return errorResponse(response, RETURN_PARAMS_NULL, "options is null");
             }
             options = (String) tmp;
-//            if(optionsMap == null) {
-//                return errorResponse(response, RETURN_PARAMS_WRONG, "options is null");
-//            }
-//            options = optionsMap.toString();
+
         } catch (Exception e) {
             LoggerManager.logger().error(String.format("[com.zulong.web.controller]InstanceController.instanceStartNode@params are wrong|"), e);
-            return errorResponse(response, RETURN_PARAMS_WRONG, e.getMessage());
+            return errorResponse(response, RETURN_PARAMS_NULL, e.getMessage());
         }
 
         //全局查询flow_id是否存在，并返回对应的flow
@@ -108,14 +248,14 @@ public class InstanceController {
             Flow tmpFlow = flowService.findFlowByRecordId(flow_record_id);
             if(tmpFlow == null) {
                 LoggerManager.logger().error(String.format("[com.zulong.web.controller]InstanceController.instanceStartNode@flow doesn't exist|flow_record_id=%d", flow_record_id));
-                return errorResponse(response, RETURN_PARAMS_WRONG, String.format("flow doesn't exist|flow_record_id = %d",flow_record_id));
+                return errorResponse(response, RETURN_PARAMS_NULL, String.format("flow doesn't exist|flow_record_id = %d",flow_record_id));
             }
         } catch (Exception e) {
             LoggerManager.logger().error(String.format("[com.zulong.web.controller]InstanceController.instanceStartNode@operation failed|flow_record_id=%d|node_id=%s", flow_record_id, node_id), e);
             return errorResponse(response, RETURN_DATABASE_WRONG, e.getMessage());
         }
         try{
-            boolean flag = instanceService.instanceStartNode(uuid, flow_record_id, node_id, start_time, complete, has_error, options);
+            boolean flag = instanceService.instanceStartNode(uuid, flow_record_id, node_id, start_time, has_error, options);
             if(flag) {
                 return successResponse(response,"success");
             }
@@ -128,7 +268,7 @@ public class InstanceController {
         }
     }
 
-    @PostMapping(value = "/report/end")
+    @PostMapping(value = "/report/nodeend")
     public Map<String, Object> instanceEndNode(@RequestBody Map<String, Object> request){
         Map<String, Object> response = new HashMap<>();
         String uuid;
@@ -141,59 +281,57 @@ public class InstanceController {
         try {
             uuid = (String) getParam(request,"uuid","instanceEndNode");
             if(uuid == null) {
-                return errorResponse(response, RETURN_PARAMS_WRONG, "uuid is null");
+                return errorResponse(response, RETURN_PARAMS_NULL, "uuid is null");
             }
             node_id = (String) getParam(request,"node_id","instanceEndNode");
             if(node_id == null) {
-                return errorResponse(response, RETURN_PARAMS_WRONG, "node_id is null");
+                return errorResponse(response, RETURN_PARAMS_NULL, "node_id is null");
             }
             end_time = (String) getParam(request,"end_time","instanceEndNode");
             if(end_time == null) {
-                return errorResponse(response, RETURN_PARAMS_WRONG, "end_time is null");
+                return errorResponse(response, RETURN_PARAMS_NULL, "end_time is null");
+            }
+            if( ParamsUtil.isInValidDateFormat(end_time)){
+                return errorResponse(response, RETURN_PARAMS_WRONG, "end_time is invalid");
             }
             Object tmp = getParam(request,"flow_record_id","instanceEndNode");
             if(tmp == null) {
-                return errorResponse(response, RETURN_PARAMS_WRONG, "flow_record_id is null");
+                return errorResponse(response, RETURN_PARAMS_NULL, "flow_record_id is null");
             }
             flow_record_id = (int) tmp;
+            if( ParamsUtil.isInValidInt(flow_record_id)){
+                return errorResponse(response, RETURN_PARAMS_WRONG, "flow_record_id is invalid");
+            }
             tmp = getParam(request,"complete","instanceEndNode");
             if(tmp == null) {
-                return errorResponse(response, RETURN_PARAMS_WRONG, "complete is null");
+                return errorResponse(response, RETURN_PARAMS_NULL, "complete is null");
             }
             complete = (boolean) tmp;
             tmp = getParam(request,"has_error","instanceEndNode");
             if(tmp == null) {
-                return errorResponse(response, RETURN_PARAMS_WRONG, "has_error is null");
+                return errorResponse(response, RETURN_PARAMS_NULL, "has_error is null");
             }
             has_error = (boolean) tmp;
             tmp = getParam(request, "options", "instanceStartNode");
             if(tmp == null) {
-                return errorResponse(response, RETURN_PARAMS_WRONG, "options is null");
+                return errorResponse(response, RETURN_PARAMS_NULL, "options is null");
             }
             options = (String) tmp;
-//            Map<String, Object> optionsMap = (Map<String, Object>) getParam(request,"options","instanceEndNode");
-//            if(optionsMap == null) {
-//                return errorResponse(response, RETURN_PARAMS_WRONG, "options is null");
-//            }
-//            options = optionsMap.toString();
-            //String optionJson = (String) request.get("option");  // 获取JSON字符串
-            //JsonParser parser = JsonParserFactory.getJsonParser();
-            //Map<String, Object> json = parser.parseMap(optionJson);  // 将JSON字符串转换为Map对象
-            //option = (String) json.get("option");  // 从Map对象中提取option参数
+
         } catch (Exception e) {
             LoggerManager.logger().error(String.format("[com.zulong.web.controller]InstanceController.instanceEndNode@params are wrong|"), e);
-            return errorResponse(response, RETURN_PARAMS_WRONG, e.getMessage());
+            return errorResponse(response, RETURN_PARAMS_NULL, e.getMessage());
         }
         //全局查询flow_id是否存在，并返回对应的flow
         try {
             Flow tmpFlow = flowService.findFlowByRecordId(flow_record_id);
             if(tmpFlow == null) {
                 LoggerManager.logger().error(String.format("[com.zulong.web.controller]InstanceController.instanceEndNode@flow doesn't exist|flow_record_id=%d", flow_record_id));
-                return errorResponse(response, RETURN_PARAMS_WRONG, String.format("Unable to find corresponding flow_record_id flow_id|flow_record_id=%d", flow_record_id));
+                return errorResponse(response, RETURN_PARAMS_NULL, String.format("Unable to find corresponding flow_record_id flow_id|flow_record_id=%d", flow_record_id));
             }
         } catch (Exception e) {
             LoggerManager.logger().error(String.format("[com.zulong.web.controller]InstanceController.instanceEndNode@create operation failed|flow_record_id=%d|node_id=%s", flow_record_id, node_id), e);
-            return errorResponse(response, RETURN_PARAMS_WRONG, e.getMessage());
+            return errorResponse(response, RETURN_PARAMS_NULL, e.getMessage());
         }
         // 创建instance
         try{
@@ -207,7 +345,7 @@ public class InstanceController {
             }
         } catch (Exception e) {
             LoggerManager.logger().error(String.format("[com.zulong.web.controller]InstanceController.instanceEndNode@create operation failed|flow_record_id=%d|node_id=%s", flow_record_id, node_id), e);
-            return errorResponse(response, RETURN_PARAMS_WRONG, e.getMessage());
+            return errorResponse(response, RETURN_PARAMS_NULL, e.getMessage());
         }
     }
 
@@ -224,18 +362,18 @@ public class InstanceController {
         try {
             uuid = (String) getParam(request,"uuid","instanceEndNode");
             if(uuid == null) {
-                return errorResponse(response, RETURN_PARAMS_WRONG, "uuid is null");
+                return errorResponse(response, RETURN_PARAMS_NULL, "uuid is null");
             }
         } catch (Exception e) {
             LoggerManager.logger().error(String.format("[com.zulong.web.controller]InstanceController.UpdateInstance@pulling failed, params are wrong|"), e);
-            return errorResponse(response, RETURN_PARAMS_WRONG, e.getMessage());
+            return errorResponse(response, RETURN_PARAMS_NULL, e.getMessage());
         }
         try {
             instanceAndNodeList = instanceService.findInstanceByUuid(uuid);
             response.put("uuid", uuid);
             return successResponse(response,instanceAndNodeList);
         } catch (Exception e) {
-            LoggerManager.logger().error(String.format("[com.zulong.web.controller]InstanceController.UpdateInstance@pulling instance failed|uuid=%d", uuid), e);
+            LoggerManager.logger().error(String.format("[com.zulong.web.controller]InstanceController.UpdateInstance@pulling instance failed|uuid=%s", uuid), e);
             return errorResponse(response, RETURN_SERVER_WRONG, e.getMessage());
         }
     }
@@ -248,12 +386,15 @@ public class InstanceController {
         try {
             Object tmp = getParam(request,"flow_record_id","instanceEndNode");
             if(tmp == null) {
-                return errorResponse(response, RETURN_PARAMS_WRONG, "flow_record_id is null");
+                return errorResponse(response, RETURN_PARAMS_NULL, "flow_record_id is null");
             }
             flow_record_id = (int) tmp;
+            if( ParamsUtil.isInValidInt(flow_record_id)){
+                return errorResponse(response, RETURN_PARAMS_WRONG, "flow_record_id is invalid");
+            }
         } catch (Exception e) {
             LoggerManager.logger().error(String.format("[com.zulong.web.controller]InstanceController.getInstanceList@params are wrong|"), e);
-            return errorResponse(response, RETURN_PARAMS_WRONG, e.getMessage());
+            return errorResponse(response, RETURN_PARAMS_NULL, e.getMessage());
         }
         try {
             List<Instance> instancelist = instanceService.findInstanceByFlowRecordId(flow_record_id);

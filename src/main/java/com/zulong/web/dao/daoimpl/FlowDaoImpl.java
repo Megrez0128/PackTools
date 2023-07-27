@@ -38,7 +38,7 @@ public class FlowDaoImpl implements FlowDao {
         // 目前认为返回的是全部的列
         try {
             String sql = "select * from flow";
-            //List<Flow> flowList = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Flow.class));
+
             List<Flow> flowList = jdbcTemplate.query(sql, new RowMapper<Flow>(){
                 @Override
                 public Flow mapRow(ResultSet resultSet, int i) throws SQLException {
@@ -54,7 +54,7 @@ public class FlowDaoImpl implements FlowDao {
 
     @Cacheable(value="flowCache", key="#flow_id+'_'+#version")
     @Override
-    public Flow getFlowDetails(final int flow_id, final int version){
+    public Flow getFlowDetailsByFlowIdAndVersion(final int flow_id, final int version){
         String sql = "select * from flow where flow_id = ? and version = ?";
         Object[] params = new Object[]{flow_id, version};
         try{
@@ -73,7 +73,7 @@ public class FlowDaoImpl implements FlowDao {
 
     @Cacheable(value = "flowCache", key = "#record_id")
     @Override
-    public Flow getFlowDetailsByID(int record_id) {
+    public Flow getFlowDetailsByRecordId(int record_id) {
         String sql = "select * from flow where record_id=?";
         Object[] params = new Object[]{record_id};
         try {
@@ -83,6 +83,7 @@ public class FlowDaoImpl implements FlowDao {
                     return getFlowFromResultSet(resultSet);
                 }
             });
+            LoggerManager.logger().info(String.format("[com.zulong.web.dao.daoimpl]FlowDaoImpl.getFlowDetailsByRecordId@show save_time|save_time=%s", flow.getSave_time()));
             return flow;
         } catch (Exception e) {
             LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]FlowDaoImpl.getFlowDetailsByID@record_id is invalid|record_id=%d", record_id), e);
@@ -134,9 +135,9 @@ public class FlowDaoImpl implements FlowDao {
     @CachePut(value = "flowCache", key = "#flow.record_id")
     @Override
     public boolean insertFlow(Flow flow) {
-        String sql = "insert into flow(record_id, flow_id, version, committed, commit_message, last_build, meta_id, graph_data, blackboard) values(?,?,?,?,?,?,?,?,?)";
+        String sql = "insert into flow(record_id, flow_id, version, committed, commit_message, last_build, save_time, meta_id, graph_data, blackboard) values(?,?,?,?,?,?,?,?,?,?)";
         Object[] params = {flow.getRecord_id(), flow.getFlow_id(), flow.getVersion(), flow.isCommitted(), flow.getCommit_message(),
-            flow.getLast_build(), flow.getMeta_id(), new SerialBlob(flow.getGraph_data().getBytes()), new SerialBlob(flow.getBlackboard().getBytes())};
+            flow.getLast_build(), flow.getSave_time(), flow.getMeta_id(), new SerialBlob(flow.getGraph_data().getBytes()), new SerialBlob(flow.getBlackboard().getBytes())};
         boolean flag = jdbcTemplate.update(sql, params) > 0;
         if(!flag){
             LoggerManager.logger().error(String.format("[com.zulong.web.dao.daoimpl]FlowDaoImpl.insertFlow@insertion failed|record_id=%d", flow.getRecord_id()));
@@ -148,8 +149,8 @@ public class FlowDaoImpl implements FlowDao {
     @CachePut(value = "flowCache", key = "#flow.record_id")
     @Override
     public boolean updateFlow(Flow flow) {
-        String sql = "update flow set committed=?, commit_message=?, last_build=?, meta_id=?, graph_data=?, blackboard=? where record_id=?";
-        Object[] params = {flow.isCommitted(), flow.getCommit_message(), flow.getLast_build(),  flow.getMeta_id(), flow.getGraph_data(), flow.getBlackboard(), flow.getRecord_id()};
+        String sql = "update flow set committed=?, commit_message=?, last_build=?, save_time=?, meta_id=?, graph_data=?, blackboard=? where record_id=?";
+        Object[] params = {flow.isCommitted(), flow.getCommit_message(), flow.getLast_build(), flow.getSave_time(), flow.getMeta_id(), flow.getGraph_data(), flow.getBlackboard(), flow.getRecord_id()};
         boolean flag = jdbcTemplate.update(sql, params) > 0;
         if(!flag){
             LoggerManager.logger().error(String.format("[com.zulong.web.dao.daoimpl]FlowDaoImpl.updateFlow@update failed|record_id=%d", flow.getRecord_id()));
@@ -158,7 +159,7 @@ public class FlowDaoImpl implements FlowDao {
     }
 
     @Override
-    public boolean updateLastBuild(int record_id, String last_build){
+    public boolean updateLastBuild(int record_id, String last_build) {
         String sql = "update flow set last_build =? where record_id=?";
         Object[] params = {last_build, record_id};
         boolean flag = jdbcTemplate.update(sql, params) > 0;

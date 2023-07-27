@@ -9,5 +9,6 @@ public interface InstanceDao {
     Instance findInstanceByUuid(String uuid);
     List<Instance> getInstanceByFlowRecordId(int record_id);
     boolean insertInstance(Instance instance);
-    boolean updateInstance(int flow_record_id,boolean complete,boolean has_error,String uuid);
+    boolean updateInstance(int flow_record_id, boolean complete, boolean has_error, String uuid);
+    boolean endInstance(int flow_record_id, String end_time, boolean complete, boolean has_error, String uuid);
 }

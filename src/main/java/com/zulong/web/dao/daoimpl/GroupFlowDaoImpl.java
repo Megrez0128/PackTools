@@ -24,10 +24,10 @@ public class GroupFlowDaoImpl implements GroupFlowDao {
         try{
             String sql = "select count(*) from group_flow where group_id = ? and flow_id = ?";
             Object[] params = {group_id, flow_id};
-            boolean flag = jdbcTemplate.update(sql,params,Integer.class) > 0;
+            boolean flag = jdbcTemplate.queryForObject(sql, params, Integer.class) > 0;
             return flag;
         }catch (Exception e){
-            LoggerManager.logger().warn(String.format("[com.zulong.web.dao.daoimpl]GroupFlowDaoImpl.hasFlowPermission@Permission verify failed|group_id=%d|flow_id=%d",group_id, flow_id));
+            LoggerManager.logger().error(String.format("[com.zulong.web.dao.daoimpl]GroupFlowDaoImpl.hasFlowPermission@Permission verify failed|group_id=%d|flow_id=%d",group_id, flow_id));
             return false;
         }
     }
@@ -37,7 +37,7 @@ public class GroupFlowDaoImpl implements GroupFlowDao {
         Object[] params = {group_id, flow_id};
         boolean flag = jdbcTemplate.update(sql,params) > 0;
         if(!flag){
-            LoggerManager.logger().warn("[com.zulong.web.dao.daoimpl]GroupFlowDaoImpl.insertGroupFlow@insert failed|group_id=%d|flow_id=%d", group_id, flow_id);
+            LoggerManager.logger().error("[com.zulong.web.dao.daoimpl]GroupFlowDaoImpl.insertGroupFlow@insert failed|group_id=%d|flow_id=%d", group_id, flow_id);
         }
         return flag;
     }

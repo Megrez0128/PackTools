@@ -57,12 +57,15 @@ public class GroupController {
         try{
             Object tmp = getParam(request,"group_id","getAllUsers");
             if(tmp == null) {
-                return errorResponse(response, RETURN_PARAMS_WRONG, "group_id is null");
+                return errorResponse(response, RETURN_PARAMS_NULL, "group_id is null");
             }
             group_id = (int) tmp;
+            if( ParamsUtil.isInValidInt(group_id)){
+                return errorResponse(response, RETURN_PARAMS_WRONG, "group_id is invalid");
+            }
         }catch (Exception e){
             LoggerManager.logger().warn(String.format("[com.zulong.web.controller]GroupController.getAllUsers@params are wrong|"), e);
-            return errorResponse(response, RETURN_PARAMS_WRONG, e.getMessage());
+            return errorResponse(response, RETURN_PARAMS_NULL, e.getMessage());
         }
         try {
             List<User> userlist = groupService.getAllUsers(group_id);
@@ -82,11 +85,11 @@ public class GroupController {
         try{
             group_name = (String) getParam(request,"group_name","createGroup");
             if(group_name == null) {
-                return errorResponse(response, RETURN_PARAMS_WRONG, "group_name is null");
+                return errorResponse(response, RETURN_PARAMS_NULL, "group_name is null");
             }
         }catch (Exception e){
             LoggerManager.logger().warn(String.format("[com.zulong.web.controller]GroupController.createGroup@params are wrong|"), e);
-            return errorResponse(response, RETURN_PARAMS_WRONG, e.getMessage());
+            return errorResponse(response, RETURN_PARAMS_NULL, e.getMessage());
         }
         try {
             Map<String, Object> data = new HashMap<>();

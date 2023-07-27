@@ -11,6 +11,7 @@ import com.zulong.web.utils.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
@@ -53,7 +54,7 @@ public class UserController {
             user_id = TokenUtils.getCurrUserId(token);
         }catch (Exception e){
             LoggerManager.logger().warn(String.format("[com.zulong.web.controller]UserController.getAllGroups@please login first|"), e);
-            return errorResponse(response,RETURN_PARAMS_WRONG,e.getMessage());
+            return errorResponse(response, RETURN_PARAMS_NULL,e.getMessage());
         }
         try {
             List<Group> groupList = userService.getAllGroups(user_id);
@@ -67,7 +68,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/create")
-    public Map<String, Object> createUser(@RequestBody Map<String, String> request, @RequestHeader("Authorization") String token) {
+    public Map<String, Object> createUser(@RequestBody Map<String, Object> request, @RequestHeader("Authorization") String token) {
         Map<String, Object> response = new HashMap<>();
         if(!authenticationService.isAdmin(TokenUtils.getCurrUserId(token))){
             LoggerManager.logger().warn(String.format("[com.zulong.web.controller]GroupController.getAllUsers@this user is not admin|"));
@@ -76,11 +77,18 @@ public class UserController {
         String user_id;
         boolean is_admin;
         try{
-            user_id = request.get("user_id");
-            is_admin = Boolean.parseBoolean(request.get("is_admin"));
+            user_id = (String) getParam(request,"user_id","createUser");
+            if(user_id == null) {
+                return errorResponse(response, RETURN_PARAMS_NULL, "user_id is null");
+            }
+            Object tmp = getParam(request,"is_admin","createUser");
+            if(tmp == null) {
+                return errorResponse(response, RETURN_PARAMS_NULL, "is_admin is null");
+            }
+            is_admin = (boolean) tmp;
         }catch (Exception e){
             LoggerManager.logger().warn(String.format("[com.zulong.web.controller]UserController.createUser@params are wrong|"), e);
-            return errorResponse(response,RETURN_PARAMS_WRONG,e.getMessage());
+            return errorResponse(response, RETURN_PARAMS_NULL,e.getMessage());
         }
 
         try {
@@ -106,21 +114,20 @@ public class UserController {
     }
 
     @PostMapping(value = "/logout")
-    public Map<String, Object> logoutUser(@RequestHeader("Authorization") String token){
-
+    public Map<String, Object> logoutUser(@RequestHeader("Authorization") String token, HttpServletResponse responseRedirect){
         Map<String, Object> response = new HashMap<>();
         try{
             if (token != null && token.startsWith("Bearer ")) {
                 token = token.substring(7);
             }
             TokenUtils.loginOut(token);
-            LoggerManager.logger().warn(String.format("[com.zulong.web.controller]UserController.logoutUser@login out success|"));
             response.put("code", RETURN_SUCCESS);
             response.put("message", "logout success, token is clear");
+            //responseRedirect.sendRedirect("https://ztp-sso.zulong.com/");
             return response;
         }catch (Exception e){
-            LoggerManager.logger().warn(String.format("[com.zulong.web.controller]UserController.logoutUser@please login first|"), e);
-            return errorResponse(response,RETURN_PARAMS_WRONG,e.getMessage());
+            LoggerManager.logger().error(String.format("[com.zulong.web.controller]UserController.logoutUser@please login first|"), e);
+            return errorResponse(response, RETURN_PARAMS_NULL,e.getMessage());
         }
     }
 
@@ -131,12 +138,11 @@ public class UserController {
         try{
             user_id = (String) getParam(request,"user_id","loginUser");
             if(user_id == null) {
-                return errorResponse(response, RETURN_PARAMS_WRONG, "user_id is null");
+                return errorResponse(response, RETURN_PARAMS_NULL, "user_id is null");
             }
         }catch (Exception e){
-            LoggerManager.logger().warn(String.format("[com.zulong.web.controller]UserController.loginUser@params are wrong|"), e);
-            return errorResponse(response,RETURN_PARAMS_WRONG,e.getMessage());
-
+            LoggerManager.logger().error(String.format("[com.zulong.web.controller]UserController.loginUser@user_id is invalid|"), e);
+            return errorResponse(response, RETURN_USER_NOT_EXISTS, e.getMessage());
         }
         User user = null;
         try {
@@ -155,7 +161,7 @@ public class UserController {
         }
         try {
             String token = TokenUtils.sign(user);
-            //将令牌放置在响应头中返回
+            //将令牌放置在响应体中返回
             Map<String, Object> data = new HashMap<>();
             data.put("token", token);
             response.put("data", data);
@@ -180,16 +186,19 @@ public class UserController {
         try{
             user_id = (String) getParam(request,"user_id","addtogroup");
             if(user_id == null) {
-                return errorResponse(response, RETURN_PARAMS_WRONG, "user_id is null");
+                return errorResponse(response, RETURN_PARAMS_NULL, "user_id is null");
             }
             Object tmp = getParam(request,"group_id","addtogroup");
             if(tmp == null) {
-                return errorResponse(response, RETURN_PARAMS_WRONG, "group_id is null");
+                return errorResponse(response, RETURN_PARAMS_NULL, "group_id is null");
             }
             group_id = (int) tmp;
+            if( ParamsUtil.isInValidInt(group_id)){
+                return errorResponse(response, RETURN_PARAMS_WRONG, "group_id is invalid");
+            }
         }catch (Exception e){
             LoggerManager.logger().warn(String.format("[com.zulong.web.controller]UserController.addToGroup@params are wrong|"), e);
-            return errorResponse(response,RETURN_PARAMS_WRONG,e.getMessage());
+            return errorResponse(response, RETURN_PARAMS_NULL,e.getMessage());
         }
         try {
             if(!userService.findByUserID(user_id)) {
@@ -229,18 +238,21 @@ public class UserController {
         String user_id;
         int group_id;
         try{
-            user_id = (String) getParam(request,"user_id","addtogroup");
+            user_id = (String) getParam(request,"user_id","removeFromGroup");
             if(user_id == null) {
-                return errorResponse(response, RETURN_PARAMS_WRONG, "user_id is null");
+                return errorResponse(response, RETURN_PARAMS_NULL, "user_id is null");
             }
-            Object tmp = getParam(request,"group_id","addtogroup");
+            Object tmp = getParam(request,"group_id","removeFromGroup");
             if(tmp == null) {
-                return errorResponse(response, RETURN_PARAMS_WRONG, "group_id is null");
+                return errorResponse(response, RETURN_PARAMS_NULL, "group_id is null");
             }
             group_id = (int) tmp;
+            if( ParamsUtil.isInValidInt(group_id)){
+                return errorResponse(response, RETURN_PARAMS_WRONG, "group_id is invalid");
+            }
         }catch (Exception e){
             LoggerManager.logger().warn(String.format("[com.zulong.web.controller]UserController.removeFromGroup@params are wrong|"), e);
-            return errorResponse(response,RETURN_PARAMS_WRONG,e.getMessage());
+            return errorResponse(response, RETURN_PARAMS_NULL,e.getMessage());
         }
         try {
             boolean flag = userService.removeFromGroup(user_id, group_id);
@@ -283,5 +295,49 @@ public class UserController {
             //身份验证失败
             return errorResponse(response,RETURN_NO_AUTHORITY,"this user is not admin, no authority");
         }
+    }
+    @PostMapping(value = "/returntoken")
+    public Map<String, Object> getToken(@RequestParam(value = "user_id", required = false) String user_id){
+        User admin_user = new User();
+        admin_user.setAdmin(true);
+        admin_user.setUser_id(user_id);
+        Map<String, Object> response = new HashMap<>();
+        try{
+            String token = TokenUtils.sign(admin_user);
+            //将令牌放置在响应体中返回
+            response.put("code",RETURN_SUCCESS);
+            response.put("Authentication", String.format("Bearer %s",token));
+            return response;
+        }
+       catch (Exception e){
+           return errorResponse(response,RETURN_NO_AUTHORITY,e.getMessage());
+       }
+    }
+    @PostMapping(value = "/info")
+    public Map<String, Object> getUserInfo(@RequestHeader("Authorization") String token) {
+        Map<String, Object> response = new HashMap<>();
+        String user_id;
+        try{
+            user_id = TokenUtils.getCurrUserId(token);
+            if(user_id == null) {
+                return errorResponse(response, RETURN_TOKEN_EXPIRED, "The token has expired, get user_id by token failed");
+            }
+        }catch (Exception e){
+            LoggerManager.logger().error(String.format("[com.zulong.web.controller]UserController.loginUser@current token is invalid|token=%s", token), e);
+            return errorResponse(response, RETURN_USER_NOT_EXISTS, e.getMessage());
+        }
+
+        User user;
+        try{
+            user = userService.getUserByUserId(user_id);
+            if(user == null){
+                return errorResponse(response, RETURN_USER_NOT_EXISTS, "user not exist");
+            }
+        }catch (Exception e){
+            LoggerManager.logger().warn(String.format("[com.zulong.web.controller]UserController.getUserInfo@get User info failed|user_id=%s", user_id), e);
+            return errorResponse(response,RETURN_SERVER_WRONG,e.getMessage());
+        }
+
+        return successResponse(response, user);
     }
 }

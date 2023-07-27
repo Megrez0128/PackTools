@@ -14,8 +14,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import static com.zulong.web.config.ConstantConfig.*;
 
 @RestController
@@ -60,21 +58,24 @@ public class MetaController {
         try{
             version_display = (String) getParam(request,"version_display","createMeta");
             if(version_display == null) {
-                return errorResponse(response, RETURN_PARAMS_WRONG, "version_display is null");
+                return errorResponse(response, RETURN_PARAMS_NULL, "version_display is null");
             }
 
             Object tmp = getParam(request,"group_id","createMeta");
             if(tmp == null) {
-                return errorResponse(response, RETURN_PARAMS_WRONG, "group_id is null");
+                return errorResponse(response, RETURN_PARAMS_NULL, "group_id is null");
             }
             group_id = (int) tmp;
+            if( ParamsUtil.isInValidInt(group_id)){
+                return errorResponse(response, RETURN_PARAMS_WRONG, "group_id is invalid");
+            }
             data = (String) getParam(request,"data","createMeta");
             if(data == null) {
-                return errorResponse(response, RETURN_PARAMS_WRONG, "data is null");
+                return errorResponse(response, RETURN_PARAMS_NULL, "data is null");
             }
         }catch (Exception e){
             LoggerManager.logger().warn(String.format("[com.zulong.web.controller]MetaController.createMeta@params are wrong|"), e);
-            return errorResponse(response,RETURN_PARAMS_WRONG,e.getMessage());
+            return errorResponse(response, RETURN_PARAMS_NULL,e.getMessage());
         }
 
         try {
@@ -98,7 +99,7 @@ public class MetaController {
                 return errorResponse(response,RETURN_DATABASE_WRONG,"database internal error");
             }
         } catch (NumberFormatException e) {
-            return errorResponse(response,RETURN_PARAMS_WRONG,"parameter error");
+            return errorResponse(response, RETURN_PARAMS_NULL,"parameter error");
         } catch (Exception e) {
             return errorResponse(response,RETURN_SERVER_WRONG,"server error");
         }
@@ -125,12 +126,15 @@ public class MetaController {
         try {
             Object tmp = getParam(request,"meta_id","getMetaDetails");
             if(tmp == null) {
-                return errorResponse(response, RETURN_PARAMS_WRONG, "meta_id is null");
+                return errorResponse(response, RETURN_PARAMS_NULL, "meta_id is null");
             }
             meta_id = (int) tmp;
+            if( ParamsUtil.isInValidMetaId(meta_id)){
+                return errorResponse(response, RETURN_PARAMS_WRONG, "meta_id is invalid");
+            }
         } catch (Exception e) {
             LoggerManager.logger().warn("[com.zulong.web.controller]MetaController.getMetaDetails@params are wrong|", e);
-            return errorResponse(response,RETURN_PARAMS_WRONG, e.getMessage());
+            return errorResponse(response, RETURN_PARAMS_NULL, e.getMessage());
         }
         try {
             Meta meta = metaService.getMetaDetails(meta_id);
@@ -151,30 +155,36 @@ public class MetaController {
         try{
             Object tmp = getParam(request,"meta_id","saveMeta");
             if(tmp == null) {
-                return errorResponse(response, RETURN_PARAMS_WRONG, "meta_id is null");
+                return errorResponse(response, RETURN_PARAMS_NULL, "meta_id is null");
             }
             meta_id = (int) tmp;
+            if( ParamsUtil.isInValidMetaId(meta_id)){
+                return errorResponse(response, RETURN_PARAMS_WRONG, "meta_id is invalid");
+            }
             tmp = getParam(request,"group_id","saveMeta");
             if(tmp == null) {
-                return errorResponse(response, RETURN_PARAMS_WRONG, "group_id is null");
+                return errorResponse(response, RETURN_PARAMS_NULL, "group_id is null");
             }
             group_id = (int) tmp;
+            if( ParamsUtil.isInValidInt(group_id)){
+                return errorResponse(response, RETURN_PARAMS_WRONG, "group_id is invalid");
+            }
             version_display = (String) getParam(request,"version_display","saveMeta");
             if(version_display == null) {
-                return errorResponse(response, RETURN_PARAMS_WRONG, "version_display is null");
+                return errorResponse(response, RETURN_PARAMS_NULL, "version_display is null");
             }
             request_data =  (String) getParam(request,"data","saveMeta");
             if(request_data == null) {
-                return errorResponse(response, RETURN_PARAMS_WRONG, "data is null");
+                return errorResponse(response, RETURN_PARAMS_NULL, "data is null");
             }
         }catch (Exception e){
-            return errorResponse(response,RETURN_PARAMS_WRONG, e.getMessage());
+            return errorResponse(response, RETURN_PARAMS_NULL, e.getMessage());
         }
         try {
             Meta meta= metaService.updateMeta(meta_id,group_id,request_data,version_display);
             return successResponse(response,meta);
         } catch (Exception e) {
-            LoggerManager.logger().warn(String.format("[com.zulong.web.controller]MetaController.getMetaList@operation failed|"), e);
+            LoggerManager.logger().error(String.format("[com.zulong.web.controller]MetaController.getMetaList@operation failed|"), e);
             return errorResponse(response,RETURN_DATABASE_WRONG,"DATABASE WRONG ");
         }
     }

@@ -11,8 +11,9 @@ import com.zulong.web.log.LoggerManager;
 
 
 
-public class TokenUtils {//token到期时间10小时
+public class TokenUtils {
 
+    //token到期时间10小时
     private static final long EXPIRE_TIME = 10 * 60 * 60 * 1000;
     //密钥盐
     private static final String TOKEN_SECRET = "ljdyaishijin**3nkjnj??";
@@ -26,11 +27,11 @@ public class TokenUtils {//token到期时间10小时
             DecodedJWT decodedJWT=jwtVerifier.verify(token);
             String user_id = decodedJWT.getClaim("user_id").asString();
             LoggerManager.logger().info(String.format(
-                    "[com.zulong.web.utils.TokenUtils]TokenUtils.getCurrUserId@get token|user_id=%s", user_id));
+                    "[com.zulong.web.utils]TokenUtils.getCurrUserId@get token|user_id=%s", user_id));
             return user_id;
         }catch (Exception e){
             LoggerManager.logger().info(String.format(
-                    "[com.zulong.web.utils.TokenUtils]TokenUtils.getCurrUserId@get token failed"));
+                    "[com.zulong.web.utils]TokenUtils.getCurrUserId@get token failed"));
             return null;
         }
     }
@@ -51,8 +52,8 @@ public class TokenUtils {//token到期时间10小时
         blackList.add(token);
     }
 
+    // 暂时不需要用的接口
     public static String getToken(String user_id, String ip){
-        //todo:加上ip
         String token=null;
         try {
             Date expireAt=new Date(System.currentTimeMillis()+EXPIRE_TIME);
@@ -65,7 +66,7 @@ public class TokenUtils {//token到期时间10小时
                     .withExpiresAt(expireAt)
                     .sign(Algorithm.HMAC256(TOKEN_SECRET));
             LoggerManager.logger().info(String.format(
-                    "[com.zulong.web.utils.TokenUtils]TokenUtils.sign@create token|token=%s|user_id = %s", token, user_id));
+                    "[com.zulong.web.utils]TokenUtils.sign@create token|token=%s|user_id = %s", token, user_id));
         } catch (Exception e) {
 
         }
@@ -84,7 +85,7 @@ public class TokenUtils {//token到期时间10小时
                     .withExpiresAt(expireAt)
                     .sign(Algorithm.HMAC256(TOKEN_SECRET));
             LoggerManager.logger().info(String.format(
-                    "[com.zulong.web.utils.TokenUtils]TokenUtils.sign@create token|token=%s|user_id = %s", token, user.getUser_id()));
+                    "[com.zulong.web.utils]TokenUtils.sign@create token|token=%s|user_id = %s", token, user.getUser_id()));
         } catch (Exception e) {
 
         }
@@ -100,12 +101,12 @@ public class TokenUtils {//token到期时间10小时
             DecodedJWT decodedJWT=jwtVerifier.verify(token);
             String user_id = decodedJWT.getClaim("user_id").asString();
             LoggerManager.logger().info(String.format(
-                    "[com.zulong.web.utils.TokenUtils]TokenUtils.loginOut@get token|user_id=%s", user_id));
+                    "[com.zulong.web.utils]TokenUtils.loginOut@get token|user_id=%s", user_id));
             addToBlackList(token);
             return user_id;
         }catch (Exception e){
             LoggerManager.logger().info(String.format(
-                    "[com.zulong.web.utils.TokenUtils]TokenUtils.loginOut@get token failed"));
+                    "[com.zulong.web.utils]TokenUtils.loginOut@get token failed"));
             return null;
         }
 
@@ -128,8 +129,8 @@ public class TokenUtils {//token到期时间10小时
             String user_id = decodedJWT.getClaim("user_id").asString();
 //            LoggerManager.logger().info(String.format(
 //                    "[com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|token=%s", token));
-            LoggerManager.logger().info(String.format(
-                    "[com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=%s", user_id));
+//            LoggerManager.logger().info(String.format(
+//                    "[com.zulong.web.utils.TokenUtils]TokenUtils.verify@verify token|user_id=%s", user_id));
             return user_id;
         }catch (Exception e){
             return null;

@@ -48,8 +48,8 @@ public class MetaServiceImpl implements MetaService {
         boolean flag = metaDao.insertMeta(meta);
         curr_meta_id++;
         if(!flag){
-            LoggerManager.logger().info(String.format(
-                    "[com.zulong.web.service.serviceimpl]MetaServiceImpl.createMeta@create meta|curr_meta_id=%s|group_id=%d|version_display=%s", curr_meta_id, group_id, version_display));
+//            LoggerManager.logger().info(String.format(
+//                    "[com.zulong.web.service.serviceimpl]MetaServiceImpl.createMeta@create meta|curr_meta_id=%s|group_id=%d|version_display=%s", curr_meta_id, group_id, version_display));
             return null;
         }
         return meta;

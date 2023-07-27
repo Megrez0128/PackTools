@@ -22,21 +22,19 @@ public class TokenInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String path = request.getRequestURI().substring(request.getContextPath().length()).replaceAll("[/]+$", "");
-
         // 如果是 /auth/user/login 请求，则放行
         if ("/auth/user/login".equals(path)) {
             return true;
         }
-        if ("/auth/user/gettoken".equals(path)) {
-            return true;
-        }
+//        if ("/auth/user/gettoken".equals(path)) {
+//            return true;
+//        }
         if("/saml/login".equals(path)) {
             return true;
         }
         if("/saml/auth".equals(path)) {
             return true;
         }
-//        return true;
         //跨域请求会首先发一个option请求，直接返回正常状态并通过拦截器
         if(request.getMethod().equals("OPTIONS")){
             response.setStatus(HttpServletResponse.SC_OK);

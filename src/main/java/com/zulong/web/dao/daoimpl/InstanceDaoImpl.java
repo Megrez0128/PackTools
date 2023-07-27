@@ -59,8 +59,8 @@ public class InstanceDaoImpl implements InstanceDao {
 //    @CachePut(value = "instanceCache", key = "#instance.uuid")
     @Override
     final public boolean insertInstance(Instance instance) {
-        String sql = "insert into instance (uuid, flow_record_id, build_time, complete, has_error) values (?, ?, ?, ?, ?)";
-        Object[] params = {instance.getUuid(), instance.getFlow_record_id(), instance.getBuild_time(), instance.getComplete(), instance.getHas_error()};
+        String sql = "insert into instance (uuid, flow_record_id, start_time, complete, has_error) values (?, ?, ?, ?, ?)";
+        Object[] params = {instance.getUuid(), instance.getFlow_record_id(), instance.getStart_time(), false, instance.getHas_error()};
         boolean flag = jdbcTemplate.update(sql, params) > 0;
         if(!flag){
             LoggerManager.logger().error(String.format("[com.zulong.web.dao.daoimpl]InstanceDaoImpl.insertInstance@insert failed|uuid=%s", instance.getUuid()));
@@ -69,12 +69,23 @@ public class InstanceDaoImpl implements InstanceDao {
     }
 
     @Override
-    final public boolean updateInstance(int flow_record_id, boolean complete, boolean has_error, String uuid) {
+    public boolean updateInstance(int flow_record_id, boolean complete, boolean has_error, String uuid) {
         String sql = "update instance set flow_record_id=?, complete=?, has_error=? where uuid=?";
         Object[] params = {flow_record_id, complete, has_error, uuid};
         boolean flag = jdbcTemplate.update(sql, params) > 0;
         if(!flag){
             LoggerManager.logger().error(String.format("[com.zulong.web.dao.daoimpl]InstanceDaoImpl.updateInstance@update failed|flow_record_id=%d|uuid=%s", flow_record_id, uuid));
+        }
+        return flag;
+    }
+
+    @Override
+    public boolean endInstance(int flow_record_id, String end_time, boolean complete, boolean has_error, String uuid) {
+        String sql = "update instance set flow_record_id=?, end_time=?, complete=?, has_error=? where uuid=?";
+        Object[] params = {flow_record_id, end_time, complete, has_error, uuid};
+        boolean flag = jdbcTemplate.update(sql, params) > 0;
+        if(!flag){
+            LoggerManager.logger().error(String.format("[com.zulong.web.dao.daoimpl]InstanceDaoImpl.endInstance@update failed|flow_record_id=%d|uuid=%s", flow_record_id, uuid));
         }
         return flag;
     }

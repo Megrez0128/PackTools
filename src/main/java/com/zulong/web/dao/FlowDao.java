@@ -8,8 +8,8 @@ public interface FlowDao {
     Flow findFlowByRecordId(int record_id);
     boolean insertFlow(Flow flow);
     List<Flow> getFlowList();
-    Flow getFlowDetails(int flow_id, int version);
-    Flow getFlowDetailsByID(int record_id);
+    Flow getFlowDetailsByFlowIdAndVersion(int flow_id, int version);
+    Flow getFlowDetailsByRecordId(int record_id);
     int deleteFlow(int record_id);
     //public Flow cloneFlow(int record_id, boolean is_committed, String commit_message);
     boolean updateFlow(Flow flow);
@@ -17,6 +17,7 @@ public interface FlowDao {
     int findMaxVersion(int flow_id);
 	Flow findByFlowIDAndVersion(int flow_id, int version);
     List<Flow> getHistoryFlowList(int flow_id);
+    // NewestFlow是最新版本，NewVersionFlow是已经commit的最新版本
     Flow getNewestFlow(int flow_id);
     Flow getNewVersionFlow(int flow_id);
     int getCurrRecordId();

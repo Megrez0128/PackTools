@@ -21,8 +21,6 @@ import static com.zulong.web.config.ConstantConfig.CONST_INIT_END_TIME;
 @Service
 public class InstanceServiceImpl implements InstanceService {
 
-
-
     @Autowired
     private InstanceDao instanceDao;
 
@@ -36,7 +34,43 @@ public class InstanceServiceImpl implements InstanceService {
     private FlowDao flowDao;
 
     @Override
-    final public boolean instanceStartNode(String uuid, int flow_record_id, String node_id, String start_time, boolean complete, boolean has_error, String option){
+    public boolean instanceStart(String uuid, int flow_record_id, String start_time, boolean complete, boolean has_error) {
+        //查找instance_id为uuid的instance是否存在，如果已经有instance存在则创建失败
+        Instance tmp = instanceDao.findInstanceByUuid(uuid);
+        if(tmp!=null) {
+            return false;
+        }
+
+        //如果不存在则更新flowSummary, flow的last_build
+        try{
+            boolean flag = flowDao.updateLastBuild(flow_record_id,start_time)
+                    && flowSummaryDao.buildUpdateFlowSummary(flowDao.getFlowIdByRecordId(flow_record_id),start_time);
+            if(!flag){
+                LoggerManager.logger().warn("[com.zulong.web.service.serviceimpl]InstanceServiceImpl.instanceStartNode@UpdateFlowSummary failed");
+                return false;
+            }
+        }catch (Exception e){
+            LoggerManager.logger().error("[com.zulong.web.service.serviceimpl]InstanceServiceImpl.instanceStartNode@UpdateFlowSummary failed");
+            return false;
+        }
+        // 如果不存在则创建新的instance
+        Instance instance = new Instance();
+        instance.setUuid(uuid);
+        instance.setFlow_record_id(flow_record_id);
+        instance.setStart_time(start_time);
+        instance.setComplete(complete);
+        instance.setHas_error(has_error);
+        try{
+            instanceDao.insertInstance(instance);
+            return true;
+        }catch (Exception e){
+            LoggerManager.logger().warn("[com.zulong.web.service.serviceimpl]InstanceServiceImpl.instanceStartNode@insertInstance failed");
+            return false;
+        }
+    }
+
+    @Override
+    public boolean instanceStartNode(String uuid, int flow_record_id, String node_id, String start_time, boolean has_error, String option){
         Node node = new Node();
         node.setInstance_id(uuid);
         node.setNode_id(node_id);
@@ -71,8 +105,9 @@ public class InstanceServiceImpl implements InstanceService {
         Instance instance = new Instance();
         instance.setUuid(uuid);
         instance.setFlow_record_id(flow_record_id);
-        instance.setBuild_time(start_time);
-        instance.setComplete(complete);
+        instance.setStart_time(start_time);
+        //instance.setComplete(complete);
+        instance.setComplete(false);
         instance.setHas_error(has_error);
         try{
             instanceDao.insertInstance(instance);
@@ -81,11 +116,22 @@ public class InstanceServiceImpl implements InstanceService {
             LoggerManager.logger().warn("[com.zulong.web.service.serviceimpl]InstanceServiceImpl.instanceStartNode@insertInstance failed");
             return false;
         }
-
     }
 
     @Override
-    final public boolean instanceEndNode(String uuid, int flow_record_id, String node_id, String end_time, boolean complete, boolean has_error, String option){
+    public boolean instanceEnd(String uuid, int flow_record_id, String end_time, boolean complete, boolean has_error) {
+        try{
+            instanceDao.endInstance(flow_record_id, end_time, complete, has_error, uuid);
+            return true;
+        }catch (Exception e){
+            LoggerManager.logger().error(String.format("[com.zulong.web.service.serviceimpl]InstanceServiceImpl.instanceEndNode@updateInstance failed|flow_record_id = %s|complete = %s|has_error = %s|uuid = %s|",flow_record_id,complete ? "true" : "false",has_error ? "true" : "false",uuid));
+            return false;
+        }
+    }
+
+
+    @Override
+    public boolean instanceEndNode(String uuid, int flow_record_id, String node_id, String end_time, boolean complete, boolean has_error, String option){
         try{
             boolean flag = nodeDao.updateNode(node_id, uuid, end_time, option);
             if(!flag){
@@ -98,7 +144,7 @@ public class InstanceServiceImpl implements InstanceService {
         }
 
         try{
-            instanceDao.updateInstance(flow_record_id, complete, has_error, uuid);
+            instanceDao.updateInstance(flow_record_id, false, has_error, uuid);
             return true;
         }catch (Exception e){
             LoggerManager.logger().error(String.format("[com.zulong.web.service.serviceimpl]InstanceServiceImpl.instanceEndNode@updateInstance failed|flow_record_id = %s|complete = %s|has_error = %s|uuid = %s|",flow_record_id,complete ? "true" : "false",has_error ? "true" : "false",uuid));

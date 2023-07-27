@@ -22,12 +22,12 @@ public class Flow implements Serializable {
     private String commit_message;
 
     private String last_build;
-    private int meta_id;
+    private String save_time;
 
+    private int meta_id;
     private String graph_data;
     private String blackboard;
-//    private byte[] graph_data;
-//    private byte[] blackboard;
+
 
     public Flow(int record_id, int version, boolean committed, String commit_message, String currentTime) {
         this.record_id = record_id;
@@ -60,6 +60,7 @@ public class Flow implements Serializable {
         flow.setCommitted(resultSet.getBoolean("committed"));
         flow.setCommit_message(resultSet.getString("commit_message"));
         flow.setLast_build(resultSet.getString("last_build"));
+        flow.setSave_time(resultSet.getString("save_time"));
         flow.setMeta_id(resultSet.getInt("meta_id"));
         Blob graphBlob = resultSet.getBlob("graph_data");
         String graphString = new String(graphBlob.getBytes(1, (int) graphBlob.length()));
